@@ -1,4 +1,4 @@
-import { authService } from 'fbase';
+import { authService, firebaseInstance } from 'fbase';
 import React, { useState } from 'react';
 
 const Auth = () => {
@@ -29,6 +29,16 @@ const Auth = () => {
   };
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
+  const onSocialClick = async ({ target: { name } }) => {
+    let provider;
+    if (name === 'google') {
+      provider = new firebaseInstance.auth.GoogleAuthProvider();
+    } else if (name === 'github') {
+      provider = new firebaseInstance.auth.GithubAuthProvider();
+    }
+    const data = await authService.signInWithPopup(provider);
+    console.log(data);
+  };
 
   return (
     <div>
@@ -55,8 +65,12 @@ const Auth = () => {
         <button type="button" onClick={toggleAccount}>
           {newAccount ? '로그인' : '회원가입'}
         </button>
-        <button type="button">Google로 시작하기</button>
-        <button type="button">Github로 시작하기</button>
+        <button type="button" name="google" onClick={onSocialClick}>
+          Google로 시작하기
+        </button>
+        <button type="button" name="github" onClick={onSocialClick}>
+          Github로 시작하기
+        </button>
       </div>
       <p>{error}</p>
     </div>
