@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
+import { dbService } from 'fbase';
 
 const Home = () => {
-  const [write, setWrite] = useState('');
-  const onSubmit = (event) => {
+  const [ssok, setSsok] = useState('');
+  const onSubmit = async (event) => {
     event.preventDefault();
-    const {
-      target: { value },
-    } = event;
+    await dbService.collection('ssok').add({
+      ssok,
+      createdAt: Date.now(),
+    });
+    setSsok('');
   };
-  const onChange = ({ target: { value } }) => setWrite(value);
+  const onChange = ({ target: { value } }) => setSsok(value);
   return (
     <div>
       <form onSubmit={onSubmit}>
         <input
           type="text"
           onChange={onChange}
-          value={write}
+          value={ssok}
           placeholder="what's on your mind?"
           maxLength={128}
         />
