@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from 'fbase';
+import Ssok from './Ssok';
 
 const Home = ({ userId }) => {
   const [ssok, setSsok] = useState('');
@@ -40,8 +41,12 @@ const Home = ({ userId }) => {
         </form>
       </div>
       <div>
-        {ssoks.map(({ text, id, createdAt }) => (
-          <div key={id}>{text}</div>
+        {ssoks.map((ssok) => (
+          <Ssok
+            key={ssok.id}
+            ssokData={ssok}
+            isOwner={ssok.creatorId === userId}
+          />
         ))}
       </div>
     </>
