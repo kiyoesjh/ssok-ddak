@@ -4,23 +4,21 @@ import { dbService } from 'fbase';
 const Home = () => {
   const [ssok, setSsok] = useState('');
   const [ssoks, setSsoks] = useState([]);
-  const getSsoks = async () => {
-    const dbSsoks = await dbService.collection('ssok').get();
-    dbSsoks.forEach((document) => {
-      const ssokObject = {
-        ...document.data(),
-        id: document.id,
-      };
-      setSsoks((prev) => [ssokObject, ...prev]);
-    });
-  };
+
   useEffect(() => {
-    getSsoks();
+    dbService.collection('ssok').onSnapshot((snapshot) => {
+      const ssokArr = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSsoks(ssokArr);
+    });
   }, []);
+
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection('ssok').add({
-      ssok,
+      text: ssok,
       createdAt: Date.now(),
     });
     setSsok('');
@@ -41,8 +39,8 @@ const Home = () => {
         </form>
       </div>
       <div>
-        {ssoks.map(({ ssok, id, createdAt }) => (
-          <div key={id}>{ssok}</div>
+        {ssoks.map(({ text, id, createdAt }) => (
+          <div key={id}>{text}</div>
         ))}
       </div>
     </>
