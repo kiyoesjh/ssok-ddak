@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from 'fbase';
 
-const Home = () => {
+const Home = ({ userId }) => {
   const [ssok, setSsok] = useState('');
   const [ssoks, setSsoks] = useState([]);
 
@@ -20,6 +20,7 @@ const Home = () => {
     await dbService.collection('ssok').add({
       text: ssok,
       createdAt: Date.now(),
+      creatorId: userId,
     });
     setSsok('');
   };
