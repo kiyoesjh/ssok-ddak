@@ -6,7 +6,7 @@ const Home = ({ userId }) => {
   const [ssok, setSsok] = useState('');
   const [ssoks, setSsoks] = useState([]);
 
-  useEffect(() => {
+  const handlerSnapShot = () => {
     dbService.collection('ssok').onSnapshot((snapshot) => {
       const ssokArr = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -14,6 +14,10 @@ const Home = ({ userId }) => {
       }));
       setSsoks(ssokArr);
     });
+  };
+
+  useEffect(() => {
+    handlerSnapShot();
   }, []);
 
   const onSubmit = async (event) => {

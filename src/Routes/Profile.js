@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 const Profile = () => {
   const history = useHistory();
-  const logOutHandle = () => {
-    authService.signOut();
+  const logOutHandle = async () => {
+    await authService.signOut();
     history.push('/');
   };
   return (
