@@ -5,6 +5,7 @@ import Ssok from './Ssok';
 const Home = ({ userId }) => {
   const [ssok, setSsok] = useState('');
   const [ssoks, setSsoks] = useState([]);
+  const [attachment, setAttachment] = useState();
 
   const handlerSnapShot = () => {
     dbService.collection('ssok').onSnapshot((snapshot) => {
@@ -16,10 +17,6 @@ const Home = ({ userId }) => {
     });
   };
 
-  useEffect(() => {
-    handlerSnapShot();
-  }, []);
-
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection('ssok').add({
@@ -30,6 +27,25 @@ const Home = ({ userId }) => {
     setSsok('');
   };
   const onChange = ({ target: { value } }) => setSsok(value);
+
+  const onFileChange = ({ target: { files } }) => {
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
+  const onClearAttachment = () => setAttachment(null);
+
+  useEffect(() => {
+    handlerSnapShot();
+  }, []);
+
   return (
     <>
       <div>
@@ -41,8 +57,17 @@ const Home = ({ userId }) => {
             placeholder="what's on your mind?"
             maxLength={128}
           />
+          <input type="file" accept="image/*" onChange={onFileChange} />
           <input type="submit" value="ssok" />
         </form>
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" height="50px" />
+            <button type="button" onClick={onClearAttachment}>
+              삭제
+            </button>
+          </div>
+        )}
       </div>
       <div>
         {ssoks.map((ssok) => (
