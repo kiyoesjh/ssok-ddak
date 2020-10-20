@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { dbService } from 'fbase';
+import { dbService, storageService } from 'fbase';
+import { v4 as uuidv4 } from 'uuid';
 import Ssok from './Ssok';
 
-const Home = ({ userId }) => {
+const Home = ({ userObject }) => {
   const [ssok, setSsok] = useState('');
   const [ssoks, setSsoks] = useState([]);
   const [attachment, setAttachment] = useState();
-
   const handlerSnapShot = () => {
     dbService.collection('ssok').onSnapshot((snapshot) => {
       const ssokArr = snapshot.docs.map((doc) => ({
@@ -19,12 +19,23 @@ const Home = ({ userId }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection('ssok').add({
+    let attachmentURL = '';
+    if (attachment) {
+      const attachmentRef = storageService
+        .ref()
+        .child(`${userObject.uid}/${uuidv4()}`);
+      const response = await attachmentRef.putString(attachment, 'data_url');
+      attachmentURL = await response.ref.getDownloadURL();
+    }
+    const ssokData = {
       text: ssok,
       createdAt: Date.now(),
-      creatorId: userId,
-    });
+      creatorId: userObject.uid,
+      attachmentURL,
+    };
+    await dbService.collection('ssok').add(ssokData);
     setSsok('');
+    setAttachment('');
   };
   const onChange = ({ target: { value } }) => setSsok(value);
 
@@ -74,7 +85,7 @@ const Home = ({ userId }) => {
           <Ssok
             key={ssok.id}
             ssokData={ssok}
-            isOwner={ssok.creatorId === userId}
+            isOwner={ssok.creatorId === userObject.uid}
           />
         ))}
       </div>
