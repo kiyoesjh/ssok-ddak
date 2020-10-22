@@ -1,31 +1,57 @@
+import React from 'react';
 import AuthForm from 'components/AuthForm';
-import { authService, firebaseInstance } from 'fbase';
-import React, { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import AuthSocialForm from 'components/AuthSocialForm';
 
-const Auth = () => {
-  const onSocialClick = async ({ target: { name } }) => {
-    let provider;
-    if (name === 'google') {
-      provider = new firebaseInstance.auth.GoogleAuthProvider();
-    } else if (name === 'github') {
-      provider = new firebaseInstance.auth.GithubAuthProvider();
-    }
-    await authService.signInWithPopup(provider);
-  };
+const gradientKeyframes = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
 
-  return (
-    <div>
+const AuthWrap = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: ${gradientKeyframes} 15s ease infinite;
+`;
+
+const TitleLogo = styled.h1`
+  font-size: 50px;
+  text-align: center;
+  font-family: 'Dancing Script';
+`;
+
+const FormWrap = styled.div`
+  width: 60%;
+  min-width: 300px;
+  max-width: 450px;
+  background-color: #eee;
+  border-radius: 4px;
+  margin-top: 30px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+`;
+
+const Auth = () => (
+  <AuthWrap>
+    <TitleLogo>ssok ddak</TitleLogo>
+    <FormWrap>
       <AuthForm />
-      <div>
-        <button type="button" name="google" onClick={onSocialClick}>
-          Google로 시작하기
-        </button>
-        <button type="button" name="github" onClick={onSocialClick}>
-          Github로 시작하기
-        </button>
-      </div>
-    </div>
-  );
-};
+      <AuthSocialForm />
+    </FormWrap>
+  </AuthWrap>
+);
 
 export default Auth;

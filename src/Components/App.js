@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AppRouter from 'components/Router';
 import { authService } from 'fbase';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyles from 'styles/GlobalStyles';
+import theme from 'styles/theme';
 
 function App() {
   const [init, setInit] = useState(false);
@@ -30,7 +33,8 @@ function App() {
     });
   };
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
       {init ? (
         <AppRouter
           isLoggedIn={Boolean(userObject)}
@@ -40,7 +44,7 @@ function App() {
       ) : (
         'loading...'
       )}
-    </>
+    </ThemeProvider>
   );
 }
 
