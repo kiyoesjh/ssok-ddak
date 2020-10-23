@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from 'fbase';
 import Ssok from 'components/Ssok';
-import SsokFactory from 'components/SsokFactory';
+import styled from 'styled-components';
 
 const Home = ({ userObject }) => {
   const [ssoks, setSsoks] = useState([]);
@@ -20,7 +20,6 @@ const Home = ({ userObject }) => {
 
   return (
     <>
-      <SsokFactory userObject={userObject} />
       <div>
         {ssoks.map((ssok) => (
           <Ssok

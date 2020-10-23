@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Auth from 'routes/Auth';
 import Home from 'routes/Home';
+import Post from 'routes/Post';
 import Profile from 'routes/Profile';
 import Navigation from './Navigation';
 
@@ -25,6 +26,9 @@ const AppRouter = ({ isLoggedIn, userObject, refreshUserObj }) => {
                 userObject={userObject}
                 refreshUserObj={refreshUserObj}
               />
+            </Route>
+            <Route exact path="/post">
+              <Post userObject={userObject} />
             </Route>
           </>
         ) : (

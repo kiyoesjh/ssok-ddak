@@ -12,6 +12,15 @@ const SocialForm = styled.div`
   justify-content: space-around;
 `;
 
+const ButtonWrap = styled.button`
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  font-size: 18px;
+`;
+
 const ButtonText = styled.span`
   margin-left: 5px;
 `;
@@ -28,14 +37,14 @@ const AuthSocialForm = () => {
   };
   return (
     <SocialForm>
-      <button type="button" name="google" onClick={onSocialClick}>
-        <FontAwesomeIcon icon={faGoogle} />
+      <ButtonWrap type="button" name="google" onClick={onSocialClick}>
+        <Icon icon={faGoogle} />
         <ButtonText>구글로 시작하기</ButtonText>
-      </button>
-      <button type="button" name="github" onClick={onSocialClick}>
-        <FontAwesomeIcon icon={faGithub} />
+      </ButtonWrap>
+      <ButtonWrap type="button" name="github" onClick={onSocialClick}>
+        <Icon icon={faGithub} />
         <ButtonText>깃허브로 시작하기</ButtonText>
-      </button>
+      </ButtonWrap>
     </SocialForm>
   );
 };
