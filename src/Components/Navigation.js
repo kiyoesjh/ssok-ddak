@@ -15,6 +15,7 @@ const Nav = styled.nav`
   left: 0;
   width: 100%;
   height: 50px;
+  z-index: 99;
 `;
 
 const NaviListWrap = styled.ul`
@@ -33,7 +34,7 @@ const NaviListWrap = styled.ul`
     background: #fff;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    opacity: 0.4;
+    opacity: 0.8;
     z-index: -1;
     content: '';
   }
@@ -74,7 +75,7 @@ const Navigation = ({ userObject }) => {
           </NaviLink>
         </NaviList>
         <NaviList>
-          <NaviLink to="/write">
+          <NaviLink to="/post">
             <FontAwesomeIcon icon={faPlus} size="lg" color="#000" />
           </NaviLink>
         </NaviList>
