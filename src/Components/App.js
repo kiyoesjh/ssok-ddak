@@ -14,6 +14,7 @@ function App() {
       if (user) {
         setUserObject({
           displayName: user.displayName,
+          photoURL: user.photoURL,
           uid: user.uid,
           updateProfile: (args) => user.updateProfile(args),
         });
@@ -29,6 +30,7 @@ function App() {
     setUserObject({
       displayName: user.displayName,
       uid: user.uid,
+      photoURL: user.photoURL,
       updateProfile: (args) => user.updateProfile(args),
     });
   };

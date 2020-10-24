@@ -9,17 +9,6 @@ const PostWrap = styled.div`
   position: relative;
   width: 100%;
   margin: 0 auto 15px;
-  border-radius: 10px;
-  overflow: hidden;
-  &:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    /* content: ''; */
-  }
 `;
 
 const PostText = styled.div`
@@ -31,23 +20,36 @@ const PostText = styled.div`
   z-index: 10;
 `;
 
+const PostImgWrap = styled.div`
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    content: '';
+  }
+`;
+
 const PostImg = styled.img`
+  display: block;
   width: 100%;
   height: auto;
 `;
 
-const Button = styled.button`
-  position: absolute;
-  top: 0;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.5);
+const LayerButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
 `;
 
-const DeleteButton = styled(Button)`
-  right: 0;
+const IconText = styled.span`
+  padding-left: 8px;
 `;
 
 const Ssok = ({ ssokData, isOwner }) => {
@@ -90,16 +92,22 @@ const Ssok = ({ ssokData, isOwner }) => {
       ) : (
         <PostWrap>
           <PostText>{ssokData.text}</PostText>
-          {ssokData.attachmentURL && <PostImg src={ssokData.attachmentURL} />}
+          {ssokData.attachmentURL && (
+            <PostImgWrap>
+              <PostImg src={ssokData.attachmentURL} />
+            </PostImgWrap>
+          )}
           {isOwner && ( //글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
             <>
               <MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
-                <DeleteButton type="button" onClick={onDelete}>
+                <LayerButton type="button" onClick={onDelete}>
                   <FontAwesomeIcon icon={faTrashAlt} />
-                </DeleteButton>
-                <button type="button" onClick={toggleEditing}>
+                  <IconText>삭제하기</IconText>
+                </LayerButton>
+                <LayerButton type="button" onClick={toggleEditing}>
                   <FontAwesomeIcon icon={faEdit} />
-                </button>
+                  <IconText>수정하기</IconText>
+                </LayerButton>
               </MorePop>
             </>
           )}

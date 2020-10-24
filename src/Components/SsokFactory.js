@@ -19,6 +19,8 @@ const SsokFactory = ({ userObject }) => {
       text: ssok,
       createdAt: Date.now(),
       creatorId: userObject.uid,
+      creatorName: userObject.displayName,
+      creatorPhoto: userObject.photoURL,
       attachmentURL,
     };
     await dbService.collection('ssok').add(ssokData);
