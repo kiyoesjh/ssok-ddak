@@ -3,13 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
-const Wrap = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding-right: 10px;
-`;
-
 const MoreButton = styled.button`
   outline: none;
   font-size: 20px;
@@ -41,7 +34,7 @@ const PopList = styled.div`
 const MorePop = ({ children, setIsOpen, isOpen }) => {
   const togglePop = () => setIsOpen((prev) => !prev);
   return (
-    <Wrap>
+    <div>
       <MoreButton onClick={togglePop}>
         <FontAwesomeIcon icon={faEllipsisH} />
       </MoreButton>
@@ -51,7 +44,7 @@ const MorePop = ({ children, setIsOpen, isOpen }) => {
           <PopList>{children}</PopList>
         </>
       )}
-    </Wrap>
+    </div>
   );
 };
 

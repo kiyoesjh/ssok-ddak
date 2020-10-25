@@ -11,6 +11,39 @@ const PostWrap = styled.div`
   margin: 0 auto 15px;
 `;
 
+const UserInfoWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 10px;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const UserPhoto = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  > img {
+    width: 100%;
+    height: auto;
+  }
+`;
+
+const UserName = styled.div`
+  margin-left: 10px;
+`;
+
 const PostText = styled.div`
   position: absolute;
   top: 50%;
@@ -23,7 +56,8 @@ const PostText = styled.div`
 const PostImgWrap = styled.div`
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   &:after {
     position: absolute;
     top: 0;
@@ -75,6 +109,7 @@ const Ssok = ({ ssokData, isOwner }) => {
   };
   return (
     <>
+      {console.log(ssokData)}
       {editing ? ( //수정하기를 눌렀다면? 폼이 나오게 된다.
         <form onSubmit={onSubmit}>
           <input
@@ -91,25 +126,33 @@ const Ssok = ({ ssokData, isOwner }) => {
         </form>
       ) : (
         <PostWrap>
+          <UserInfoWrap>
+            <UserInfo>
+              <UserPhoto>
+                <img src={ssokData.creatorPhoto} />
+              </UserPhoto>
+              <UserName>{ssokData.creatorName}</UserName>
+            </UserInfo>
+            {isOwner && ( //글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
+              <>
+                <MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
+                  <LayerButton type="button" onClick={onDelete}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                    <IconText>삭제하기</IconText>
+                  </LayerButton>
+                  <LayerButton type="button" onClick={toggleEditing}>
+                    <FontAwesomeIcon icon={faEdit} />
+                    <IconText>수정하기</IconText>
+                  </LayerButton>
+                </MorePop>
+              </>
+            )}
+          </UserInfoWrap>
           <PostText>{ssokData.text}</PostText>
           {ssokData.attachmentURL && (
             <PostImgWrap>
               <PostImg src={ssokData.attachmentURL} />
             </PostImgWrap>
-          )}
-          {isOwner && ( //글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
-            <>
-              <MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
-                <LayerButton type="button" onClick={onDelete}>
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                  <IconText>삭제하기</IconText>
-                </LayerButton>
-                <LayerButton type="button" onClick={toggleEditing}>
-                  <FontAwesomeIcon icon={faEdit} />
-                  <IconText>수정하기</IconText>
-                </LayerButton>
-              </MorePop>
-            </>
           )}
         </PostWrap>
       )}
