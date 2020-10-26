@@ -9,6 +9,7 @@ const PostWrap = styled.div`
   position: relative;
   width: 100%;
   margin: 0 auto 15px;
+  break-inside: avoid;
 `;
 
 const UserInfoWrap = styled.div`
@@ -80,6 +81,9 @@ const LayerButton = styled.button`
   flex-direction: row;
   align-items: center;
   padding: 10px;
+  &:hover {
+    background-color: #ddd;
+  }
 `;
 
 const IconText = styled.span`

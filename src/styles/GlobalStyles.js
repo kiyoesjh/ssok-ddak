@@ -31,6 +31,13 @@ export default createGlobalStyle`
     height: 100vh;
     font-size: 14px;
     background-color: #eee;
+    color: #888;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+
   }
 
 `;

@@ -4,6 +4,7 @@ import { authService } from 'fbase';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from 'styles/GlobalStyles';
 import theme from 'styles/theme';
+import RootWrap from './RootWrap';
 
 function App() {
   const [init, setInit] = useState(false);
@@ -38,11 +39,13 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       {init ? (
-        <AppRouter
-          isLoggedIn={Boolean(userObject)}
-          userObject={userObject}
-          refreshUserObj={refreshUserObj}
-        />
+        <RootWrap>
+          <AppRouter
+            isLoggedIn={Boolean(userObject)}
+            userObject={userObject}
+            refreshUserObj={refreshUserObj}
+          />
+        </RootWrap>
       ) : (
         'loading...'
       )}

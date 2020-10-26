@@ -26,6 +26,7 @@ const PopList = styled.div`
   top: 0;
   right: 0;
   background-color: #eee;
+  overflow: hidden;
   border-radius: 5px;
   box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
   z-index: 21;

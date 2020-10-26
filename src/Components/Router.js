@@ -14,10 +14,11 @@ import Navigation from './Navigation';
 const AppRouter = ({ isLoggedIn, userObject, refreshUserObj }) => {
   return (
     <Router>
-      {isLoggedIn && <Navigation userObject={userObject} />}
+      {/* {isLoggedIn && <Navigation userObject={userObject} />} */}
       <Switch>
         {isLoggedIn ? (
           <>
+            <Navigation userObject={userObject} />
             <Route exact path="/">
               <Home userObject={userObject} />
             </Route>
