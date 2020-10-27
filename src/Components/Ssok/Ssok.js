@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import MorePop from './MorePop';
+import MorePop from '../MorePop';
 
 const PostWrap = styled.div`
   position: relative;
@@ -50,7 +50,9 @@ const PostText = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #fff;
+  color: ${({ color }) => color};
+  white-space: pre-wrap;
+  word-wrap: break-word;
   z-index: 10;
 `;
 
@@ -90,6 +92,13 @@ const IconText = styled.span`
   padding-left: 8px;
 `;
 
+const EmptyDiv = styled.div`
+  width: 100%;
+  min-height: 100px;
+  background-color: #fff;
+  color: #000;
+`;
+
 const Ssok = ({ ssokData, isOwner }) => {
   const [editing, setEditing] = useState(false); //수정하고 있는지 아닌지에 대한 상태
   const [newSsok, setNewSsok] = useState(ssokData.text); //input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
@@ -113,7 +122,6 @@ const Ssok = ({ ssokData, isOwner }) => {
   };
   return (
     <>
-      {console.log(ssokData)}
       {editing ? ( //수정하기를 눌렀다면? 폼이 나오게 된다.
         <form onSubmit={onSubmit}>
           <input
@@ -152,12 +160,16 @@ const Ssok = ({ ssokData, isOwner }) => {
               </>
             )}
           </UserInfoWrap>
-          <PostText>{ssokData.text}</PostText>
-          {ssokData.attachmentURL && (
-            <PostImgWrap>
+          <PostText color={ssokData.attachmentURL ? '#fff' : '#000'}>
+            {ssokData.text}
+          </PostText>
+          <PostImgWrap>
+            {ssokData.attachmentURL ? (
               <PostImg src={ssokData.attachmentURL} />
-            </PostImgWrap>
-          )}
+            ) : (
+              <EmptyDiv />
+            )}
+          </PostImgWrap>
         </PostWrap>
       )}
     </>

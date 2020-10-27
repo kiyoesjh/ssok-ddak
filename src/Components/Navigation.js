@@ -23,23 +23,20 @@ const NavWrap = styled.div`
 `;
 
 const Nav = styled.nav`
+  position: fixed;
+  bottom: 0;
   display: flex;
   align-items: center;
-  width: 100%;
+  width: inherit;
   height: 50px;
   z-index: 99;
   @media ${device.tablet} {
-    width: 200px;
+    top: 0;
     height: 100%;
-  }
-  @media ${device.laptop} {
-    width: 80px;
   }
 `;
 
 const NaviListWrap = styled.ul`
-  position: fixed;
-  bottom: 0;
   /* left: 0; */
   display: flex;
   width: inherit;
@@ -62,7 +59,6 @@ const NaviListWrap = styled.ul`
     content: '';
   }
   @media ${device.tablet} {
-    top: 0;
     /* left: 0; */
     padding-left: 30px;
     height: 100%;
@@ -120,7 +116,12 @@ const Navigation = ({ userObject }) => {
             </NaviLink>
           </NaviList>
           <NaviList selected={pathname === '/post'}>
-            <NaviLink to="/post">
+            <NaviLink
+              to={{
+                pathname: '/post',
+                state: { modal: true },
+              }}
+            >
               <FontAwesomeIcon icon={faPlus} size="lg" color="#000" />
               <NaviText>글쓰기</NaviText>
             </NaviLink>

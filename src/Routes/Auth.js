@@ -1,7 +1,7 @@
 import React from 'react';
-import AuthForm from 'components/AuthForm';
+import AuthForm from 'components/auth/AuthForm';
 import styled, { keyframes } from 'styled-components';
-import AuthSocialForm from 'components/AuthSocialForm';
+import AuthSocialForm from 'components/auth/AuthSocialForm';
 
 const gradientKeyframes = keyframes`
   0% {

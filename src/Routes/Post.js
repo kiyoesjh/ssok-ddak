@@ -1,12 +1,8 @@
-import SsokFactory from 'components/SsokFactory';
 import React from 'react';
+import SsokEditor from 'components/Editor/SsokEditor';
 
 const Post = ({ userObject }) => {
-  return (
-    <div>
-      <SsokFactory userObject={userObject} />
-    </div>
-  );
+  return <SsokEditor userObject={userObject} />;
 };
 
 export default Post;

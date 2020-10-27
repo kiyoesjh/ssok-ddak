@@ -1,10 +1,20 @@
 import { dbService, storageService } from 'fbase';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import FileButton from './FileButton';
+import SDButton from './SDButton';
+import TextArea from './TextArea';
+import styled from 'styled-components';
+import { containerWidth } from 'styles/deviceSize';
+// import { Editor, EditorState, convertToRaw } from 'draft-js';
 
-const SsokFactory = ({ userObject }) => {
+const SsokEditor = ({ userObject }) => {
   const [ssok, setSsok] = useState('');
   const [attachment, setAttachment] = useState();
+  // const [editorState, setEditorState] = useState(() =>
+  //   EditorState.createEmpty()
+  // );
+
   const onSubmit = async (event) => {
     event.preventDefault();
     let attachmentURL = '';
@@ -27,7 +37,12 @@ const SsokFactory = ({ userObject }) => {
     setSsok('');
     setAttachment('');
   };
-  const onChange = ({ target: { value } }) => setSsok(value);
+
+  // const onChange = (editorState) => {
+  //   const contentState = editorState.getCurrentContent();
+  //   console.log(JSON.stringify(convertToRaw(contentState)));
+  //   setEditorState(editorState);
+  // };
 
   const onFileChange = ({ target: { files } }) => {
     const theFile = files[0];
@@ -43,17 +58,13 @@ const SsokFactory = ({ userObject }) => {
 
   const onClearAttachment = () => setAttachment(null);
   return (
-    <div>
+    <Container>
       <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          onChange={onChange}
-          value={ssok}
-          placeholder="what's on your mind?"
-          maxLength={128}
-        />
-        <input type="file" accept="image/*" onChange={onFileChange} />
-        <input type="submit" value="ssok" />
+        <TextArea setSsok={(val) => setSsok(val)} ssok={ssok} />
+        {/* <div contentEditable="true" onInput={getText}></div> */}
+        {/* <Editor editorState={editorState} onChange={onChange} /> */}
+        <FileButton onFileChange={onFileChange} />
+        <SDButton />
       </form>
       {attachment && (
         <div>
@@ -63,8 +74,13 @@ const SsokFactory = ({ userObject }) => {
           </button>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 
-export default SsokFactory;
+export default SsokEditor;
+
+const Container = styled.div`
+  width: 100%;
+  ${containerWidth}
+`;

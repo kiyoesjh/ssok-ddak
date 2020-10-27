@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { dbService } from 'fbase';
-import Ssok from 'components/Ssok';
+import Ssok from 'components/Ssok/Ssok';
 import styled from 'styled-components';
-import device from 'styles/deviceSize';
+import device, { containerWidth } from 'styles/deviceSize';
 
 const HomeWrap = styled.div`
   display: flex;
-  /* flex-grow: 2; */
   width: 100%;
-  @media ${device.tablet} {
-    width: calc(100% - 200px);
-  }
-  @media ${device.laptop} {
-    width: calc(100% - 80px);
-  }
+  ${containerWidth}
 `;
 
 const ColumnWrap = styled.div`

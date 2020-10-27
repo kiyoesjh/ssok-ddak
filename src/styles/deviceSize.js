@@ -14,4 +14,13 @@ const device = {
   laptopL: `(min-width: ${size.laptopL})`,
 };
 
+export const containerWidth = `
+  @media ${device.tablet} {
+    width: calc(100% - 200px);
+  }
+  @media ${device.laptop} {
+    width: calc(100% - 80px);
+  }
+`;
+
 export default device;

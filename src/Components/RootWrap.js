@@ -7,6 +7,7 @@ const Wrap = styled.div`
   @media ${device.tablet} {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
   }
 `;
 
