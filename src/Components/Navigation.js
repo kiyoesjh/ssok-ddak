@@ -8,18 +8,12 @@ import {
   faSearch,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import device from 'styles/deviceSize';
+import device, { NavigationResponseWidth } from 'styles/deviceSize';
 
 const NavWrap = styled.div`
   display: flex;
-  /* flex-grow: 1; */
   width: 100%;
-  @media ${device.tablet} {
-    width: 200px;
-  }
-  @media ${device.laptop} {
-    width: 80px;
-  }
+  ${NavigationResponseWidth}
 `;
 
 const Nav = styled.nav`
@@ -30,7 +24,7 @@ const Nav = styled.nav`
   width: inherit;
   height: 50px;
   z-index: 99;
-  @media ${device.tablet} {
+  ${device.tablet} {
     top: 0;
     height: 100%;
   }
@@ -58,19 +52,26 @@ const NaviListWrap = styled.ul`
     -webkit-backdrop-filter: blur(5px);
     content: '';
   }
-  @media ${device.tablet} {
-    /* left: 0; */
-    padding-left: 30px;
+  ${device.tablet} {
+    padding: 30px 0;
     height: 100%;
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
+    background: #fff;
+    &:after {
+      display: none;
+    }
   }
+  ${NavigationResponseWidth}
 `;
 
 const NaviList = styled.li`
   position: relative;
+  width: 100%;
+  padding: 0 10px;
   color: #000;
+  transition: all 0.2s;
   opacity: ${({ selected }) => (selected ? 1 : 0.5)};
   &:hover {
     opacity: 1;
@@ -79,23 +80,42 @@ const NaviList = styled.li`
 
 const NaviLink = styled(Link)`
   display: flex;
+  transition: all 0.3s;
+  padding: 5px 0;
+  &:hover {
+    > div {
+      background-color: #eee;
+    }
+  }
+`;
+
+const LinkText = styled.div`
+  display: flex;
+  height: 100%;
   align-items: center;
-  justify-content: center;
   padding: 10px;
+  border-radius: 20px;
+  font-size: 1.5rem;
 `;
 
 const NaviText = styled.span`
   display: none;
-  @media ${device.tablet} {
+  ${device.tablet} {
     display: block;
     font-size: 20px;
     font-weight: bold;
-    padding-left: 10px;
+    margin: 0 10px;
   }
-  @media ${device.laptop} {
+  ${device.laptop} {
     display: none;
   }
 `;
+
+const iconStyle = {
+  width: '1.7rem',
+  height: '1.7rem',
+  color: '#000',
+};
 
 const Navigation = ({ userObject }) => {
   const { pathname } = useLocation();
@@ -105,32 +125,35 @@ const Navigation = ({ userObject }) => {
         <NaviListWrap>
           <NaviList selected={pathname === '/'}>
             <NaviLink to="/">
-              <FontAwesomeIcon icon={faHome} size="lg" color="#000" />
-              <NaviText>홈</NaviText>
+              <LinkText>
+                <FontAwesomeIcon icon={faHome} style={iconStyle} />
+                <NaviText>홈</NaviText>
+              </LinkText>
             </NaviLink>
           </NaviList>
           <NaviList selected={pathname === '/search'}>
             <NaviLink to="/search">
-              <FontAwesomeIcon icon={faSearch} size="lg" color="#000" />
-              <NaviText>글찾기</NaviText>
+              <LinkText>
+                <FontAwesomeIcon icon={faSearch} style={iconStyle} />
+                <NaviText>글찾기</NaviText>
+              </LinkText>
             </NaviLink>
           </NaviList>
           <NaviList selected={pathname === '/post'}>
-            <NaviLink
-              to={{
-                pathname: '/post',
-                state: { modal: true },
-              }}
-            >
-              <FontAwesomeIcon icon={faPlus} size="lg" color="#000" />
-              <NaviText>글쓰기</NaviText>
+            <NaviLink to="/post">
+              <LinkText>
+                <FontAwesomeIcon icon={faPlus} style={iconStyle} />
+                <NaviText>글쓰기</NaviText>
+              </LinkText>
             </NaviLink>
           </NaviList>
           <NaviList selected={pathname === '/profile'}>
             {/* <Link to="/profile">{userObject.displayName}의 Profile</Link> */}
             <NaviLink to="/profile">
-              <FontAwesomeIcon icon={faUser} size="lg" color="#000" />
-              <NaviText>프로필</NaviText>
+              <LinkText>
+                <FontAwesomeIcon icon={faUser} style={iconStyle} />
+                <NaviText>프로필</NaviText>
+              </LinkText>
             </NaviLink>
           </NaviList>
         </NaviListWrap>

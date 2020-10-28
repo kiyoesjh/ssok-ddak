@@ -4,7 +4,7 @@ import device from 'styles/deviceSize';
 
 const Wrap = styled.div`
   height: 100vh;
-  @media ${device.tablet} {
+  ${device.tablet} {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -4,6 +4,7 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import MorePop from '../MorePop';
+import device from 'styles/deviceSize';
 
 const PostWrap = styled.div`
   position: relative;
@@ -23,6 +24,7 @@ const UserInfoWrap = styled.div`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding: 10px;
+  background-color: #fff;
 `;
 
 const UserInfo = styled.div`
@@ -45,15 +47,32 @@ const UserName = styled.div`
   margin-left: 10px;
 `;
 
-const PostText = styled.div`
+const PostContent = styled.div`
+  position: relative;
+`;
+
+const PostText = styled.p`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: ${({ color }) => color};
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.5;
+  color: ${({ fontColor }) => fontColor};
   white-space: pre-wrap;
-  word-wrap: break-word;
+  word-break: break-word;
+  font-family: 'RIDIBatang';
+  text-align: center;
   z-index: 10;
+  ${device.tablet} {
+    font-size: 1.2rem;
+  }
+  ${device.laptop} {
+    font-size: 0.95rem;
+  }
 `;
 
 const PostImgWrap = styled.div`
@@ -61,14 +80,15 @@ const PostImgWrap = styled.div`
   overflow: hidden;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  border: ${({ isImg }) => (isImg ? 'none' : '1px solid #ddd')};
   &:after {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    content: '';
+    background: rgba(0, 0, 0, 0.3);
+    ${({ isImg }) => (isImg ? `content: ''` : null)};
   }
 `;
 
@@ -160,16 +180,18 @@ const Ssok = ({ ssokData, isOwner }) => {
               </>
             )}
           </UserInfoWrap>
-          <PostText color={ssokData.attachmentURL ? '#fff' : '#000'}>
-            {ssokData.text}
-          </PostText>
-          <PostImgWrap>
-            {ssokData.attachmentURL ? (
-              <PostImg src={ssokData.attachmentURL} />
-            ) : (
-              <EmptyDiv />
-            )}
-          </PostImgWrap>
+          <PostContent>
+            <PostText fontColor={ssokData.attachmentURL ? '#fff' : '#000'}>
+              {ssokData.text}
+            </PostText>
+            <PostImgWrap isImg={Boolean(ssokData.attachmentURL)}>
+              {ssokData.attachmentURL ? (
+                <PostImg src={ssokData.attachmentURL} />
+              ) : (
+                <EmptyDiv />
+              )}
+            </PostImgWrap>
+          </PostContent>
         </PostWrap>
       )}
     </>

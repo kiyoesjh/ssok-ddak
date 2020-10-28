@@ -3,8 +3,7 @@ import { useState } from 'react';
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 100%;
-  padding: 10px;
+  background-color: rgba(255,255,255,0.7);
 `;
 
 const Textarea = styled.textarea`
@@ -12,6 +11,9 @@ const Textarea = styled.textarea`
   width: 100%;
   min-height: 100px;
   resize: none;
+  padding: 10px;
+  font-size: 1rem;
+  background: none;
 `;
 
 

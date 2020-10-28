@@ -1,26 +1,24 @@
-const { faDivide } = require('@fortawesome/free-solid-svg-icons');
-
-const size = {
-  mobile: '480px',
-  tablet: '768px',
-  laptop: '1024px',
-  laptopL: '1200px',
+const SIZE = {
+  MOBILE: '480px',
+  TABLET: '768px',
+  LAPTOP: '1024px',
+  LAPTOP_LARGE: '1200px',
 };
 
 const device = {
-  mobile: `(min-width: ${size.mobile})`,
-  tablet: `(min-width: ${size.tablet})`,
-  laptop: `(min-width: ${size.laptop})`,
-  laptopL: `(min-width: ${size.laptopL})`,
+  mobile: `@media (min-width: ${SIZE.MOBILE})`,
+  tablet: `@media (min-width: ${SIZE.TABLET})`,
+  laptop: `@media (min-width: ${SIZE.LAPTOP})`,
+  laptopL: `@media (min-width: ${SIZE.LAPTOP_LARGE})`,
 };
 
-export const containerWidth = `
-  @media ${device.tablet} {
-    width: calc(100% - 200px);
-  }
-  @media ${device.laptop} {
-    width: calc(100% - 80px);
-  }
+export const NavigationResponseWidth = `
+${device.tablet} {
+  width: 200px;
+}
+${device.laptop} {
+  width: 110px;
+}
 `;
 
 export default device;

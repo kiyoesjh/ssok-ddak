@@ -5,7 +5,6 @@ import FileButton from './FileButton';
 import SDButton from './SDButton';
 import TextArea from './TextArea';
 import styled from 'styled-components';
-import { containerWidth } from 'styles/deviceSize';
 // import { Editor, EditorState, convertToRaw } from 'draft-js';
 
 const SsokEditor = ({ userObject }) => {
@@ -17,6 +16,7 @@ const SsokEditor = ({ userObject }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (!ssok) return;
     let attachmentURL = '';
     if (attachment) {
       const attachmentRef = storageService
@@ -58,29 +58,48 @@ const SsokEditor = ({ userObject }) => {
 
   const onClearAttachment = () => setAttachment(null);
   return (
-    <Container>
+    <Section>
       <form onSubmit={onSubmit}>
         <TextArea setSsok={(val) => setSsok(val)} ssok={ssok} />
         {/* <div contentEditable="true" onInput={getText}></div> */}
         {/* <Editor editorState={editorState} onChange={onChange} /> */}
-        <FileButton onFileChange={onFileChange} />
-        <SDButton />
+        <ButtonWrapper>
+          <FileButton onFileChange={onFileChange} />
+          <SDButton />
+        </ButtonWrapper>
       </form>
       {attachment && (
-        <div>
-          <img src={attachment} width="50px" height="50px" />
+        <ImgFilePreview backgroundURL={attachment}>
+          {/* <img src={attachment} /> */}
           <button type="button" onClick={onClearAttachment}>
             삭제
           </button>
-        </div>
+        </ImgFilePreview>
       )}
-    </Container>
+    </Section>
   );
 };
 
 export default SsokEditor;
 
-const Container = styled.div`
+const Section = styled.div`
+  width: 80%;
+  height: 100%;
+  margin: 10px auto;
+  max-width: 980px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  margin: 10px 0;
+  justify-content: space-between;
+`;
+
+const ImgFilePreview = styled.div`
   width: 100%;
-  ${containerWidth}
+  height: 50%;
+  margin: 0 auto;
+  background-image: url(${({ backgroundURL }) => backgroundURL});
+  background-repeat: no-repeat;
+  background-size: 100% auto;
 `;
