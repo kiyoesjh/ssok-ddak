@@ -1,6 +1,9 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from 'react-router-dom';
 
 const Modal = styled.div`
   position: fixed;
@@ -30,13 +33,39 @@ const Overlay = styled.div`
 const ChildrenWrap = styled.div`
   position: relative;
   z-index: 102;
+  width: 50%;
+  height: auto;
+  min-height: 100px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.lightMode.mainColor(0.8)};
+  &:hover {
+    color: ${({ theme }) => theme.lightMode.mainColor(1)};
+  }
 `;
 
 const ModalLayer = ({ children, onClick }) => {
+  const history = useHistory();
+  const onCloseLayer = () => history.goBack();
   return createPortal(
     <Modal>
       <Overlay onClick={onClick} />
-      <ChildrenWrap>{children}</ChildrenWrap>
+      <ChildrenWrap>
+        {children}
+        <CloseButton type="button" onClick={onCloseLayer}>
+          <FontAwesomeIcon icon={faTimesCircle} />
+        </CloseButton>
+      </ChildrenWrap>
     </Modal>,
     document.getElementById('modal_root')
   );

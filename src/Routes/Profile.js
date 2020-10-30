@@ -10,8 +10,7 @@ import device from 'styles/deviceSize';
 import Post from './Post';
 
 const Profile = ({ userObject, refreshUserObj }) => {
-  const [userName, setUserName] = useState(userObject.displayName);
-  const [userPhoto, setUserPhoto] = useState(userObject.photoURL);
+  const [ssoks, setSsoks] = useState([]);
   const history = useHistory();
   const { url } = useRouteMatch();
 
@@ -19,40 +18,32 @@ const Profile = ({ userObject, refreshUserObj }) => {
     await authService.signOut();
     history.push('/');
   };
-  // const getMySsoks = async () => {
-  //   const ssoks = await dbService
-  //     .collection('ssok')
-  //     .where('creatorId', '==', userObject.uid)
-  //     .orderBy('createdAt')
-  //     .get();
-  //   console.log(ssoks.docs.map((doc) => doc.data()));
-  // };
-  // useEffect(() => {
-  //   getMySsoks();
-  // }, []);
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    if (userObject.displayName !== userName) {
-      //변경
-      await userObject.updateProfile({ displayName: userName });
-      refreshUserObj();
-    }
+
+  const getMySsoks = async () => {
+    const userSsoks = await dbService
+      .collection('ssok')
+      .where('creatorId', '==', userObject.uid)
+      .orderBy('createdAt')
+      .get();
+    // console.log(ssoks.docs.map((doc) => doc.data()));
+    const ssokArr = userSsoks.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setSsoks(ssokArr);
   };
-  const onChange = ({ target: { value } }) => {
-    setUserName(value);
-  };
+
+  useEffect(() => {
+    getMySsoks();
+  }, []);
+
   return (
     <>
       <Container>
-        <Header>{userName}</Header>
-        {/* <ProfileEditor
-        onSubmit={onSubmit}
-        onChange={onChange}
-        userName={userName}
-      /> */}
+        <Header>{userObject.displayName}</Header>
         <Wrap>
           <UserPhoto>
-            <UserImg src={userPhoto} />
+            <UserImg src={userObject.photoURL} />
           </UserPhoto>
           <Content>
             <ButtonWrap>
@@ -68,7 +59,11 @@ const Profile = ({ userObject, refreshUserObj }) => {
       </Container>
       <Route path={`${url}/edit`}>
         <ModalLayer onClick={() => history.goBack()}>
-          <div>test</div>
+          <ProfileEditor
+            refreshUserObj={refreshUserObj}
+            userObject={userObject}
+            ssoks={ssoks}
+          />
         </ModalLayer>
       </Route>
     </>
@@ -81,9 +76,6 @@ const Wrap = styled.div`
   width: 100%;
   max-width: 1000px;
   margin: 15px auto;
-  ${device.tablet} {
-    width: 90%;
-  }
 `;
 
 const UserPhoto = styled.div`
@@ -108,7 +100,7 @@ const Content = styled.div`
   height: 100%;
   min-height: 400px;
   margin-top: -50px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   background: #fff;
 `;
 

@@ -5,11 +5,12 @@ import FileButton from './FileButton';
 import SDButton from './SDButton';
 import TextArea from './TextArea';
 import styled from 'styled-components';
+import { onFileChange, uploadFileURL } from 'utils';
 // import { Editor, EditorState, convertToRaw } from 'draft-js';
 
 const SsokEditor = ({ userObject }) => {
   const [ssok, setSsok] = useState('');
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState('');
   // const [editorState, setEditorState] = useState(() =>
   //   EditorState.createEmpty()
   // );
@@ -19,11 +20,7 @@ const SsokEditor = ({ userObject }) => {
     if (!ssok) return;
     let attachmentURL = '';
     if (attachment) {
-      const attachmentRef = storageService
-        .ref()
-        .child(`${userObject.uid}/${uuidv4()}`);
-      const response = await attachmentRef.putString(attachment, 'data_url');
-      attachmentURL = await response.ref.getDownloadURL();
+      attachmentURL = await uploadFileURL(userObject.uid, attachment);
     }
     const ssokData = {
       text: ssok,
@@ -44,18 +41,6 @@ const SsokEditor = ({ userObject }) => {
   //   setEditorState(editorState);
   // };
 
-  const onFileChange = ({ target: { files } }) => {
-    const theFile = files[0];
-    const reader = new FileReader();
-    reader.onloadend = (finishedEvent) => {
-      const {
-        currentTarget: { result },
-      } = finishedEvent;
-      setAttachment(result);
-    };
-    reader.readAsDataURL(theFile);
-  };
-
   const onClearAttachment = () => setAttachment(null);
   return (
     <Section>
@@ -64,7 +49,10 @@ const SsokEditor = ({ userObject }) => {
         {/* <div contentEditable="true" onInput={getText}></div> */}
         {/* <Editor editorState={editorState} onChange={onChange} /> */}
         <ButtonWrapper>
-          <FileButton onFileChange={onFileChange} />
+          <FileButton
+            onFileChange={onFileChange}
+            setAttachment={setAttachment}
+          />
           <SDButton />
         </ButtonWrapper>
       </form>
