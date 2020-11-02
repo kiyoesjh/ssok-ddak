@@ -50,8 +50,10 @@ const Home = ({ userObject }) => {
     });
   };
   useEffect(() => {
-    handlerSnapShot();
-  }, []);
+    let mounted = true;
+    if (mounted) handlerSnapShot();
+    return () => (mounted = false);
+  }, [ssoks]);
 
   return (
     <Container>

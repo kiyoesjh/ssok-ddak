@@ -6,8 +6,7 @@ import { authService, dbService } from 'fbase';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, useHistory, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
-import device from 'styles/deviceSize';
-import Post from './Post';
+import UserSsoks from 'components/Profile/UserSsoks';
 
 const Profile = ({ userObject, refreshUserObj }) => {
   const [ssoks, setSsoks] = useState([]);
@@ -34,7 +33,9 @@ const Profile = ({ userObject, refreshUserObj }) => {
   };
 
   useEffect(() => {
-    getMySsoks();
+    let mounted = true;
+    if (mounted) getMySsoks();
+    return () => (mounted = false);
   }, []);
 
   return (
@@ -51,6 +52,7 @@ const Profile = ({ userObject, refreshUserObj }) => {
                 프로필 수정
               </ProfileEditButton>
             </ButtonWrap>
+            {ssoks && <UserSsoks ssoks={ssoks} />}
           </Content>
           <button type="button" onClick={logOutHandle}>
             logout
@@ -97,10 +99,9 @@ const UserImg = styled.img`
 
 const Content = styled.div`
   width: 100%;
-  height: 100%;
   min-height: 400px;
+  padding: 10px;
   margin-top: -50px;
-  /* border-radius: 5px; */
   background: #fff;
 `;
 

@@ -10,6 +10,7 @@ const device = {
   tablet: `@media (min-width: ${SIZE.TABLET})`,
   laptop: `@media (min-width: ${SIZE.LAPTOP})`,
   laptopL: `@media (min-width: ${SIZE.LAPTOP_LARGE})`,
+  custom: (size) => `@media (min-width: ${size})`,
 };
 
 export const NavigationResponseWidth = `
