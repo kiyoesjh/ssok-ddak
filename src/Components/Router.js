@@ -9,6 +9,7 @@ import Auth from 'routes/Auth';
 import Home from 'routes/Home';
 import Post from 'routes/Post';
 import Profile from 'routes/Profile';
+import ResultSearch from 'routes/ResultSearch';
 import Search from 'routes/Search';
 import Navigation from './Navigation';
 
@@ -30,6 +31,9 @@ const AppRouter = ({ isLoggedIn, userObject, refreshUserObj }) => {
             </Route>
             <Route exact path="/search">
               <Search />
+            </Route>
+            <Route path={`/search/:tag`}>
+              <ResultSearch userObject={userObject} />
             </Route>
             <Route exact path="/post">
               <Post userObject={userObject} />

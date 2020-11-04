@@ -7,6 +7,7 @@ const FileUploadLabel = styled.label`
   font-size: 1.75rem;
   width: 45px;
   height: 45px;
+  margin: 0 10px;
   padding: 10px;
   color: ${({ theme }) => theme.lightMode.mainColor(1)};
   background-color: ${({ theme }) => theme.lightMode.mainColor(0.1)};

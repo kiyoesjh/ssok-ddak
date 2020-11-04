@@ -39,9 +39,7 @@ const Home = ({ userObject }) => {
       setSsoks(ssokArr);
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   return (

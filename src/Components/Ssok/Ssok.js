@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import MorePop from '../MorePop';
 import device from 'styles/deviceSize';
 
-const PostWrap = styled.div`
+const Wrap = styled.div`
   position: relative;
   width: 100%;
   margin: 0 auto 15px;
@@ -51,22 +51,16 @@ const PostContent = styled.div`
   position: relative;
 `;
 
-const PostText = styled.p`
-  position: absolute;
+const Text = styled.p`
   display: flex;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
   justify-content: center;
-  align-items: center;
-  line-height: 1.5;
-  color: ${({ fontColor }) => fontColor};
   white-space: pre-wrap;
   word-break: break-word;
   font-family: 'RIDIBatang';
   text-align: center;
-  z-index: 10;
+  line-height: 1.5;
   ${device.tablet} {
     font-size: 1.2rem;
   }
@@ -75,12 +69,29 @@ const PostText = styled.p`
   }
 `;
 
-const PostImgWrap = styled.div`
-  position: relative;
+const ImgText = styled(Text)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  color: #fff;
+  z-index: 10;
+`;
+
+const PostText = styled(Text)`
+  align-items: flex-start;
+  padding: 30px 0;
+  color: #444;
+`;
+
+const PostWrap = styled.div`
   overflow: hidden;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  border: ${({ isImg }) => (isImg ? 'none' : '1px solid #ddd')};
+`;
+
+const PostImgWrap = styled(PostWrap)`
+  position: relative;
   &:after {
     position: absolute;
     top: 0;
@@ -88,7 +99,7 @@ const PostImgWrap = styled.div`
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
-    ${({ isImg }) => (isImg ? `content: ''` : null)};
+    content: '';
   }
 `;
 
@@ -112,9 +123,10 @@ const IconText = styled.span`
   padding-left: 8px;
 `;
 
-const EmptyDiv = styled.div`
+const EmptyDiv = styled(PostWrap)`
   width: 100%;
   min-height: 100px;
+  border: 1px solid #ddd;
   background-color: #fff;
   color: #000;
 `;
@@ -158,7 +170,7 @@ const Ssok = ({ ssokData, isOwner }) => {
           <button type="submit">완료</button>
         </form>
       ) : (
-        <PostWrap>
+        <Wrap>
           <UserInfoWrap>
             <UserInfo>
               <UserPhoto>
@@ -182,18 +194,20 @@ const Ssok = ({ ssokData, isOwner }) => {
             )}
           </UserInfoWrap>
           <PostContent>
-            <PostText fontColor={ssokData.attachmentURL ? '#fff' : '#000'}>
-              {ssokData.text}
-            </PostText>
-            <PostImgWrap isImg={Boolean(ssokData.attachmentURL)}>
-              {ssokData.attachmentURL ? (
-                <PostImg src={ssokData.attachmentURL} />
-              ) : (
-                <EmptyDiv />
-              )}
-            </PostImgWrap>
+            {ssokData.attachmentURL ? (
+              <>
+                <ImgText>{ssokData.text}</ImgText>
+                <PostImgWrap>
+                  <PostImg src={ssokData.attachmentURL} />
+                </PostImgWrap>
+              </>
+            ) : (
+              <EmptyDiv>
+                <PostText>{ssokData.text}</PostText>
+              </EmptyDiv>
+            )}
           </PostContent>
-        </PostWrap>
+        </Wrap>
       )}
     </>
   );

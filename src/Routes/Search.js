@@ -1,9 +1,12 @@
 import React from 'react';
 import Header from 'components/Header';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import Container from 'components/Container';
 import device from 'styles/deviceSize';
+
+import tags from 'category';
+import ResultSearch from './ResultSearch';
 
 const Content = styled.div`
   display: flex;
@@ -51,39 +54,29 @@ const ListLink = styled(Link)`
 `;
 
 const Search = () => {
+  const { url } = useRouteMatch();
   return (
-    <Container>
-      <Header headText="검색" />
-      <Content>
-        <ListWrap>
-          <List>
-            <ListLink category="empathy" to="">
-              공감
-            </ListLink>
-          </List>
-          <List>
-            <ListLink category="affirmation" to="">
-              확언
-            </ListLink>
-          </List>
-          <List>
-            <ListLink category="lyrics" to="">
-              가사
-            </ListLink>
-          </List>
-          <List>
-            <ListLink category="quotation" to="">
-              책구절
-            </ListLink>
-          </List>
-          <List>
-            <ListLink category="other" to="">
-              기타
-            </ListLink>
-          </List>
-        </ListWrap>
-      </Content>
-    </Container>
+    <>
+      <Container>
+        <Header headText="검색" />
+        <Content>
+          <ListWrap>
+            {Object.keys(tags).map((tag) => (
+              <List key={tag}>
+                <ListLink
+                  category={tag}
+                  type="button"
+                  to={`${url}/${tag}`}
+                  value={tag}
+                >
+                  {tags[tag]}
+                </ListLink>
+              </List>
+            ))}
+          </ListWrap>
+        </Content>
+      </Container>
+    </>
   );
 };
 
