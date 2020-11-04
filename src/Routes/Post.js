@@ -6,7 +6,7 @@ import Container from 'components/Container';
 const Post = ({ userObject }) => {
   return (
     <Container>
-      <Header>글쓰기</Header>
+      <Header headText="글쓰기" />
       <SsokEditor userObject={userObject} />
     </Container>
   );

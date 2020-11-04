@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import device from 'styles/deviceSize';
 
 const Wrap = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   ${device.tablet} {
     display: flex;
     flex-direction: row;

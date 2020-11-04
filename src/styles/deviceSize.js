@@ -15,10 +15,10 @@ const device = {
 
 export const NavigationResponseWidth = `
 ${device.tablet} {
-  width: 200px;
+  width: 110px;
 }
 ${device.laptop} {
-  width: 110px;
+  width: 200px;
 }
 `;
 

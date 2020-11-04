@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -80,6 +80,8 @@ const NaviList = styled.li`
 
 const NaviLink = styled(Link)`
   display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s;
   padding: 5px 0;
   &:hover {
@@ -100,14 +102,11 @@ const LinkText = styled.div`
 
 const NaviText = styled.span`
   display: none;
-  ${device.tablet} {
+  ${device.laptop} {
     display: block;
     font-size: 20px;
     font-weight: bold;
     margin: 0 10px;
-  }
-  ${device.laptop} {
-    display: none;
   }
 `;
 
@@ -148,7 +147,6 @@ const Navigation = ({ userObject }) => {
             </NaviLink>
           </NaviList>
           <NaviList selected={pathname === '/profile'}>
-            {/* <Link to="/profile">{userObject.displayName}의 Profile</Link> */}
             <NaviLink to="/profile">
               <LinkText>
                 <FontAwesomeIcon icon={faUser} style={iconStyle} />

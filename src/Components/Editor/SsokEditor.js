@@ -1,19 +1,36 @@
-import { dbService, storageService } from 'fbase';
+import { dbService } from 'fbase';
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import FileButton from './FileButton';
 import SDButton from './SDButton';
 import TextArea from './TextArea';
 import styled from 'styled-components';
 import { onFileChange, uploadFileURL } from 'utils';
-// import { Editor, EditorState, convertToRaw } from 'draft-js';
+
+const Section = styled.div`
+  width: 80%;
+  height: 100%;
+  margin: 50px auto;
+  max-width: 980px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  margin: 10px 0;
+  justify-content: space-between;
+`;
+
+const ImgFilePreview = styled.div`
+  width: 100%;
+  height: 50%;
+  margin: 0 auto;
+  background-image: url(${({ backgroundURL }) => backgroundURL});
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+`;
 
 const SsokEditor = ({ userObject }) => {
   const [ssok, setSsok] = useState('');
   const [attachment, setAttachment] = useState('');
-  // const [editorState, setEditorState] = useState(() =>
-  //   EditorState.createEmpty()
-  // );
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -35,19 +52,12 @@ const SsokEditor = ({ userObject }) => {
     setAttachment('');
   };
 
-  // const onChange = (editorState) => {
-  //   const contentState = editorState.getCurrentContent();
-  //   console.log(JSON.stringify(convertToRaw(contentState)));
-  //   setEditorState(editorState);
-  // };
-
   const onClearAttachment = () => setAttachment(null);
+
   return (
     <Section>
       <form onSubmit={onSubmit}>
         <TextArea setSsok={(val) => setSsok(val)} ssok={ssok} />
-        {/* <div contentEditable="true" onInput={getText}></div> */}
-        {/* <Editor editorState={editorState} onChange={onChange} /> */}
         <ButtonWrapper>
           <FileButton
             onFileChange={onFileChange}
@@ -58,7 +68,6 @@ const SsokEditor = ({ userObject }) => {
       </form>
       {attachment && (
         <ImgFilePreview backgroundURL={attachment}>
-          {/* <img src={attachment} /> */}
           <button type="button" onClick={onClearAttachment}>
             삭제
           </button>
@@ -69,25 +78,3 @@ const SsokEditor = ({ userObject }) => {
 };
 
 export default SsokEditor;
-
-const Section = styled.div`
-  width: 80%;
-  height: 100%;
-  margin: 10px auto;
-  max-width: 980px;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  margin: 10px 0;
-  justify-content: space-between;
-`;
-
-const ImgFilePreview = styled.div`
-  width: 100%;
-  height: 50%;
-  margin: 0 auto;
-  background-image: url(${({ backgroundURL }) => backgroundURL});
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-`;

@@ -2,6 +2,14 @@ const logoFont = `
   font-family: 'Dancing Script'
 `;
 
+const categoryColor = {
+  affirmation: '#4e89ae',
+  empathy: '#43658b',
+  lyrics: '#ed6663',
+  quotation: '#ffa372',
+  other: '#d54062',
+};
+
 const lightMode = {
   mainColor: (opacity) => `rgba(230, 43, 43, ${opacity})`,
   backgroundColor: '#eee',
@@ -23,4 +31,5 @@ const darkMode = {
 export default {
   logoFont,
   lightMode,
+  categoryColor,
 };

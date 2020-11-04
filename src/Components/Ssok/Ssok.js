@@ -128,6 +128,7 @@ const Ssok = ({ ssokData, isOwner }) => {
     const ok = window.confirm('삭제하시겠습니까?');
     if (ok) {
       await dbService.doc(`ssok/${ssokData.id}`).delete(); //doc(경로) => collection 안에 document 가 있기 때문에 'collection이름/document 아이디'로 작성
+      if (!ssokData.attachmentURL) return;
       await storageService.refFromURL(ssokData.attachmentURL).delete(); //refFromURL => 입력받은 url을 firebase 가 storage 안에서 url reference 를 찾아 그 reference로 리턴하는 method
     }
   };
@@ -161,7 +162,7 @@ const Ssok = ({ ssokData, isOwner }) => {
           <UserInfoWrap>
             <UserInfo>
               <UserPhoto>
-                <img src={ssokData.creatorPhoto} />
+                <img src={ssokData.creatorPhoto} alt="배경이미지" />
               </UserPhoto>
               <UserName>{ssokData.creatorName}</UserName>
             </UserInfo>

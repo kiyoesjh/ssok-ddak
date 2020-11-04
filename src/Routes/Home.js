@@ -6,16 +6,6 @@ import device from 'styles/deviceSize';
 import Header from 'components/Header';
 import Container from 'components/Container';
 
-// const HomeWrap = styled.div`
-//   display: flex;
-//   flex: 1;
-//   width: 100%;
-//   flex-direction: column;
-//   ${device.tablet} {
-//     border-left: 1px solid #ddd;
-//   }
-// `;
-
 const ColumnWrap = styled.div`
   width: 100%;
 `;
@@ -33,31 +23,30 @@ const Wrap = styled.div`
   ${device.laptop} {
     width: 100%;
     column-count: 3;
-    /* column-width: 320px; */
     column-gap: 15px;
   }
 `;
 
 const Home = ({ userObject }) => {
   const [ssoks, setSsoks] = useState([]);
-  const handlerSnapShot = () => {
-    dbService.collection('ssok').onSnapshot((snapshot) => {
+
+  useEffect(() => {
+    const unsubscribe = dbService.collection('ssok').onSnapshot((snapshot) => {
       const ssokArr = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setSsoks(ssokArr);
     });
-  };
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) handlerSnapShot();
-    return () => (mounted = false);
-  }, [ssoks]);
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <Container>
-      <Header>홈</Header>
+      <Header headText="홈" />
       <ColumnWrap>
         <Wrap>
           {ssoks.map((ssok) => (
