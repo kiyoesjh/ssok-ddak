@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import device, { NavigationResponseWidth } from 'styles/deviceSize';
+import SettingPop from './sideModal/SettingPop';
 
 const NavWrap = styled.div`
   display: flex;
@@ -25,6 +26,8 @@ const Nav = styled.nav`
   height: 50px;
   z-index: 99;
   ${device.tablet} {
+    flex-direction: column;
+    background-color: #fff;
     top: 0;
     height: 100%;
   }
@@ -116,7 +119,16 @@ const iconStyle = {
   color: '#000',
 };
 
+const ProfileWrap = styled.div`
+  display: none;
+  ${device.tablet} {
+    display: block;
+    width: 100%;
+  }
+`;
+
 const Navigation = ({ userObject }) => {
+  // const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
   return (
     <NavWrap>
@@ -155,6 +167,11 @@ const Navigation = ({ userObject }) => {
             </NaviLink>
           </NaviList>
         </NaviListWrap>
+        <ProfileWrap>
+          <SettingPop position={`bottom: 100%; left: 10px;`}>
+            <NaviText>설정</NaviText>
+          </SettingPop>
+        </ProfileWrap>
       </Nav>
     </NavWrap>
   );

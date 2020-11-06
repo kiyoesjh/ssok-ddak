@@ -13,12 +13,13 @@ const ColumnWrap = styled.div`
 const Wrap = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 50px 0;
+  padding: 15px 10px;
   ${device.mobile} {
     width: 80%;
   }
   ${device.tablet} {
     columns: unset;
+    padding: 50px 10px;
   }
   ${device.laptop} {
     width: 100%;

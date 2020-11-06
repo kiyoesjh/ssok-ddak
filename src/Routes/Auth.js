@@ -31,6 +31,7 @@ const TitleLogo = styled.h1`
   font-size: 50px;
   text-align: center;
   font-family: 'Dancing Script';
+  color: #000;
 `;
 
 const FormWrap = styled.div`

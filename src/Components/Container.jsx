@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   min-height: 100%;
   flex-direction: column;
   ${device.tablet} {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid ${({ theme }) => theme.borderColor};
   }
 `;
 

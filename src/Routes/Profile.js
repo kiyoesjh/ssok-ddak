@@ -2,7 +2,7 @@ import Container from 'components/Container';
 import Header from 'components/Header';
 import ModalLayer from 'routes/ModalLayer';
 import ProfileEditor from 'components/Profile/ProfileEditor';
-import { authService, dbService } from 'fbase';
+import { dbService } from 'fbase';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, Route, useHistory, useRouteMatch } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -77,19 +77,10 @@ const ProfileEditButton = styled(Link)`
   ${grayButtonStyle}
 `;
 
-const LogoutButton = styled.button`
-  ${grayButtonStyle}
-`;
-
 const Profile = ({ userObject, refreshUserObj }) => {
   const [ssoks, setSsoks] = useState([]);
   const history = useHistory();
   const { url } = useRouteMatch();
-
-  const logOutHandle = async () => {
-    await authService.signOut();
-    history.push('/');
-  };
 
   const getMySsoks = useCallback(async () => {
     const userSsoks = await dbService
@@ -111,11 +102,7 @@ const Profile = ({ userObject, refreshUserObj }) => {
   return (
     <>
       <Container>
-        <Header headText={userObject.displayName}>
-          <LogoutButton type="button" onClick={logOutHandle}>
-            로그아웃
-          </LogoutButton>
-        </Header>
+        <Header headText={userObject.displayName} />
         <Wrap>
           <UserInfoWrap>
             <UserInfo>

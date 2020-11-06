@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import device from 'styles/deviceSize';
+import SettingPop from './sideModal/SettingPop';
 
 const Container = styled.div`
   position: sticky;
@@ -21,11 +23,20 @@ const Head = styled.h2`
   color: #000;
 `;
 
-const Header = ({ headText, children }) => {
+const ButtonWrap = styled.div`
+  display: block;
+  ${device.tablet} {
+    display: none;
+  }
+`;
+
+const Header = ({ headText }) => {
   return (
     <Container>
       <Head>{headText}</Head>
-      {children}
+      <ButtonWrap>
+        <SettingPop position={`top: 5px; right: 0;`} />
+      </ButtonWrap>
     </Container>
   );
 };
