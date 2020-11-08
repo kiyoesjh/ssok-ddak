@@ -32,9 +32,8 @@ export default createGlobalStyle`
   }
   body {
     height: 100vh;
-    /* font-size: 14px; */
-    background-color: #eee;
-    color: #888;
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.fontColor};
   }
   a {
     text-decoration: none;

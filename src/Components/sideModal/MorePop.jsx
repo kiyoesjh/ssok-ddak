@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const MoreButton = styled.button`
   outline: none;
   font-size: 20px;
+  color: ${({ theme }) => theme.boldColor};
 `;
 
 const Overlay = styled.div`
@@ -14,7 +15,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 20;
+  z-index: 98;
 `;
 
 const PopList = styled.div`
@@ -25,11 +26,10 @@ const PopList = styled.div`
   max-width: calc(295px);
   top: 0;
   right: 0;
-  background-color: #eee;
-  overflow: hidden;
+  background-color: ${({ theme }) => theme.backgroundColor};
   border-radius: 5px;
-  box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
-  z-index: 21;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  z-index: 99;
 `;
 
 const MorePop = ({ children, setIsOpen, isOpen }) => {

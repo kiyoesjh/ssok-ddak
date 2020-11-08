@@ -13,14 +13,14 @@ const Container = styled.div`
   height: 50px;
   min-height: 50px;
   padding: 0 15px;
-  border-bottom: 1px solid #ddd;
-  background-color: #fff;
+  border-bottom: 1px solid ${({ theme }) => theme.borderColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
   z-index: 90;
 `;
 
 const Head = styled.h2`
   font-size: 1.25rem;
-  color: #000;
+  color: ${({ theme }) => theme.boldColor};
 `;
 
 const ButtonWrap = styled.div`

@@ -19,12 +19,11 @@ const UserInfoWrap = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 50px;
-  border: 1px solid #ccc;
   border-bottom: 0;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding: 10px;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.cardColor};
 `;
 
 const UserInfo = styled.div`
@@ -45,6 +44,7 @@ const UserPhoto = styled.div`
 
 const UserName = styled.div`
   margin-left: 10px;
+  color: ${({ theme }) => theme.boldColor};
 `;
 
 const PostContent = styled.div`
@@ -81,7 +81,7 @@ const ImgText = styled(Text)`
 const PostText = styled(Text)`
   align-items: flex-start;
   padding: 30px 0;
-  color: #444;
+  color: ${({ theme }) => theme.boldColor};
 `;
 
 const PostWrap = styled.div`
@@ -114,21 +114,22 @@ const LayerButton = styled.button`
   flex-direction: row;
   align-items: center;
   padding: 10px;
+  color: ${({ theme }) => theme.fontColor};
   &:hover {
-    background-color: #ddd;
+    background-color: ${({ theme }) => theme.lightColor};
   }
 `;
 
 const IconText = styled.span`
   padding-left: 8px;
+  color: ${({ theme }) => theme.fontColor};
 `;
 
 const EmptyDiv = styled(PostWrap)`
   width: 100%;
   min-height: 100px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  color: #000;
+  border-top: 1px solid ${({ theme }) => theme.borderColor};
+  background-color: ${({ theme }) => theme.cardColor};
 `;
 
 const Ssok = ({ ssokData, isOwner }) => {

@@ -27,7 +27,7 @@ const Nav = styled.nav`
   z-index: 99;
   ${device.tablet} {
     flex-direction: column;
-    background-color: #fff;
+    background-color: ${({ theme }) => theme.backgroundColor};
     top: 0;
     height: 100%;
   }
@@ -46,7 +46,7 @@ const NaviListWrap = styled.ul`
     left: 0;
     width: 100%;
     height: 100%;
-    background: #fff;
+    background: ${({ theme }) => theme.backgroundColor};
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     opacity: 0.8;
@@ -61,7 +61,7 @@ const NaviListWrap = styled.ul`
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
-    background: #fff;
+    background: ${({ theme }) => theme.backgroundColor};
     &:after {
       display: none;
     }
@@ -73,7 +73,7 @@ const NaviList = styled.li`
   position: relative;
   width: 100%;
   padding: 0 10px;
-  color: #000;
+  color: ${({ theme }) => theme.boldColor};
   transition: all 0.2s;
   opacity: ${({ selected }) => (selected ? 1 : 0.5)};
   &:hover {
@@ -89,7 +89,7 @@ const NaviLink = styled(Link)`
   padding: 5px 0;
   &:hover {
     > div {
-      background-color: #eee;
+      background-color: ${({ theme }) => theme.lightColor};
     }
   }
 `;
@@ -137,7 +137,7 @@ const Navigation = ({ userObject }) => {
           <NaviList selected={pathname === '/'}>
             <NaviLink to="/">
               <LinkText>
-                <FontAwesomeIcon icon={faHome} style={iconStyle} />
+                <FontAwesomeIcon icon={faHome} fixedWidth />
                 <NaviText>홈</NaviText>
               </LinkText>
             </NaviLink>
@@ -145,7 +145,7 @@ const Navigation = ({ userObject }) => {
           <NaviList selected={pathname === '/search'}>
             <NaviLink to="/search">
               <LinkText>
-                <FontAwesomeIcon icon={faSearch} style={iconStyle} />
+                <FontAwesomeIcon icon={faSearch} fixedWidth />
                 <NaviText>글찾기</NaviText>
               </LinkText>
             </NaviLink>
@@ -153,7 +153,7 @@ const Navigation = ({ userObject }) => {
           <NaviList selected={pathname === '/post'}>
             <NaviLink to="/post">
               <LinkText>
-                <FontAwesomeIcon icon={faPlus} style={iconStyle} />
+                <FontAwesomeIcon icon={faPlus} fixedWidth />
                 <NaviText>글쓰기</NaviText>
               </LinkText>
             </NaviLink>
@@ -161,7 +161,7 @@ const Navigation = ({ userObject }) => {
           <NaviList selected={pathname === '/profile'}>
             <NaviLink to="/profile">
               <LinkText>
-                <FontAwesomeIcon icon={faUser} style={iconStyle} />
+                <FontAwesomeIcon icon={faUser} fixedWidth />
                 <NaviText>프로필</NaviText>
               </LinkText>
             </NaviLink>
