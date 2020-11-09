@@ -52,4 +52,4 @@ const AppRouter = ({ isLoggedIn, userObject, refreshUserObj }) => {
   );
 };
 
-export default AppRouter;
+export default React.memo(AppRouter);

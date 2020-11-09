@@ -132,4 +132,4 @@ const SettingPop = ({ children, position }) => {
   );
 };
 
-export default SettingPop;
+export default React.memo(SettingPop);

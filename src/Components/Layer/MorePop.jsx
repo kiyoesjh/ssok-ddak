@@ -49,4 +49,4 @@ const MorePop = ({ children, setIsOpen, isOpen }) => {
   );
 };
 
-export default MorePop;
+export default React.memo(MorePop);

@@ -35,4 +35,4 @@ const EditSsok = ({ onSubmit, setNewSsok, newSsok, toggleEditing }) => {
   );
 };
 
-export default EditSsok;
+export default React.memo(EditSsok);
