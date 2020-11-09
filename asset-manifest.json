@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/ssok-ddak/static/js/main.53e90eea.chunk.js",
-    "main.js.map": "/ssok-ddak/static/js/main.53e90eea.chunk.js.map",
+    "main.js": "/ssok-ddak/static/js/main.12abdf97.chunk.js",
+    "main.js.map": "/ssok-ddak/static/js/main.12abdf97.chunk.js.map",
     "runtime-main.js": "/ssok-ddak/static/js/runtime-main.7e820de9.js",
     "runtime-main.js.map": "/ssok-ddak/static/js/runtime-main.7e820de9.js.map",
     "static/js/2.1d5c3f00.chunk.js": "/ssok-ddak/static/js/2.1d5c3f00.chunk.js",
     "static/js/2.1d5c3f00.chunk.js.map": "/ssok-ddak/static/js/2.1d5c3f00.chunk.js.map",
     "index.html": "/ssok-ddak/index.html",
-    "precache-manifest.26313263aa142620a3aa86f65df388cc.js": "/ssok-ddak/precache-manifest.26313263aa142620a3aa86f65df388cc.js",
+    "precache-manifest.3930ebb0bf9f9432816f89bed4074ba1.js": "/ssok-ddak/precache-manifest.3930ebb0bf9f9432816f89bed4074ba1.js",
     "service-worker.js": "/ssok-ddak/service-worker.js",
     "static/js/2.1d5c3f00.chunk.js.LICENSE.txt": "/ssok-ddak/static/js/2.1d5c3f00.chunk.js.LICENSE.txt",
     "static/media/DancingScript-SemiBold.ttf": "/ssok-ddak/static/media/DancingScript-SemiBold.415dfbf4.ttf",
@@ -16,6 +16,6 @@
   "entrypoints": [
     "static/js/runtime-main.7e820de9.js",
     "static/js/2.1d5c3f00.chunk.js",
-    "static/js/main.53e90eea.chunk.js"
+    "static/js/main.12abdf97.chunk.js"
   ]
 }
