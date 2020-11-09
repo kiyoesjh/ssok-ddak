@@ -42,14 +42,14 @@ const UserProfile = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.lightColor};
+  background-color: ${({ theme }) => theme.borderColor};
 `;
 
 const UserName = styled.span`
   width: 60px;
   height: 20px;
   margin-left: 10px;
-  background-color: ${({ theme }) => theme.lightColor};
+  background-color: ${({ theme }) => theme.borderColor};
 `;
 
 const Content = styled.div`
@@ -63,12 +63,12 @@ const Content = styled.div`
 const Text = styled.span`
   width: ${({ width }) => width};
   height: 20px;
-  background-color: ${({ theme }) => theme.lightColor};
+  background-color: ${({ theme }) => theme.borderColor};
   margin: 5px 0;
 `;
 
 const HomeSkeleton = () => {
-  const cardArr = [0, 1, 2, 3];
+  const cardArr = [0, 1, 2, 3, 4, 5];
   return (
     <Container>
       {cardArr.map((n) => (

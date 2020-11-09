@@ -69,7 +69,7 @@ const FileInput = styled.input`
 const SubmitInput = styled.input`
   width: 100%;
   padding: 10px;
-  color: #eee;
+  color: #fff;
 `;
 
 const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
@@ -130,7 +130,7 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
           value={userName}
           onChange={onChange}
         />
-        <Button buttonWidth="100%">
+        <Button buttonWidth="100%" isFullButton={true}>
           <SubmitInput type="submit" value="Update" />
         </Button>
       </Form>
