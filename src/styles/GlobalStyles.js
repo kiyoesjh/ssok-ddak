@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import DancingScript from './fonts/DancingScript-SemiBold.ttf';
-import RIDIBatang from './fonts/RIDIBatang.otf';
+import './App.css';
 
 export default createGlobalStyle`
   ${reset};
@@ -14,14 +13,6 @@ export default createGlobalStyle`
     border-radius: 0;
     padding: 0;
     margin: 0;
-  }
-  @font-face {
-    font-family: 'Dancing Script';
-    src: url(${DancingScript});
-  }
-  @font-face {
-    font-family: 'RIDIBatang';
-    src: url(${RIDIBatang});
   }
   * {
     box-sizing: border-box;

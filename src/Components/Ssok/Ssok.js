@@ -207,4 +207,4 @@ const Ssok = ({ ssokData, isOwner }) => {
   );
 };
 
-export default Ssok;
+export default React.memo(Ssok);

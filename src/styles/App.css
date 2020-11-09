@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Dancing Script';
+  src: local('Dancing Script'),
+    url(./fonts/DancingScript-SemiBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'RIDIBatang';
+  src: local('RIDIBatang'), url(./fonts/RIDIBatang.otf) format('opentype');
+}

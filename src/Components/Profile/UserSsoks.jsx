@@ -25,4 +25,4 @@ const UserSsoks = ({ ssoks }) => {
   );
 };
 
-export default UserSsoks;
+export default React.memo(UserSsoks);

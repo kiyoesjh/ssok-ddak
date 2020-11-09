@@ -138,4 +138,4 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
   );
 };
 
-export default ProfileEditor;
+export default React.memo(ProfileEditor);

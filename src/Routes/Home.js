@@ -69,4 +69,4 @@ const Home = ({ userObject }) => {
   );
 };
 
-export default Home;
+export default React.memo(Home);
