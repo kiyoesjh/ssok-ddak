@@ -3,8 +3,10 @@ import React, { useState } from 'react';
 import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
-import MorePop from '../sideModal/MorePop.jsx';
+import MorePop from '../Layer/MorePop.jsx';
 import device from 'styles/deviceSize';
+import { onDelete } from 'utils.js';
+import EditSsok from './EditSsok.jsx';
 
 const Wrap = styled.div`
   position: relative;
@@ -74,13 +76,14 @@ const ImgText = styled(Text)`
   top: 0;
   left: 0;
   align-items: center;
+  padding: 0 10px;
   color: #fff;
   z-index: 10;
 `;
 
 const PostText = styled(Text)`
   align-items: flex-start;
-  padding: 30px 0;
+  padding: 30px 10px;
   color: ${({ theme }) => theme.boldColor};
 `;
 
@@ -137,64 +140,54 @@ const Ssok = ({ ssokData, isOwner }) => {
   const [newSsok, setNewSsok] = useState(ssokData.text); //input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
   const [isOpen, setIsOpen] = useState(false);
 
-  const onDelete = async () => {
-    const ok = window.confirm('삭제하시겠습니까?');
-    if (ok) {
-      await dbService.doc(`ssok/${ssokData.id}`).delete(); //doc(경로) => collection 안에 document 가 있기 때문에 'collection이름/document 아이디'로 작성
-      if (!ssokData.attachmentURL) return;
-      await storageService.refFromURL(ssokData.attachmentURL).delete(); //refFromURL => 입력받은 url을 firebase 가 storage 안에서 url reference 를 찾아 그 reference로 리턴하는 method
-    }
+  const onSsokDelete = async () => await onDelete(ssokData);
+  const toggleEditing = () => {
+    setEditing((prev) => !prev);
+    setIsOpen(false);
   };
-  const onUpdate = ({ target: { value } }) => setNewSsok(value);
-  const toggleEditing = () => setEditing((prev) => !prev);
   const onSubmit = (event) => {
     event.preventDefault();
-    dbService.doc(`ssok/${ssokData.id}`).update({
-      text: newSsok,
-    });
+    try {
+      dbService.doc(`ssok/${ssokData.id}`).update({
+        text: newSsok,
+      });
+    } catch {}
     setEditing(false);
   };
   return (
-    <>
-      {editing ? ( //수정하기를 눌렀다면? 폼이 나오게 된다.
-        <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            onChange={onUpdate}
-            value={newSsok}
-            required
-            placeholder="Write your mind"
+    <Wrap>
+      <UserInfoWrap>
+        <UserInfo>
+          <UserPhoto>
+            <img src={ssokData.creatorPhoto} alt="배경이미지" />
+          </UserPhoto>
+          <UserName>{ssokData.creatorName}</UserName>
+        </UserInfo>
+        {isOwner && ( //글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
+          <>
+            <MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
+              <LayerButton type="button" onClick={onSsokDelete}>
+                <FontAwesomeIcon icon={faTrashAlt} />
+                <IconText>삭제하기</IconText>
+              </LayerButton>
+              <LayerButton type="button" onClick={toggleEditing}>
+                <FontAwesomeIcon icon={faEdit} />
+                <IconText>수정하기</IconText>
+              </LayerButton>
+            </MorePop>
+          </>
+        )}
+      </UserInfoWrap>
+      <PostContent>
+        {editing ? ( //수정하기를 눌렀다면? 폼이 나오게 된다.
+          <EditSsok
+            onSubmit={onSubmit}
+            setNewSsok={setNewSsok}
+            newSsok={newSsok}
+            toggleEditing={toggleEditing}
           />
-          <button type="button" onClick={toggleEditing}>
-            취소
-          </button>
-          <button type="submit">완료</button>
-        </form>
-      ) : (
-        <Wrap>
-          <UserInfoWrap>
-            <UserInfo>
-              <UserPhoto>
-                <img src={ssokData.creatorPhoto} alt="배경이미지" />
-              </UserPhoto>
-              <UserName>{ssokData.creatorName}</UserName>
-            </UserInfo>
-            {isOwner && ( //글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
-              <>
-                <MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
-                  <LayerButton type="button" onClick={onDelete}>
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                    <IconText>삭제하기</IconText>
-                  </LayerButton>
-                  <LayerButton type="button" onClick={toggleEditing}>
-                    <FontAwesomeIcon icon={faEdit} />
-                    <IconText>수정하기</IconText>
-                  </LayerButton>
-                </MorePop>
-              </>
-            )}
-          </UserInfoWrap>
-          <PostContent>
+        ) : (
+          <>
             {ssokData.attachmentURL ? (
               <>
                 <ImgText>{ssokData.text}</ImgText>
@@ -207,10 +200,10 @@ const Ssok = ({ ssokData, isOwner }) => {
                 <PostText>{ssokData.text}</PostText>
               </EmptyDiv>
             )}
-          </PostContent>
-        </Wrap>
-      )}
-    </>
+          </>
+        )}
+      </PostContent>
+    </Wrap>
   );
 };
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import styled, {css} from "styled-components";
+import styled, { css } from 'styled-components';
 
 const widthStyles = css`
-  width: ${({buttonWidth}) => buttonWidth};
+  width: ${({ buttonWidth }) => buttonWidth};
 `;
 
 const StyledButton = styled.div`
@@ -10,19 +10,27 @@ const StyledButton = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 30px;
-  color: #eee;
-  background-color: ${({theme}) => theme.lightMode.mainColor(1)};
+  color: ${({ theme }) => theme.mainColor(1)};
+  border: 1px solid ${({ theme }) => theme.mainColor(1)};
+  ${({ isFullButton, theme }) =>
+    isFullButton &&
+    `
+      background-color: ${theme.mainColor(1)};
+      color: #fff;
+    `};
   transition: 0.3s;
+  ${({ gap }) => gap && `margin: ${gap}`};
   ${widthStyles};
-  &:hover {
-    background-color: ${({theme}) => theme.lightMode.mainColor(0.5)};
-  }
 `;
 
-
-const Button = ({children, buttonWidth, ...rest}) => {
+const Button = ({ children, buttonWidth, isFullButton, gap, ...rest }) => {
   return (
-    <StyledButton buttonWidth={buttonWidth} {...rest}>
+    <StyledButton
+      buttonWidth={buttonWidth}
+      isFullButton={isFullButton}
+      gap={gap}
+      {...rest}
+    >
       {children}
     </StyledButton>
   );

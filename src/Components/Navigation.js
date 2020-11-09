@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,7 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import device, { NavigationResponseWidth } from 'styles/deviceSize';
-import SettingPop from './sideModal/SettingPop';
+import SettingPop from './Layer/SettingPop';
 
 const NavWrap = styled.div`
   display: flex;
@@ -25,11 +25,13 @@ const Nav = styled.nav`
   width: inherit;
   height: 50px;
   z-index: 99;
+  border-top: 1px solid ${({ theme }) => theme.borderColor};
   ${device.tablet} {
     flex-direction: column;
     background-color: ${({ theme }) => theme.backgroundColor};
     top: 0;
     height: 100%;
+    border-top: 0;
   }
 `;
 
@@ -112,12 +114,6 @@ const NaviText = styled.span`
     margin: 0 10px;
   }
 `;
-
-const iconStyle = {
-  width: '1.7rem',
-  height: '1.7rem',
-  color: '#000',
-};
 
 const ProfileWrap = styled.div`
   display: none;

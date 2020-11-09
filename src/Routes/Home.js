@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import device from 'styles/deviceSize';
 import Header from 'components/Header';
 import Container from 'components/Container';
+import HomeSkeleton from 'skeletons/HomeSkeleton';
 
 const ColumnWrap = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const ColumnWrap = styled.div`
 
 const Wrap = styled.div`
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 0 auto 50px;
   padding: 15px 10px;
   ${device.mobile} {
     width: 80%;
@@ -20,6 +21,7 @@ const Wrap = styled.div`
   ${device.tablet} {
     columns: unset;
     padding: 50px 10px;
+    margin: 0 auto;
   }
   ${device.laptop} {
     width: 100%;
@@ -44,20 +46,26 @@ const Home = ({ userObject }) => {
   }, []);
 
   return (
-    <Container>
-      <Header headText="홈" />
-      <ColumnWrap>
-        <Wrap>
-          {ssoks.map((ssok) => (
-            <Ssok
-              key={ssok.id}
-              ssokData={ssok}
-              isOwner={ssok.creatorId === userObject.uid}
-            />
-          ))}
-        </Wrap>
-      </ColumnWrap>
-    </Container>
+    <>
+      <Container>
+        <Header headText="홈" />
+        <ColumnWrap>
+          {ssoks.length ? (
+            <Wrap>
+              {ssoks.map((ssok) => (
+                <Ssok
+                  key={ssok.id}
+                  ssokData={ssok}
+                  isOwner={ssok.creatorId === userObject.uid}
+                />
+              ))}
+            </Wrap>
+          ) : (
+            <HomeSkeleton />
+          )}
+        </ColumnWrap>
+      </Container>
+    </>
   );
 };
 

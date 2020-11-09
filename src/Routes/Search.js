@@ -1,12 +1,10 @@
 import React from 'react';
 import Header from 'components/Header';
 import styled from 'styled-components';
-import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import Container from 'components/Container';
 import device from 'styles/deviceSize';
-
 import tags from 'category';
-import ResultSearch from './ResultSearch';
 
 const Content = styled.div`
   display: flex;
@@ -47,7 +45,7 @@ const ListLink = styled(Link)`
   height: 100%;
   background-color: ${({ theme, category }) => theme.categoryColor[category]};
   border-radius: 5px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   color: #fff;
   font-family: 'RIDIBatang';
   font-size: 1.5rem;

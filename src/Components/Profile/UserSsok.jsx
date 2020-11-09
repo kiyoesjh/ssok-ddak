@@ -14,22 +14,21 @@ const ImgWrap = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  ${({ imgUrl }) =>
+  ${({ imgUrl, theme }) =>
     imgUrl
       ? `
     background-image: url(${imgUrl});
     &:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.3);
-    content: "";
-  }`
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3);
+      content: "";
+    }`
       : `
-  background-color: #fff;
-  border: 1px solid #ddd;
+    background-color: ${theme.cardColor};
   `}
 `;
 
@@ -42,8 +41,9 @@ const Text = styled.p`
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 15px 0;
-  color: ${({ fontColor }) => fontColor};
+  padding: 20px 10px;
+  color: ${({ isAttachment, theme }) =>
+    isAttachment ? '#fff' : `${theme.boldColor}`};
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
@@ -53,10 +53,11 @@ const Text = styled.p`
 `;
 
 const UserSsok = ({ ssok }) => {
+  const { attachmentURL } = ssok;
   return (
     <Container>
-      <ImgWrap imgUrl={ssok.attachmentURL} />
-      <Text fontColor={ssok.attachmentURL ? '#fff' : '#000'}>{ssok.text}</Text>
+      <ImgWrap imgUrl={attachmentURL} />
+      <Text isAttachment={Boolean(attachmentURL)}>{ssok.text}</Text>
     </Container>
   );
 };

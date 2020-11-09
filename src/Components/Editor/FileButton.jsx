@@ -9,12 +9,12 @@ const FileUploadLabel = styled.label`
   height: 45px;
   margin: 0 10px;
   padding: 10px;
-  color: ${({ theme }) => theme.lightMode.mainColor(1)};
-  background-color: ${({ theme }) => theme.lightMode.mainColor(0.1)};
+  color: ${({ theme }) => theme.mainColor(1)};
+  background-color: ${({ theme }) => theme.mainColor(0.1)};
   cursor: pointer;
   border-radius: 50%;
   &:hover {
-    color: ${({ theme }) => theme.lightMode.mainColor(0.5)};
+    color: ${({ theme }) => theme.mainColor(0.5)};
   }
 `;
 

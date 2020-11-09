@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from 'components/Button';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const SubmitButton = styled.input`
   width: 100%;
@@ -16,8 +16,13 @@ const SDButton = () => {
   const onUp = () => setIsMousedown(false);
 
   return (
-    <Button buttonWidth='100px'>
-      <SubmitButton type="submit" value={isMousedown ? '딱' : '쏙'} onMouseDown={onDown} onMouseUp={onUp} />
+    <Button buttonWidth="100px" isFullButton={true}>
+      <SubmitButton
+        type="submit"
+        value={isMousedown ? '딱' : '쏙'}
+        onMouseDown={onDown}
+        onMouseUp={onUp}
+      />
     </Button>
   );
 };

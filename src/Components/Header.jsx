@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
-import SettingPop from './sideModal/SettingPop';
+import SettingPop from './Layer/SettingPop';
 
 const Container = styled.div`
   position: sticky;

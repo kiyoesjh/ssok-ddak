@@ -47,7 +47,7 @@ const UserImg = styled.img`
 
 const UserName = styled.strong`
   font-size: 1.6rem;
-  color: #444;
+  color: ${({ theme }) => theme.fontColor};
   display: block;
   margin: 0 40px;
 `;
@@ -57,7 +57,7 @@ const Content = styled.div`
   margin: 0 auto;
   min-height: 400px;
   padding-top: 30px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid ${({ theme }) => theme.borderColor};
 `;
 
 const ButtonWrap = styled.div`
@@ -68,9 +68,10 @@ const ButtonWrap = styled.div`
 const grayButtonStyle = css`
   display: block;
   padding: 10px;
-  background-color: #ddd;
+  /* background-color: ${({ theme }) => theme.lightColor}; */
+  border: 1px solid ${({ theme }) => theme.mainColor(1)};
   border-radius: 30px;
-  color: #000;
+  color: ${({ theme }) => theme.mainColor(1)};
 `;
 
 const ProfileEditButton = styled(Link)`

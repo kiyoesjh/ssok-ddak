@@ -48,9 +48,9 @@ const CloseButton = styled.button`
   width: 30px;
   height: 30px;
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.lightMode.mainColor(0.8)};
+  color: ${({ theme }) => theme.mainColor(0.8)};
   &:hover {
-    color: ${({ theme }) => theme.lightMode.mainColor(1)};
+    color: ${({ theme }) => theme.mainColor(1)};
   }
 `;
 

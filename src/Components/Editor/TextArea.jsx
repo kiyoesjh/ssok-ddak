@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: ${({ theme }) => theme.lightColor};
   flex: 1;
 `;
 
@@ -15,6 +15,11 @@ const Textarea = styled.textarea`
   padding: 10px;
   font-size: 1rem;
   background: none;
+  color: ${({ theme }) => theme.boldColor};
+  &::placeholder {
+    color: ${({ theme }) => theme.boldColor};
+    opacity: 0.8;
+  }
 `;
 
 const TextArea = ({ setSsok, ssok }) => {
@@ -32,8 +37,8 @@ const TextArea = ({ setSsok, ssok }) => {
       <Textarea
         onChange={onChange}
         value={ssok}
-        placeholder="이야기를 적어주세요"
-        maxLength={128}
+        placeholder="적고 싶은 글이나 기억하고 싶은 글을 적어보세요."
+        maxLength={300}
         style={style}
       />
     </Container>
