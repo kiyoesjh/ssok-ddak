@@ -1,19 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8b56c7e47513bcd78c8eec56a0e6b30c",
+    "revision": "59b012cf087338e3ba62febddef956d3",
     "url": "/ssok-ddak/index.html"
   },
   {
-    "revision": "2c39db939a37a04b2bfe",
-    "url": "/ssok-ddak/static/js/2.1d5c3f00.chunk.js"
+    "revision": "0905333b6f5cb2a54bd5",
+    "url": "/ssok-ddak/static/css/main.cbd6c995.chunk.css"
+  },
+  {
+    "revision": "2f0c7717ec3c176c2a2f",
+    "url": "/ssok-ddak/static/js/2.65bcba9b.chunk.js"
   },
   {
     "revision": "8e844923efaee6906e00c8fde9e55716",
-    "url": "/ssok-ddak/static/js/2.1d5c3f00.chunk.js.LICENSE.txt"
+    "url": "/ssok-ddak/static/js/2.65bcba9b.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "d9497791481410a128bc",
-    "url": "/ssok-ddak/static/js/main.12abdf97.chunk.js"
+    "revision": "0905333b6f5cb2a54bd5",
+    "url": "/ssok-ddak/static/js/main.e0fb7935.chunk.js"
   },
   {
     "revision": "cd2f88b529b9cd9e2d51",
