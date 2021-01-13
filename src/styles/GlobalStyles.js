@@ -1,6 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import './App.css';
 
 export default createGlobalStyle`
   ${reset};

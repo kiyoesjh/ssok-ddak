@@ -1,6 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { authService } from 'fbase';
 import styled, { css } from 'styled-components';
 import ThemeButton from 'components/ThemeButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -99,12 +97,12 @@ const LogoutButton = styled.button`
 
 const SettingPop = ({ children, position }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
   const togglePop = () => setIsOpen((prev) => !prev);
 
   const logOutHandle = async () => {
-    await authService.signOut();
-    history.push('/');
+    // await authService.signOut();
+    // history.push('/');
   };
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from 'components/Header';
 import styled from 'styled-components';
-import { Link, useRouteMatch } from 'react-router-dom';
+// import { Link, useRouteMatch } from 'react-router-dom';
 import Container from 'components/Container';
 import device from 'styles/deviceSize';
 import tags from 'category';
@@ -37,7 +37,7 @@ const List = styled.li`
   justify-content: center;
 `;
 
-const ListLink = styled(Link)`
+const ListLink = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,7 +52,7 @@ const ListLink = styled(Link)`
 `;
 
 const Search = () => {
-  const { url } = useRouteMatch();
+  // const { url } = useRouteMatch();
   return (
     <>
       <Container>

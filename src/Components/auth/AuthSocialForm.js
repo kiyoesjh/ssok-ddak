@@ -1,5 +1,4 @@
 import React from 'react';
-import { authService, firebaseInstance } from 'fbase';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -26,22 +25,13 @@ const ButtonText = styled.span`
 `;
 
 const AuthSocialForm = () => {
-  const onSocialClick = async ({ currentTarget: { name } }) => {
-    let provider;
-    if (name === 'google') {
-      provider = new firebaseInstance.auth.GoogleAuthProvider();
-    } else if (name === 'github') {
-      provider = new firebaseInstance.auth.GithubAuthProvider();
-    }
-    await authService.signInWithPopup(provider);
-  };
   return (
     <SocialForm>
-      <ButtonWrap type="button" name="google" onClick={onSocialClick}>
+      <ButtonWrap type="button" name="google" onClick={() => {}}>
         <Icon icon={faGoogle} />
         <ButtonText>구글로 시작하기</ButtonText>
       </ButtonWrap>
-      <ButtonWrap type="button" name="github" onClick={onSocialClick}>
+      <ButtonWrap type="button" name="github" onClick={() => {}}>
         <Icon icon={faGithub} />
         <ButtonText>깃허브로 시작하기</ButtonText>
       </ButtonWrap>

@@ -1,4 +1,4 @@
-import { storageService, dbService } from 'fbase';
+// import { storageService, dbService } from 'fbase';
 import { v4 as uuidv4 } from 'uuid';
 
 export const onFileChange = ({ target: { files } }, setAttachment) => {
@@ -14,9 +14,9 @@ export const onFileChange = ({ target: { files } }, setAttachment) => {
 };
 
 export const uploadFileURL = async (uid, attachment) => {
-  const attachmentRef = storageService.ref().child(`${uid}/${uuidv4()}`);
-  const response = await attachmentRef.putString(attachment, 'data_url');
-  return await response.ref.getDownloadURL();
+  // const attachmentRef = storageService.ref().child(`${uid}/${uuidv4()}`);
+  // const response = await attachmentRef.putString(attachment, 'data_url');
+  // return await response.ref.getDownloadURL();
 };
 
 export const onDelete = async (ssokData) => {

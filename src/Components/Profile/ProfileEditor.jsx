@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { onFileChange, uploadFileURL } from 'utils';
-import { dbService, storageService } from 'fbase';
+// import { dbService, storageService } from 'fbase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button';
@@ -75,7 +75,7 @@ const SubmitInput = styled.input`
 const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
   const [userName, setUserName] = useState(userObject.displayName);
   const [userPhoto, setUserPhoto] = useState('');
-  const history = useHistory();
+  // const history = useHistory();
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -96,14 +96,14 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
       editObj.userInfo['photoURL'] = uploadURL;
       editObj.ssokUserInfo['creatorPhoto'] = uploadURL;
     }
-    await userObject.updateProfile(editObj.userInfo); //user정보 업데이트
+    // await userObject.updateProfile(editObj.userInfo); //user정보 업데이트
     ssoks.forEach((ssok) => {
       //db정보 업데이트
       dbService.doc(`ssok/${ssok.id}`).update(editObj.ssokUserInfo);
     });
     refreshUserObj();
     setUserPhoto('');
-    history.push('/profile');
+    // history.push('/profile');
   };
 
   const onChange = ({ target: { value } }) => {

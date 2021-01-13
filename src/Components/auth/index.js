@@ -1,7 +1,19 @@
 import React from 'react';
-import AuthForm from 'components/auth/AuthForm';
+import AuthForm from 'components/Auth/AuthForm';
 import styled, { keyframes } from 'styled-components';
-import AuthSocialForm from 'components/auth/AuthSocialForm';
+import AuthSocialForm from 'components/Auth/AuthSocialForm';
+
+const Auth = () => (
+  <AuthWrap>
+    <TitleLogo>ssok ddak</TitleLogo>
+    <FormWrap>
+      <AuthForm />
+      <AuthSocialForm />
+    </FormWrap>
+  </AuthWrap>
+);
+
+export default Auth;
 
 const gradientKeyframes = keyframes`
   0% {
@@ -44,15 +56,3 @@ const FormWrap = styled.div`
   padding: 20px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 `;
-
-const Auth = () => (
-  <AuthWrap>
-    <TitleLogo>ssok ddak</TitleLogo>
-    <FormWrap>
-      <AuthForm />
-      <AuthSocialForm />
-    </FormWrap>
-  </AuthWrap>
-);
-
-export default Auth;

@@ -5,12 +5,12 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import Auth from 'routes/Auth';
-import Home from 'routes/Home';
-import Post from 'routes/Post';
-import Profile from 'routes/Profile';
-import ResultSearch from 'routes/ResultSearch';
-import Search from 'routes/Search';
+import Auth from 'pages/auth';
+import Home from 'pages/home';
+import Post from 'pages/post';
+import Profile from 'pages/profile';
+import ResultSearch from 'pages/resultSearch';
+import Search from 'pages/search';
 import Navigation from './Navigation';
 
 const AppRouter = ({ isLoggedIn, userObject, refreshUserObj }) => {

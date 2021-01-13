@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 const Modal = styled.div`
   position: fixed;
@@ -55,8 +55,9 @@ const CloseButton = styled.button`
 `;
 
 const ModalLayer = ({ children, onClick }) => {
-  const history = useHistory();
-  const onCloseLayer = () => history.goBack();
+  // const history = useHistory();
+  // const onCloseLayer = () => history.goBack();
+  const onCloseLayer = () => {};
   return createPortal(
     <Modal>
       <Overlay onClick={onClick} />
