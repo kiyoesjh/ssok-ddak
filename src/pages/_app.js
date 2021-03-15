@@ -7,24 +7,30 @@ import theme from 'styles/theme';
 import themeReducer from 'reducer/themeReducer';
 import Context from 'context';
 import wrapper from 'store/configureStore';
+import PropTypes from 'prop-types';
+import withReduxSaga from 'next-redux-saga';
 
 const SsokDdak = ({ Component }) => {
-  const [state, dispatch] = useReducer(themeReducer, {
-    isDark: false,
-  });
-  return (
-    <>
-      <Context.Provider value={{ state, dispatch }}>
-        <ThemeProvider theme={state.isDark ? theme.dark : theme.light}>
-          <GlobalStyles />
-          <Head>
-            <title>ssok ddak</title>
-          </Head>
-          <Component />
-        </ThemeProvider>
-      </Context.Provider>
-    </>
-  );
+	const [state, dispatch] = useReducer(themeReducer, {
+		isDark: false,
+	});
+	return (
+		<>
+			<Context.Provider value={{ state, dispatch }}>
+				<ThemeProvider theme={state.isDark ? theme.dark : theme.light}>
+					<GlobalStyles />
+					<Head>
+						<title>ssok ddak</title>
+					</Head>
+					<Component />
+				</ThemeProvider>
+			</Context.Provider>
+		</>
+	);
 };
 
-export default wrapper.withRedux(SsokDdak);
+export default wrapper.withRedux(withReduxSaga(SsokDdak));
+
+SsokDdak.propTypes = {
+	Component: PropTypes.elementType.isRequired,
+};
