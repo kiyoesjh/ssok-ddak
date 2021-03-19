@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import Container from 'components/Container';
 import device from 'styles/deviceSize';
 import tags from 'category';
+import AppLayout from 'components/AppLayout';
 
 const Search = () => {
 	return (
-		<>
+		<AppLayout>
 			<Container>
 				<Header headText="검색" />
 				<Content>
@@ -23,7 +24,7 @@ const Search = () => {
 					</ListWrap>
 				</Content>
 			</Container>
-		</>
+		</AppLayout>
 	);
 };
 

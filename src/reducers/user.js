@@ -1,88 +1,87 @@
 export const initialState = {
-	isLoggingIn: false, // 로그인 시도중
-	isLoggedIn: false,
-	isLoggingOut: false, // 로그아웃 시도중
+	logInLoading: false,
+	logInDone: false,
+	logInError: null,
+	logOutLoading: false,
+	logOutDone: false,
+	logOutError: false,
+	signUpLoading: false,
+	signUpDone: false,
+	signUpError: false,
 	userInfo: null,
-	displayName: '',
-	uid: 'ari',
-	photoURL: 'https://picsum.photos/200',
 	updateProfile: () => {},
 };
 
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
+export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+
+export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
+export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
+export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
+
 export const loginRequestAction = data => {
 	return {
-		type: 'LOG_IN_REQUEST',
+		type: LOG_IN_REQUEST,
 		data,
-	};
-};
-
-export const loginSuccessAction = data => {
-	return {
-		type: 'LOG_IN_SUCCESS',
-		data,
-	};
-};
-
-export const loginFailureAction = () => {
-	return {
-		type: 'LOG_IN_FAILURE',
 	};
 };
 
 export const logoutRequestAction = () => {
 	return {
-		type: 'LOG_OUT_REQUEST',
+		type: LOG_OUT_REQUEST,
 	};
 };
 
-export const logoutSuccess = () => {
-	return {
-		type: 'LOG_OUT_SUCCESS',
-	};
-};
-
-export const logoutFailure = () => {
-	return {
-		type: 'LOG_OUT_FAILURE',
-	};
-};
+const dummyUser = data => ({
+	...data,
+	id: 1,
+	nickname: 'ari',
+	photoURL: 'https://picsum.photos/200',
+	Post: [],
+	Followings: [],
+	Followers: [],
+});
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case 'LOG_IN_REQUEST':
+		case LOG_IN_REQUEST:
 			return {
 				...state,
-				isLoggingIn: true,
+				logInLoading: true,
 			};
-		case 'LOG_IN_SUCCESS':
+		case LOG_IN_SUCCESS:
 			return {
 				...state,
-				isLoggingIn: false,
-				isLoggedIn: true,
-				userInfo: action.data,
+				logInLoading: false,
+				logInDone: true,
+				userInfo: dummyUser(action.data),
 			};
-		case 'LOG_IN_FAILURE':
+		case LOG_IN_FAILURE:
 			return {
 				...state,
-				isLoggingIn: false,
-				isLoggedIn: false,
+				logInLoading: false,
+				logInError: action.error,
 			};
-		case 'LOG_OUT_REQUEST':
+		case LOG_OUT_REQUEST:
 			return {
 				...state,
-				isLoggingOut: true,
+				logOutLoading: true,
+				logOutDone: false,
+				logOutError: null,
 			};
-		case 'LOG_OUT_SUCCESS':
+		case LOG_OUT_SUCCESS:
 			return {
 				...state,
-				isLoggingOut: false,
-				isLoggedIn: false,
+				logOutLoading: false,
+				logInDone: true,
 				userInfo: null,
 			};
-		case 'LOG_OUT_FAILURE':
+		case LOG_OUT_FAILURE:
 			return {
 				...state,
-				isLoggingOut: false,
+				logOutLoading: false,
+				logOutError: action.error,
 			};
 		default:
 			return state;

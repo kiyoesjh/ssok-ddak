@@ -4,12 +4,12 @@ import Header from 'components/Header';
 import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
 
-const Post = ({ userObject }) => {
+const Post = () => {
 	return (
 		<AppLayout>
 			<Container>
 				<Header headText="글쓰기" />
-				<SsokEditor userObject={userObject} />
+				<SsokEditor />
 			</Container>
 		</AppLayout>
 	);

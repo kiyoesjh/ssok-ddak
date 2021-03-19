@@ -84,33 +84,18 @@ const Ssok = ({ ssokData, isOwner }) => {
 export default React.memo(Ssok);
 
 Ssok.propTypes = {
-	ssokData: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.number.isRequired,
-			attachmentURL: PropTypes.string,
-			category: PropTypes.string,
-			createdAt: PropTypes.string,
-			creatorId: PropTypes.string.isRequired,
-			creatorName: PropTypes.string,
-			creatorPhoto: PropTypes.string,
-			text: PropTypes.string,
-		}),
-	).isRequired,
+	ssokData: PropTypes.shape({
+		id: PropTypes.number.isRequired,
+		attachmentURL: PropTypes.string,
+		category: PropTypes.string,
+		createdAt: PropTypes.number,
+		creatorId: PropTypes.string.isRequired,
+		creatorName: PropTypes.string,
+		creatorPhoto: PropTypes.string,
+		text: PropTypes.string,
+	}).isRequired,
 	isOwner: PropTypes.bool.isRequired,
 };
-
-// Ssok.propTypes = {
-// 	ssokData: PropTypes.shape({
-// 		isLoggedIn: PropTypes.bool,
-// 		userInfo: PropTypes.shape({
-// 			profileImg: PropTypes.string,
-// 		}),
-// 		displayName: PropTypes.string,
-// 		uid: PropTypes.string,
-// 		photoURL: PropTypes.string,
-// 	}).isRequired,
-// 	isOwner: PropTypes.bool.isRequired,
-// };
 
 const Wrap = styled.div`
 	position: relative;

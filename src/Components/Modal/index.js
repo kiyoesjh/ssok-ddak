@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-// import { useHistory } from 'react-router-dom';
+
+const ModalLayer = ({ children, onClick }) => {
+	const [isBrowser, setIsBrowser] = useState(false);
+
+	useEffect(() => {
+		setIsBrowser(true);
+	}, []);
+	// const onCloseLayer = () => {};
+	const modalComponent = createPortal(
+		<Modal>
+			<Overlay onClick={onClick} />
+			<ChildrenWrap>
+				{children}
+				<CloseButton type="button" onClick={onClick}>
+					<FontAwesomeIcon icon={faTimesCircle} />
+				</CloseButton>
+			</ChildrenWrap>
+		</Modal>,
+		document.getElementById('modal_root'),
+	);
+	if (isBrowser) {
+		return modalComponent;
+	}
+	return null;
+};
+
+export default ModalLayer;
 
 const Modal = styled.div`
 	position: fixed;
@@ -53,23 +79,3 @@ const CloseButton = styled.button`
 		color: ${({ theme }) => theme.mainColor(1)};
 	}
 `;
-
-const ModalLayer = ({ children, onClick }) => {
-	// const history = useHistory();
-	// const onCloseLayer = () => history.goBack();
-	const onCloseLayer = () => {};
-	return createPortal(
-		<Modal>
-			<Overlay onClick={onClick} />
-			<ChildrenWrap>
-				{children}
-				<CloseButton type="button" onClick={onCloseLayer}>
-					<FontAwesomeIcon icon={faTimesCircle} />
-				</CloseButton>
-			</ChildrenWrap>
-		</Modal>,
-		document.getElementById('modal_root'),
-	);
-};
-
-export default ModalLayer;

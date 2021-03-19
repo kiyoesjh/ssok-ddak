@@ -11,33 +11,54 @@ export const initialState = {
 			text: '구글에서 테스트!!! ㅎㅎㅎ ㅎㅎㅎ',
 		},
 	],
-	postAdded: false,
 	imagePaths: [],
+	addPostLoading: false,
+	addPostDone: false,
+	addPostError: null,
 };
 
-const dummy = {
+const dummy = data => ({
 	id: 2,
-	attachmentURL: 'https://picsum.photos/seed/picsum/200/500',
+	attachmentURL: 'https://picsum.photos/seed/picsum/200/200',
 	category: 'affirmation',
 	createdAt: 1604552017773,
 	creatorId: 'ari222',
 	creatorName: 'ari',
 	creatorPhoto: '/images/user_img.png',
-	text: 'ㅎㅎ 하이아리',
-};
+	text: data,
+});
 
-const ADD_POST = 'ADD_POST';
-export const addPost = {
-	type: ADD_POST,
-};
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const addPostRequestAction = data => ({
+	type: ADD_POST_REQUEST,
+	data,
+});
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case ADD_POST:
+		case ADD_POST_REQUEST:
 			return {
 				...state,
-				ssoks: [dummy, ...state.ssoks],
-				postAdded: true,
+				addPostLoading: true,
+				addPostDone: false,
+				addPostError: null,
+			};
+		case ADD_POST_SUCCESS:
+			return {
+				...state,
+				ssoks: [dummy(action.data), ...state.ssoks],
+				addPostLoading: false,
+				addPostDone: true,
+				addPostError: null,
+			};
+		case ADD_POST_FAILURE:
+			return {
+				...state,
+				addPostLoading: false,
+				addPostError: action.error,
 			};
 		default:
 			return state;

@@ -1,11 +1,10 @@
-// import { dbService } from 'fbase';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { onFileChange } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'react-redux';
-import { addPost } from 'reducers/post';
+import { useDispatch, useSelector } from 'react-redux';
+import { addPostRequestAction } from 'reducers/post';
 import FileButton from './FileButton';
 import SDButton from './SDButton';
 import TextArea from './TextArea';
@@ -20,12 +19,23 @@ const SsokEditor = () => {
 
 	const onSubmit = async event => {
 		event.preventDefault();
-		dispatch(addPost);
-		setSsok('');
-		setAttachment('');
+		if (!ssok) return;
+		dispatch(addPostRequestAction(ssok));
 	};
 
 	const onClearAttachment = () => setAttachment(null);
+
+	const { addPostDone, addPostError } = useSelector(state => state.post);
+	useEffect(() => {
+		if (addPostDone) {
+			window.alert('완료');
+			setSsok('');
+			setAttachment('');
+		}
+		if (addPostError) {
+			window.alert('오류가 발생했습니다');
+		}
+	}, [addPostDone, addPostError]);
 
 	return (
 		<Section>
