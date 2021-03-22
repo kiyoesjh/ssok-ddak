@@ -17,18 +17,18 @@ const SsokEditor = () => {
 
 	const dispatch = useDispatch();
 
+	const onClearAttachment = () => setAttachment(null);
+
+	const { addPostDone, addPostError } = useSelector(state => state.post);
+
 	const onSubmit = async event => {
 		event.preventDefault();
 		if (!ssok) return;
 		dispatch(addPostRequestAction(ssok));
 	};
 
-	const onClearAttachment = () => setAttachment(null);
-
-	const { addPostDone, addPostError } = useSelector(state => state.post);
 	useEffect(() => {
 		if (addPostDone) {
-			window.alert('완료');
 			setSsok('');
 			setAttachment('');
 		}

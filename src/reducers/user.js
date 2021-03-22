@@ -20,6 +20,9 @@ export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
+
 export const loginRequestAction = data => {
 	return {
 		type: LOG_IN_REQUEST,
@@ -33,15 +36,18 @@ export const logoutRequestAction = () => {
 	};
 };
 
-const dummyUser = data => ({
-	...data,
-	id: 1,
-	nickname: 'ari',
-	photoURL: 'https://picsum.photos/200',
-	Post: [],
-	Followings: [],
-	Followers: [],
-});
+const dummyUser = data => {
+	console.log(data);
+	return {
+		...data,
+		id: 1,
+		nickname: 'ari',
+		photoURL: 'https://picsum.photos/200',
+		Post: [{ id: 1 }],
+		Followings: [],
+		Followers: [],
+	};
+};
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -82,6 +88,14 @@ const reducer = (state = initialState, action) => {
 				...state,
 				logOutLoading: false,
 				logOutError: action.error,
+			};
+		case ADD_POST_TO_ME:
+			return {
+				...state,
+				userInfo: {
+					...state.userInfo,
+					Post: [{ id: action.data }, ...state.userInfo.Post],
+				},
 			};
 		default:
 			return state;

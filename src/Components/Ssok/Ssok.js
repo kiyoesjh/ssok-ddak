@@ -11,7 +11,7 @@ import EditSsok from './EditSsok';
 
 const Ssok = ({ ssokData, isOwner }) => {
 	const [editing, setEditing] = useState(false); // 수정하고 있는지 아닌지에 대한 상태
-	const [newSsok, setNewSsok] = useState(ssokData.text); // input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
+	const [newSsok, setNewSsok] = useState(ssokData.content); // input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
 	const [isOpen, setIsOpen] = useState(false);
 
 	const onSsokDelete = async () => onDelete(ssokData);
@@ -33,9 +33,9 @@ const Ssok = ({ ssokData, isOwner }) => {
 			<UserInfoWrap>
 				<UserInfo>
 					<UserPhoto>
-						<img src={ssokData.creatorPhoto} alt="배경이미지" />
+						<img src={ssokData.User.photo} alt="배경이미지" />
 					</UserPhoto>
-					<UserName>{ssokData.creatorName}</UserName>
+					<UserName>{ssokData.User.creatorName}</UserName>
 				</UserInfo>
 				{isOwner && ( // 글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
 					<>
@@ -62,16 +62,16 @@ const Ssok = ({ ssokData, isOwner }) => {
 					/>
 				) : (
 					<>
-						{ssokData.attachmentURL ? (
+						{ssokData.Images.length ? (
 							<>
-								<ImgText>{ssokData.text}</ImgText>
+								<ImgText>{ssokData.content}</ImgText>
 								<PostImgWrap>
-									<PostImg src={ssokData.attachmentURL} />
+									<PostImg src={ssokData.Images} />
 								</PostImgWrap>
 							</>
 						) : (
 							<EmptyDiv>
-								<PostText>{ssokData.text}</PostText>
+								<PostText>{ssokData.content}</PostText>
 							</EmptyDiv>
 						)}
 					</>
@@ -86,13 +86,15 @@ export default React.memo(Ssok);
 Ssok.propTypes = {
 	ssokData: PropTypes.shape({
 		id: PropTypes.number.isRequired,
-		attachmentURL: PropTypes.string,
-		category: PropTypes.string,
-		createdAt: PropTypes.number,
-		creatorId: PropTypes.string.isRequired,
-		creatorName: PropTypes.string,
-		creatorPhoto: PropTypes.string,
-		text: PropTypes.string,
+		User: PropTypes.shape({
+			id: PropTypes.number.isRequired,
+			creatorName: PropTypes.string,
+			photo: PropTypes.string,
+		}),
+		Images: PropTypes.arrayOf(PropTypes.string),
+		category: PropTypes.string.isRequired,
+		content: PropTypes.string.isRequired,
+		createdAt: PropTypes.number.isRequired,
 	}).isRequired,
 	isOwner: PropTypes.bool.isRequired,
 };

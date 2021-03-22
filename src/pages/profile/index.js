@@ -39,7 +39,7 @@ const Profile = () => {
 							</Link>
 						</ButtonWrap>
 					</UserInfoWrap>
-					<Content>{!!userInfo.Post.length && <UserSsoks ssoks={userInfo.Post} />}</Content>
+					<Content>{!!userInfo.Post.length && <UserSsoks />}</Content>
 				</Wrap>
 			</Container>
 

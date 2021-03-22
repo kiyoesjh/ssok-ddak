@@ -2,13 +2,16 @@ export const initialState = {
 	ssoks: [
 		{
 			id: 1,
-			attachmentURL: 'https://picsum.photos/seed/picsum/500/300',
+			User: {
+				id: 33,
+				creatorId: 'arari',
+				creatorName: 'arari',
+				photo: '/images/user_img.png',
+			},
+			Images: ['https://picsum.photos/seed/picsum/500/300'],
 			category: 'affirmation',
+			content: '구글에서 테스트!!! ㅎㅎㅎ ㅎㅎㅎ',
 			createdAt: 1604552017773,
-			creatorId: 'ari',
-			creatorName: '구글정혜',
-			creatorPhoto: '/images/user_img.png',
-			text: '구글에서 테스트!!! ㅎㅎㅎ ㅎㅎㅎ',
 		},
 	],
 	imagePaths: [],
@@ -17,17 +20,6 @@ export const initialState = {
 	addPostError: null,
 };
 
-const dummy = data => ({
-	id: 2,
-	attachmentURL: 'https://picsum.photos/seed/picsum/200/200',
-	category: 'affirmation',
-	createdAt: 1604552017773,
-	creatorId: 'ari222',
-	creatorName: 'ari',
-	creatorPhoto: '/images/user_img.png',
-	text: data,
-});
-
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -35,6 +27,19 @@ export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 export const addPostRequestAction = data => ({
 	type: ADD_POST_REQUEST,
 	data,
+});
+
+const dummy = data => ({
+	id: data.id,
+	User: {
+		id: 1,
+		creatorName: '구글정혜',
+		photo: '/images/user_img.png',
+	},
+	Images: ['https://picsum.photos/seed/picsum/300/300'],
+	category: 'affirmation',
+	content: data.data,
+	createdAt: 1604552017773,
 });
 
 const reducer = (state = initialState, action) => {

@@ -20,6 +20,7 @@ export const uploadFileURL = async (uid, attachment) => {
 };
 
 export const onDelete = async ssokData => {
+	console.log(ssokData);
 	const ok = window.confirm('삭제하시겠습니까?');
 	if (ok) {
 		try {

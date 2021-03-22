@@ -20,13 +20,8 @@ const Home = () => {
 				<Header headText="홈" />
 				<ColumnWrap>
 					<Wrap>
-						{console.log(ssoks)}
 						{ssoks.map(ssok => (
-							<Ssok
-								key={ssok.id}
-								ssokData={ssok}
-								isOwner={ssok.creatorId === user.userInfo.nickname}
-							/>
+							<Ssok key={ssok.id} ssokData={ssok} isOwner={ssok.User.id === user.userInfo.id} />
 						))}
 					</Wrap>
 				</ColumnWrap>
