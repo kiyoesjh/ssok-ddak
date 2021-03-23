@@ -1,23 +1,29 @@
-import React from 'react';
-// import { Link, Route, useHistory, useRouteMatch } from 'react-router-dom';
-import Container from 'components/Container';
-import Header from 'components/Header';
-// import ModalLayer from 'pages/ModalLayer';
-// import ProfileEditor from 'components/Profile/ProfileEditor';
-import styled, { css } from 'styled-components';
-import UserSsoks from 'components/Profile/UserSsoks';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import ProfileEditor from 'components/Profile/ProfileEditor';
+import styled, { css } from 'styled-components';
+
+import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
-import ModalLayer from '../../components/Modal';
+import Header from 'components/Header';
+import UserSsoks from 'components/Profile/UserSsoks';
+import ProfileEditor from 'components/Profile/ProfileEditor';
+import ModalLayer from 'components/Modal';
 
 const Profile = () => {
 	const { userInfo } = useSelector(state => state.user);
 	const router = useRouter();
+	useEffect(() => {
+		if (!userInfo) {
+			router.push('/');
+		}
+	}, [userInfo]);
 
+	if (!userInfo) {
+		return null;
+	}
 	return (
 		<AppLayout>
 			<Head>

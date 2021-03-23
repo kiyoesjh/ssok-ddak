@@ -4,7 +4,6 @@ export const initialState = {
 			id: 1,
 			User: {
 				id: 33,
-				creatorId: 'arari',
 				creatorName: 'arari',
 				photo: '/images/user_img.png',
 			},
@@ -38,7 +37,7 @@ const dummy = data => ({
 	},
 	Images: ['https://picsum.photos/seed/picsum/300/300'],
 	category: 'affirmation',
-	content: data.data,
+	content: data.content,
 	createdAt: 1604552017773,
 });
 
