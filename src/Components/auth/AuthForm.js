@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from 'react';
-// import { authService } from 'fbase';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { loginRequestAction } from 'reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequestAction, signUpAction } from 'reducers/user';
+import Loading from 'components/Button/Loading';
 
 const AuthForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [nickname, setNickname] = useState('');
 	const [newAccount, setNewAccount] = useState(false);
 	const [error, setError] = useState('');
 
@@ -17,6 +18,8 @@ const AuthForm = () => {
 			setEmail(value);
 		} else if (name === 'password') {
 			setPassword(value);
+		} else if (name === 'nickname') {
+			setNickname(value);
 		}
 	}, []);
 	const onSubmit = async event => {
@@ -24,10 +27,10 @@ const AuthForm = () => {
 		try {
 			if (newAccount) {
 				// 계정만들기
-				// await authService.createUserWithEmailAndPassword(email, password);
+				console.log('onsubmit!');
+				dispatch(signUpAction({ email, password, nickname }));
 			} else {
 				// 로그인
-				// await authService.signInWithEmailAndPassword(email, password);
 				dispatch(loginRequestAction({ email, password }));
 			}
 		} catch (err) {
@@ -36,6 +39,28 @@ const AuthForm = () => {
 	};
 
 	const toggleAccount = () => setNewAccount(prev => !prev);
+
+	const { logInLoading, logInError, signUpLoading, signUpDone, signUpError } = useSelector(
+		state => state.user,
+	);
+
+	useEffect(() => {
+		if (signUpDone) {
+			dispatch(loginRequestAction({ email, password }));
+		}
+	}, [signUpDone]);
+
+	useEffect(() => {
+		if (logInError) {
+			alert(logInError);
+		}
+	}, [logInError]);
+
+	useEffect(() => {
+		if (signUpError) {
+			alert(signUpError);
+		}
+	}, [signUpError]);
 	return (
 		<>
 			<FormWrapper>
@@ -55,7 +80,23 @@ const AuthForm = () => {
 						required
 						onChange={onChange}
 					/>
-					<ActiveSubmit type="submit" value={newAccount ? '회원가입' : '로그인'} />
+					{newAccount && (
+						<InputBox
+							name="nickname"
+							type="text"
+							placeholder="닉네임을 입력하세요"
+							required
+							value={nickname}
+							onChange={onChange}
+						/>
+					)}
+					<ActiveSubmit type="submit">
+						{newAccount ? (
+							<>{signUpLoading ? <Loading /> : '회원가입'}</>
+						) : (
+							<>{logInLoading ? <Loading /> : '로그인'}</>
+						)}
+					</ActiveSubmit>
 				</form>
 				<ToggleButtonWrap>
 					<ToggleText>
@@ -87,7 +128,7 @@ const InputBox = styled.input`
 	border-radius: 3px;
 `;
 
-const ActiveSubmit = styled.input`
+const ActiveSubmit = styled.button`
 	width: 100%;
 	height: 40px;
 	background-color: #14274e;

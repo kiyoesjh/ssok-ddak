@@ -19,7 +19,7 @@ const SsokEditor = () => {
 
 	const onClearAttachment = () => setAttachment(null);
 
-	const { addPostDone, addPostError } = useSelector(state => state.post);
+	const { addPostDone } = useSelector(state => state.post);
 
 	const onSubmit = async event => {
 		event.preventDefault();
@@ -32,10 +32,7 @@ const SsokEditor = () => {
 			setSsok('');
 			setAttachment('');
 		}
-		if (addPostError) {
-			window.alert('오류가 발생했습니다');
-		}
-	}, [addPostDone, addPostError]);
+	}, [addPostDone]);
 
 	return (
 		<Section>

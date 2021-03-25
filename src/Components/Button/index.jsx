@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 
 const Button = ({ children, buttonWidth, isFullButton = false, gap, loading }) => {
 	return (
@@ -51,26 +52,4 @@ const StyledButton = styled.div`
 	${({ gap }) => gap && `margin: ${gap}`};
 	${({ disabled }) => disabled && disabledStyles};
 	${widthStyles};
-`;
-
-const Loading = styled.span`
-	display: inline-block;
-	width: 20px;
-	height: 20px;
-	border: 3px solid rgba(255, 255, 255, 0.3);
-	border-radius: 50%;
-	border-top-color: #fff;
-	animation: spin 1s ease-in-out infinite;
-	-webkit-animation: spin 1s ease-in-out infinite;
-
-	@keyframes spin {
-		to {
-			-webkit-transform: rotate(360deg);
-		}
-	}
-	@-webkit-keyframes spin {
-		to {
-			-webkit-transform: rotate(360deg);
-		}
-	}
 `;

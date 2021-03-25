@@ -25,6 +25,10 @@ export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 
+export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
+
 export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
 export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
 export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
@@ -49,18 +53,26 @@ export const logoutRequestAction = () => {
 	};
 };
 
-const dummyUser = data => {
-	console.log(data);
+export const signUpAction = data => {
+	console.log('signupAction data? ', data);
 	return {
-		...data,
-		id: 1,
-		nickname: 'ari',
-		photoURL: 'https://picsum.photos/200',
-		Post: [],
-		Followings: [],
-		Followers: [],
+		type: SIGN_UP_REQUEST,
+		data,
 	};
 };
+
+// const dummyUser = data => {
+// 	console.log(data);
+// 	return {
+// 		...data,
+// 		id: 1,
+// 		nickname: 'ari',
+// 		photoURL: 'https://picsum.photos/200',
+// 		Post: [],
+// 		Followings: [],
+// 		Followers: [],
+// 	};
+// };
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -75,7 +87,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				logInLoading: false,
-				userInfo: dummyUser(action.data),
+				userInfo: action.data,
 				logInDone: true,
 			};
 		case LOG_IN_FAILURE:
@@ -96,6 +108,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				logOutLoading: false,
 				logInDone: true,
+				signUpDone: false,
 				userInfo: null,
 			};
 		case LOG_OUT_FAILURE:
@@ -149,6 +162,25 @@ const reducer = (state = initialState, action) => {
 				...state,
 				unfollowLoading: false,
 				unfollowError: action.error,
+			};
+		case SIGN_UP_REQUEST:
+			return {
+				...state,
+				signUpLoading: true,
+				signUpDone: false,
+				signUpError: null,
+			};
+		case SIGN_UP_SUCCESS:
+			return {
+				...state,
+				signUpLoading: false,
+				signUpDone: true,
+			};
+		case SIGN_UP_FAILURE:
+			return {
+				...state,
+				signUpLoading: false,
+				signUpError: action.error,
 			};
 		case ADD_POST_TO_ME:
 			return {

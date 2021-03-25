@@ -45,13 +45,13 @@ const Profile = () => {
 							</Link>
 						</ButtonWrap>
 					</UserInfoWrap>
-					<Content>{!!userInfo.Post.length && <UserSsoks />}</Content>
+					<Content>{!!userInfo.Posts.length && <UserSsoks />}</Content>
 				</Wrap>
 			</Container>
 
 			{router.query.edit && (
 				<ModalLayer onClick={() => router.back()}>
-					<ProfileEditor refreshUserObj={null} userObject={userInfo} ssoks={userInfo.Post} />
+					<ProfileEditor refreshUserObj={null} userObject={userInfo} ssoks={userInfo.Posts} />
 				</ModalLayer>
 			)}
 		</AppLayout>

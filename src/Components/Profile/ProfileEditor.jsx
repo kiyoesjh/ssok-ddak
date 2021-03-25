@@ -15,25 +15,25 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
 	const onSubmit = async event => {
 		event.preventDefault();
 		if (userObject.displayName === userName && !userPhoto) return;
-		//user info update,
-		//db ssok 에 있는 user info update
+		// user info update,
+		// db ssok 에 있는 user info update
 		const editObj = {
 			userInfo: {},
 			ssokUserInfo: {},
 		};
 		if (userObject.displayName !== userName) {
-			editObj.userInfo['displayName'] = userName;
-			editObj.ssokUserInfo['creatorName'] = userName;
+			editObj.userInfo.displayName = userName;
+			editObj.ssokUserInfo.creatorName = userName;
 		}
 		if (userPhoto) {
 			await storageService.refFromURL(userObject.photoURL).delete();
 			const uploadURL = await uploadFileURL(userObject.uid, userPhoto);
-			editObj.userInfo['photoURL'] = uploadURL;
-			editObj.ssokUserInfo['creatorPhoto'] = uploadURL;
+			editObj.userInfo.photoURL = uploadURL;
+			editObj.ssokUserInfo.creatorPhoto = uploadURL;
 		}
 		// await userObject.updateProfile(editObj.userInfo); //user정보 업데이트
 		ssoks.forEach(ssok => {
-			//db정보 업데이트
+			// db정보 업데이트
 			dbService.doc(`ssok/${ssok.id}`).update(editObj.ssokUserInfo);
 		});
 		refreshUserObj();
@@ -60,7 +60,7 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
 					/>
 				</ProfileImgWrap>
 				<NameInput type="text" placeholder="Display name" value={userName} onChange={onChange} />
-				<Button buttonWidth="100%" isFullButton={true}>
+				<Button buttonWidth="100%" isFullButton>
 					<SubmitInput type="submit" value="Update" />
 				</Button>
 			</Form>
