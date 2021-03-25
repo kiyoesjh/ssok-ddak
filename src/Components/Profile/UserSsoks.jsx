@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
+import { useSelector } from 'react-redux';
 import UserSsok from './UserSsok';
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: repeat(auto-fill, minmax(200px, auto));
-  grid-auto-rows: minmax(200px, auto);
-  gap: 10px;
-  margin: 20px 0;
-  ${device.custom('630px')} {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
+const UserSsoks = () => {
+	const {
+		user: {
+			userInfo: { Post },
+		},
+		post,
+	} = useSelector(state => state);
 
-const UserSsoks = ({ ssoks }) => {
-  return (
-    <Container>
-      {ssoks.map((ssok) => (
-        <UserSsok ssok={ssok} key={ssok.id} />
-      ))}
-    </Container>
-  );
+	const filterPost = useCallback(postId => {
+		return post.ssoks.filter(({ id }) => id === postId);
+	});
+	return (
+		<Container>
+			{Post.map(({ id }) => filterPost(id).map(ssok => <UserSsok ssok={ssok} />))}
+		</Container>
+	);
 };
 
 export default React.memo(UserSsoks);
+
+const Container = styled.div`
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-template-rows: repeat(auto-fill, minmax(200px, auto));
+	grid-auto-rows: minmax(200px, auto);
+	gap: 10px;
+	margin: 20px 0;
+	${device.custom('630px')} {
+		grid-template-columns: repeat(3, 1fr);
+	}
+`;

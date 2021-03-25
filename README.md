@@ -1,4 +1,4 @@
-# SSOK-DDAK V1
+# SSOK-DDAK V2
 
 기억하고 싶은 글 또는 적어두고 싶은 짧은 이야기들을 저장하고 공유하는 앱
 
@@ -7,13 +7,13 @@
 ### Client
 
 - React
-- React Router
+- Nextjs
 - Styled-component
-- Context API
+- Redux
+- Redux-saga
 
 ### Server
 
-- Firebase
-  - Authentication
-  - Cloud Firestore
-  - Storage
+- Nodejs
+- mySQL
+- Express
