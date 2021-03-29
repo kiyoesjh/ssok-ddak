@@ -1,11 +1,13 @@
 // import { dbService } from 'fbase';
-import React, { useState } from 'react';
-import { faEdit, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import React, { useCallback, useState } from 'react';
+import { faEdit, faTrashAlt, faHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
 import { onDelete } from 'utils';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'reducers/post';
 import MorePop from '../Layer/MorePop';
 import EditSsok from './EditSsok';
 
@@ -19,6 +21,23 @@ const Ssok = ({ ssokData, isOwner }) => {
 		setEditing(prev => !prev);
 		setIsOpen(false);
 	};
+
+	const id = useSelector(state => state.user.userInfo?.id);
+	const liked = ssokData.Likers.find(v => v.id === id);
+	const dispatch = useDispatch();
+	const onClickLike = useCallback(() => {
+		if (liked) {
+			return dispatch({
+				type: UNLIKE_POST_REQUEST,
+				data: ssokData.id,
+			});
+		}
+		return dispatch({
+			type: LIKE_POST_REQUEST,
+			data: ssokData.id,
+		});
+	}, [liked]);
+
 	const onSubmit = event => {
 		event.preventDefault();
 		// try {
@@ -33,9 +52,9 @@ const Ssok = ({ ssokData, isOwner }) => {
 			<UserInfoWrap>
 				<UserInfo>
 					<UserPhoto>
-						<img src={ssokData.User.photo} alt="배경이미지" />
+						<img src={ssokData.User.profileImg || '/images/user_img.png'} alt="배경이미지" />
 					</UserPhoto>
-					<UserName>{ssokData.User.creatorName}</UserName>
+					<UserName>{ssokData.User.nickname}</UserName>
 				</UserInfo>
 				{isOwner && ( // 글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
 					<>
@@ -74,6 +93,16 @@ const Ssok = ({ ssokData, isOwner }) => {
 								<PostText>{ssokData.content}</PostText>
 							</EmptyDiv>
 						)}
+						<Info>
+							<CommentButton>
+								<FontAwesomeIcon icon={faComment} />
+								<span>0</span>
+							</CommentButton>
+							<LikeButton liked={liked} onClick={onClickLike}>
+								<FontAwesomeIcon icon={faHeart} />
+								<span>{ssokData.Likers.length}</span>
+							</LikeButton>
+						</Info>
 					</>
 				)}
 			</PostContent>
@@ -88,13 +117,14 @@ Ssok.propTypes = {
 		id: PropTypes.number.isRequired,
 		User: PropTypes.shape({
 			id: PropTypes.number.isRequired,
-			creatorName: PropTypes.string,
-			photo: PropTypes.string,
+			nickname: PropTypes.string,
+			profileImg: PropTypes.string,
 		}),
 		Images: PropTypes.arrayOf(PropTypes.string),
 		category: PropTypes.string.isRequired,
 		content: PropTypes.string.isRequired,
 		createdAt: PropTypes.number.isRequired,
+		Likers: PropTypes.arrayOf(PropTypes.object),
 	}).isRequired,
 	isOwner: PropTypes.bool.isRequired,
 };
@@ -224,4 +254,19 @@ const EmptyDiv = styled(PostWrap)`
 	min-height: 100px;
 	border-top: 1px solid ${({ theme }) => theme.borderColor};
 	background-color: ${({ theme }) => theme.cardColor};
+`;
+
+const Info = styled.div`
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 5px 10px;
+	font-size: 14px;
+`;
+
+const CommentButton = styled.button``;
+
+const LikeButton = styled.button`
+	color: ${({ liked }) => (liked ? `red` : `inherit`)};
 `;
