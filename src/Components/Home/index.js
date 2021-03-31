@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Ssok from 'components/Ssok/Ssok';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
 import Header from 'components/Header';
 import Container from 'components/Container';
-// import HomeSkeleton from 'skeletons/HomeSkeleton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from 'components/AppLayout';
+import { LOAD_POST_REQUEST } from 'reducers/post';
 
 const Home = () => {
 	const {
 		user,
 		post: { ssoks },
 	} = useSelector(state => state);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch({
+			type: LOAD_POST_REQUEST,
+		});
+	}, []);
 
 	return (
 		<AppLayout>

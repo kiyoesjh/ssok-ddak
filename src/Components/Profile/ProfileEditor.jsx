@@ -1,54 +1,56 @@
-import React, { useState } from 'react';
-// import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { onFileChange, uploadFileURL } from 'utils';
-// import { dbService, storageService } from 'fbase';
+import { onFileChange /* uploadFileURL */ } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { CHANGE_NICKNAME_REQUEST } from 'reducers/user';
+import { useRouter } from 'next/router';
+import Loading from 'components/Button/Loading';
 
-const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
-	const [userName, setUserName] = useState(userObject.displayName);
+const ProfileEditor = () => {
+	const userInfo = useSelector(state => state.user.userInfo);
+	const [userName, setUserName] = useState(userInfo.nickname);
 	const [userPhoto, setUserPhoto] = useState('');
-	// const history = useHistory();
+	const { changeNicknameLoading, changeNicknameDone } = useSelector(state => state.user);
+	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const onSubmit = async event => {
 		event.preventDefault();
-		if (userObject.displayName === userName && !userPhoto) return;
-		// user info update,
-		// db ssok 에 있는 user info update
-		const editObj = {
-			userInfo: {},
-			ssokUserInfo: {},
-		};
-		if (userObject.displayName !== userName) {
-			editObj.userInfo.displayName = userName;
-			editObj.ssokUserInfo.creatorName = userName;
+		if (userInfo.nickname === userName && !userPhoto) return;
+
+		if (userInfo.nickname !== userName) {
+			dispatch({
+				type: CHANGE_NICKNAME_REQUEST,
+				data: userName,
+			});
 		}
 		if (userPhoto) {
-			await storageService.refFromURL(userObject.photoURL).delete();
-			const uploadURL = await uploadFileURL(userObject.uid, userPhoto);
-			editObj.userInfo.photoURL = uploadURL;
-			editObj.ssokUserInfo.creatorPhoto = uploadURL;
+			// await storageService.refFromURL(userInfo.photoURL).delete();
+			// const uploadURL = await uploadFileURL(userInfo.uid, userPhoto);
+			// console.log(uploadURL);
+			// editObj.userInfo.photoURL = uploadURL;
+			// editObj.ssokUserInfo.creatorPhoto = uploadURL;
 		}
-		// await userObject.updateProfile(editObj.userInfo); //user정보 업데이트
-		ssoks.forEach(ssok => {
-			// db정보 업데이트
-			dbService.doc(`ssok/${ssok.id}`).update(editObj.ssokUserInfo);
-		});
-		refreshUserObj();
-		setUserPhoto('');
-		// history.push('/profile');
 	};
 
 	const onChange = ({ target: { value } }) => {
 		setUserName(value);
 	};
 
+	useEffect(() => {
+		if (changeNicknameDone) {
+			setUserPhoto('');
+			router.push('/profile');
+		}
+	}, []);
+
 	return (
 		<Wrap>
 			<Form onSubmit={onSubmit}>
-				<ProfileImgWrap photo={userPhoto || userObject.photoURL}>
+				<ProfileImgWrap photo={userPhoto || userInfo.profileImage}>
 					<Label htmlFor="file_upload">
 						<FontAwesomeIcon icon={faPlus} />
 					</Label>
@@ -61,7 +63,9 @@ const ProfileEditor = ({ refreshUserObj, userObject, ssoks }) => {
 				</ProfileImgWrap>
 				<NameInput type="text" placeholder="Display name" value={userName} onChange={onChange} />
 				<Button buttonWidth="100%" isFullButton>
-					<SubmitInput type="submit" value="Update" />
+					<SubmitInput type="submit">
+						{changeNicknameLoading ? <Loading /> : '업데이트'}
+					</SubmitInput>
 				</Button>
 			</Form>
 		</Wrap>
@@ -129,7 +133,7 @@ const FileInput = styled.input`
 	z-index: -1;
 `;
 
-const SubmitInput = styled.input`
+const SubmitInput = styled.button`
 	width: 100%;
 	padding: 10px;
 	color: #fff;
