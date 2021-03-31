@@ -19,6 +19,9 @@ export const initialState = {
 	addPostLoading: false,
 	addPostDone: false,
 	addPostError: null,
+	deletePostLoading: false,
+	deletePostDone: false,
+	deletePostError: null,
 	loadPostLoading: false,
 	loadPostDone: false,
 	loadPostError: null,
@@ -36,6 +39,10 @@ export const initialState = {
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const DELETE_POST_REQUEST = 'DELETE_POST_REQUEST';
+export const DELETE_POST_SUCCESS = 'DELETE_POST_SUCCESS';
+export const DELETE_POST_FAILURE = 'DELETE_POST_FAILURE';
 
 export const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
 export const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
@@ -82,7 +89,7 @@ const reducer = (state = initialState, action) =>
 				draft.addPostError = null;
 				break;
 			case ADD_POST_SUCCESS:
-				draft.ssoks = draft.ssoks.unshift(action.data);
+				draft.ssoks.unshift(action.data);
 				draft.addPostLoading = false;
 				draft.addPostDone = true;
 				draft.addPostError = null;
@@ -90,6 +97,21 @@ const reducer = (state = initialState, action) =>
 			case ADD_POST_FAILURE:
 				draft.addPostLoading = false;
 				draft.addPostError = action.error;
+				break;
+			case DELETE_POST_REQUEST:
+				draft.deleteLoading = true;
+				draft.deleteDone = false;
+				draft.deleteError = null;
+				break;
+			case DELETE_POST_SUCCESS:
+				draft.ssoks = draft.ssoks.filter(v => v.id !== action.data.postId);
+				draft.deleteLoading = false;
+				draft.deleteDone = true;
+				draft.deleteError = null;
+				break;
+			case DELETE_POST_FAILURE:
+				draft.deleteLoading = false;
+				draft.deleteError = action.error;
 				break;
 			case RESET_POST_REQUEST:
 				draft.resetPostLoading = true;

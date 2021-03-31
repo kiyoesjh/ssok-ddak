@@ -17,7 +17,7 @@ const UserSsoks = () => {
 	});
 	return (
 		<Container>
-			{Posts.map(({ id }) => filterPost(id).map(ssok => <UserSsok ssok={ssok} />))}
+			{Posts.map(({ id }) => filterPost(id).map(ssok => <UserSsok key={ssok.id} ssok={ssok} />))}
 		</Container>
 	);
 };

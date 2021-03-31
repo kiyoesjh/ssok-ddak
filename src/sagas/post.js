@@ -4,6 +4,9 @@ import {
 	ADD_POST_FAILURE,
 	ADD_POST_REQUEST,
 	ADD_POST_SUCCESS,
+	DELETE_POST_FAILURE,
+	DELETE_POST_REQUEST,
+	DELETE_POST_SUCCESS,
 	LIKE_POST_FAILURE,
 	LIKE_POST_REQUEST,
 	LIKE_POST_SUCCESS,
@@ -35,6 +38,25 @@ function* addPost(action) {
 	} catch (error) {
 		yield put({
 			type: ADD_POST_FAILURE,
+			error: error.response.data,
+		});
+	}
+}
+
+function deletePostAPI(postId) {
+	return axios.delete(`/post/${postId}`);
+}
+
+function* deletePost(action) {
+	try {
+		const result = yield call(deletePostAPI, action.data);
+		yield put({
+			type: DELETE_POST_SUCCESS,
+			data: result.data,
+		});
+	} catch (error) {
+		yield put({
+			type: DELETE_POST_FAILURE,
 			error: error.response.data,
 		});
 	}
@@ -101,6 +123,10 @@ function* watchAddPost() {
 	yield takeLatest(ADD_POST_REQUEST, addPost);
 }
 
+function* watchDeletePost() {
+	yield takeLatest(DELETE_POST_REQUEST, deletePost);
+}
+
 function* watchLoadPost() {
 	yield takeLatest(LOAD_POST_REQUEST, loadPost);
 }
@@ -114,5 +140,11 @@ function* watchUnlikePost() {
 }
 
 export default function* postSaga() {
-	yield all([fork(watchAddPost), fork(watchLoadPost), fork(watchLikePost), fork(watchUnlikePost)]);
+	yield all([
+		fork(watchAddPost),
+		fork(watchLoadPost),
+		fork(watchLikePost),
+		fork(watchUnlikePost),
+		fork(watchDeletePost),
+	]);
 }

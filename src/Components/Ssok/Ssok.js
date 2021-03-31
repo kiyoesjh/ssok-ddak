@@ -4,10 +4,9 @@ import { faEdit, faTrashAlt, faHeart, faComment } from '@fortawesome/free-regula
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
-import { onDelete } from 'utils';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'reducers/post';
+import { DELETE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'reducers/post';
 import MorePop from '../Layer/MorePop';
 import EditSsok from './EditSsok';
 
@@ -15,8 +14,14 @@ const Ssok = ({ ssokData, isOwner }) => {
 	const [editing, setEditing] = useState(false); // 수정하고 있는지 아닌지에 대한 상태
 	const [newSsok, setNewSsok] = useState(ssokData.content); // input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
 	const [isOpen, setIsOpen] = useState(false);
+	const dispatch = useDispatch();
 
-	const onSsokDelete = async () => onDelete(ssokData);
+	const onSsokDelete = () => {
+		dispatch({
+			type: DELETE_POST_REQUEST,
+			data: ssokData.id,
+		});
+	};
 	const toggleEditing = () => {
 		setEditing(prev => !prev);
 		setIsOpen(false);
@@ -24,7 +29,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 
 	const id = useSelector(state => state.user.userInfo?.id);
 	const liked = ssokData.Likers.find(v => v.id === id);
-	const dispatch = useDispatch();
+
 	const onClickLike = useCallback(() => {
 		if (liked) {
 			return dispatch({

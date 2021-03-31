@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 const UserSsok = ({ ssok }) => {
 	// const { attachmentURL } = ssok;
-	console.log(ssok);
 	return (
 		<Container>
 			<ImgWrap imgUrl={ssok.Images[0]} />
@@ -17,7 +16,19 @@ const UserSsok = ({ ssok }) => {
 export default React.memo(UserSsok);
 
 UserSsok.propTypes = {
-	ssok: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	ssok: PropTypes.shape({
+		id: PropTypes.number,
+		Images: PropTypes.arrayOf(PropTypes.string),
+		Likers: PropTypes.arrayOf(PropTypes.object),
+		User: PropTypes.shape({
+			id: PropTypes.number,
+			nickname: PropTypes.string,
+		}),
+		UserId: PropTypes.number,
+		content: PropTypes.string,
+		createdAt: PropTypes.string,
+		updatedAt: PropTypes.string,
+	}),
 };
 
 const Container = styled.div`

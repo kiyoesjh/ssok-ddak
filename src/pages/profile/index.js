@@ -35,12 +35,12 @@ const Profile = () => {
 					<UserInfoWrap>
 						<UserInfo>
 							<UserPhoto>
-								<UserImg src={userInfo.photoURL} />
+								<UserImg src={userInfo.photoURL || '/images/user_img.png'} />
 							</UserPhoto>
 							<UserName>{userInfo.nickname || userInfo.email}</UserName>
 						</UserInfo>
 						<ButtonWrap>
-							<Link href={`/profile/?edit=${true}`} as="/profile/edit">
+							<Link href="/profile/?edit=true" as="/profile/edit">
 								<ProfileEditButton>프로필 수정</ProfileEditButton>
 							</Link>
 						</ButtonWrap>
@@ -51,7 +51,7 @@ const Profile = () => {
 
 			{router.query.edit && (
 				<ModalLayer onClick={() => router.back()}>
-					<ProfileEditor refreshUserObj={null} userObject={userInfo} ssoks={userInfo.Posts} />
+					<ProfileEditor userObject={userInfo} />
 				</ModalLayer>
 			)}
 		</AppLayout>

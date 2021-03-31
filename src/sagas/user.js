@@ -1,6 +1,9 @@
-import { all, fork, put, takeLatest, delay, call } from 'redux-saga/effects';
+import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import {
+	CHANGE_NICKNAME_FAILURE,
+	CHANGE_NICKNAME_REQUEST,
+	CHANGE_NICKNAME_SUCCESS,
 	FOLLOW_FAILURE,
 	FOLLOW_REQUEST,
 	FOLLOW_SUCCESS,
@@ -78,14 +81,17 @@ function* signUp(action) {
 	}
 }
 
+function followAPI(data) {
+	return axios.post('/user/follow', data);
+}
+
 function* follow(action) {
 	try {
-		// const result = yield call(followAPI);
-		yield delay(1000);
+		const result = yield call(followAPI, action.data);
+		// yield delay(1000);
 		yield put({
 			type: FOLLOW_SUCCESS,
-			// data: result.data,
-			data: action.data,
+			data: result.data,
 		});
 	} catch (error) {
 		yield put({
@@ -95,14 +101,16 @@ function* follow(action) {
 	}
 }
 
+function unfollowAPI(data) {
+	return axios.post('/user/unfollow', data);
+}
+
 function* unfollow(action) {
 	try {
-		// const result = yield call(unfollowAPI);
-		yield delay(1000);
+		const result = yield call(unfollowAPI, action.data);
 		yield put({
 			type: UNFOLLOW_SUCCESS,
-			// data: result.data,
-			data: action.data,
+			data: result.data,
 		});
 	} catch (error) {
 		yield put({
@@ -132,6 +140,26 @@ function* loadUserInfo() {
 	}
 }
 
+const changeNicknameAPI = data => {
+	return axios.patch('/user/nickname', { nickname: data });
+};
+
+function* changeNickname(action) {
+	try {
+		const result = yield call(changeNicknameAPI, action.data);
+		yield put({
+			type: CHANGE_NICKNAME_SUCCESS,
+			data: result.data,
+		});
+	} catch (error) {
+		console.error(error);
+		yield put({
+			type: CHANGE_NICKNAME_FAILURE,
+			error: error.response.data,
+		});
+	}
+}
+
 function* watchLogIn() {
 	yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -156,6 +184,10 @@ function* watchLoadUserInfo() {
 	yield takeLatest(LOAD_MY_INFO_REQUEST, loadUserInfo);
 }
 
+function* watchChangeNickname() {
+	yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
+}
+
 export default function* userSaga() {
 	yield all([
 		fork(watchLogIn),
@@ -164,5 +196,6 @@ export default function* userSaga() {
 		fork(watchFollow),
 		fork(watchUnfollow),
 		fork(watchLoadUserInfo),
+		fork(watchChangeNickname),
 	]);
 }
