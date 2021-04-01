@@ -50,7 +50,7 @@ const ProfileEditor = () => {
 	return (
 		<Wrap>
 			<Form onSubmit={onSubmit}>
-				<ProfileImgWrap photo={userPhoto || userInfo.profileImage}>
+				<ProfileImgWrap photo={userPhoto || userInfo.profileImage || '/images/user_img.png'}>
 					<Label htmlFor="file_upload">
 						<FontAwesomeIcon icon={faPlus} />
 					</Label>

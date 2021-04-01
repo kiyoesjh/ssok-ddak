@@ -19,6 +19,12 @@ export const initialState = {
 	unfollowLoading: false,
 	unfollowDone: false,
 	unfollowError: false,
+	loadFollowingsLoading: false,
+	loadFollowingsDone: false,
+	loadFollowingsError: false,
+	loadFollowersLoading: false,
+	loadFollowersDone: false,
+	loadFollowersError: false,
 	changeNicknameLoading: false,
 	changeNicknameDone: false,
 	changeNicknameError: false,
@@ -49,6 +55,14 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
 export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
 export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
 export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
@@ -70,7 +84,6 @@ export const logoutRequestAction = () => {
 };
 
 export const signUpAction = data => {
-	console.log('signupAction data? ', data);
 	return {
 		type: SIGN_UP_REQUEST,
 		data,
@@ -152,6 +165,34 @@ const reducer = (state = initialState, action) =>
 			case UNFOLLOW_FAILURE:
 				draft.unfollowLoading = false;
 				draft.unfollowError = action.error;
+				break;
+			case LOAD_FOLLOWINGS_REQUEST:
+				draft.loadFollowingsLoading = true;
+				draft.loadFollowingsError = null;
+				draft.loadFollowingsDone = false;
+				break;
+			case LOAD_FOLLOWINGS_SUCCESS:
+				draft.loadFollowingsLoading = false;
+				draft.loadFollowingsDone = true;
+				draft.userInfo.Followings = action.data;
+				break;
+			case LOAD_FOLLOWINGS_FAILURE:
+				draft.loadFollowersLoading = false;
+				draft.loadFollowersError = action.error;
+				break;
+			case LOAD_FOLLOWERS_REQUEST:
+				draft.loadFollowersLoading = true;
+				draft.loadFollowersError = null;
+				draft.loadFollowersDone = false;
+				break;
+			case LOAD_FOLLOWERS_SUCCESS:
+				draft.loadFollowersLoading = false;
+				draft.loadFollowersDone = true;
+				draft.userInfo.Followers = action.data;
+				break;
+			case LOAD_FOLLOWERS_FAILURE:
+				draft.loadFollowingsLoading = false;
+				draft.loadFollowingsError = action.error;
 				break;
 			case CHANGE_NICKNAME_REQUEST:
 				draft.changeNicknameLoading = true;

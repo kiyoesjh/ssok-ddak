@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWERS_REQUEST } from 'reducers/user';
 
 import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
@@ -14,12 +15,29 @@ import ModalLayer from 'components/Modal';
 
 const Profile = () => {
 	const { userInfo } = useSelector(state => state.user);
+	const dispatch = useDispatch();
 	const router = useRouter();
 	useEffect(() => {
 		if (!userInfo) {
 			router.push('/');
 		}
 	}, [userInfo]);
+
+	useEffect(() => {
+		if (router.query.followings) {
+			dispatch({
+				type: LOAD_FOLLOWINGS_REQUEST,
+			});
+		}
+	}, [router.query.followings]);
+
+	useEffect(() => {
+		if (router.query.followers) {
+			dispatch({
+				type: LOAD_FOLLOWERS_REQUEST,
+			});
+		}
+	}, [router.query.followers]);
 
 	if (!userInfo) {
 		return null;
@@ -49,9 +67,25 @@ const Profile = () => {
 								</ButtonWrap>
 							</UserNameWrapper>
 							<UserInfoList>
-								<li>게시글 0</li>
-								<li>팔로우 {userInfo.Followings.length}</li>
-								<li>팔로워 {userInfo.Followers.length}</li>
+								<li>
+									<ListButton type="button">
+										게시글 <Length>{userInfo.Posts.length}</Length>
+									</ListButton>
+								</li>
+								<li>
+									<Link href="/profile/?followings=true" as="/profile/followings">
+										<FollowListButton>
+											팔로우 <Length>{userInfo.Followings.length}</Length>
+										</FollowListButton>
+									</Link>
+								</li>
+								<li>
+									<Link href="/profile/?followers=true" as="/profile/followers">
+										<FollowListButton>
+											팔로워 <Length>{userInfo.Followers.length}</Length>
+										</FollowListButton>
+									</Link>
+								</li>
 							</UserInfoList>
 						</UserInfo>
 					</UserInfoWrap>
@@ -62,6 +96,24 @@ const Profile = () => {
 			{router.query.edit && (
 				<ModalLayer onClick={() => router.back()}>
 					<ProfileEditor userObject={userInfo} />
+				</ModalLayer>
+			)}
+			{router.query.followings && (
+				<ModalLayer onClick={() => router.back()}>
+					<div>
+						{userInfo.Followings.map(({ id, nickname }) => (
+							<div key={id}>{nickname}</div>
+						))}
+					</div>
+				</ModalLayer>
+			)}
+			{router.query.followers && (
+				<ModalLayer onClick={() => router.back()}>
+					<div>
+						{userInfo.Followers.map(({ id, nickname }) => (
+							<div key={id}>{nickname}</div>
+						))}
+					</div>
 				</ModalLayer>
 			)}
 		</AppLayout>
@@ -138,6 +190,18 @@ const UserInfoList = styled.ul`
 	}
 `;
 
+const ListButton = styled.button`
+	cursor: pointer;
+`;
+
+const FollowListButton = styled.a`
+	cursor: pointer;
+`;
+
+const Length = styled.span`
+	font-weight: bold;
+`;
+
 const Content = styled.div`
 	width: 90%;
 	margin: 0 auto;
@@ -147,20 +211,14 @@ const Content = styled.div`
 `;
 
 const ButtonWrap = styled.div`
-	/* display: flex;
-	justify-content: flex-end; */
 	margin-left: 15px;
 `;
 
-const grayButtonStyle = css`
+const ProfileEditButton = styled.a`
 	display: block;
 	padding: 10px;
-	/* background-color: ${({ theme }) => theme.lightColor}; */
 	border: 1px solid ${({ theme }) => theme.mainColor(1)};
 	border-radius: 30px;
 	color: ${({ theme }) => theme.mainColor(1)};
-`;
-
-const ProfileEditButton = styled.a`
-	${grayButtonStyle}
+	cursor: pointer;
 `;
