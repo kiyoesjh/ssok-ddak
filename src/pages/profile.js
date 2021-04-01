@@ -24,6 +24,7 @@ const Profile = () => {
 	if (!userInfo) {
 		return null;
 	}
+
 	return (
 		<AppLayout>
 			<Head>
@@ -33,17 +34,26 @@ const Profile = () => {
 				<Header headText={userInfo.nickname || userInfo.email} />
 				<Wrap>
 					<UserInfoWrap>
-						<UserInfo>
+						<UserPhotoWrap>
 							<UserPhoto>
 								<UserImg src={userInfo.photoURL || '/images/user_img.png'} />
 							</UserPhoto>
-							<UserName>{userInfo.nickname || userInfo.email}</UserName>
+						</UserPhotoWrap>
+						<UserInfo>
+							<UserNameWrapper>
+								<UserName>{userInfo.nickname || userInfo.email}</UserName>
+								<ButtonWrap>
+									<Link href="/profile/?edit=true" as="/profile/edit">
+										<ProfileEditButton>프로필 수정</ProfileEditButton>
+									</Link>
+								</ButtonWrap>
+							</UserNameWrapper>
+							<UserInfoList>
+								<li>게시글 0</li>
+								<li>팔로우 {userInfo.Followings.length}</li>
+								<li>팔로워 {userInfo.Followers.length}</li>
+							</UserInfoList>
 						</UserInfo>
-						<ButtonWrap>
-							<Link href="/profile/?edit=true" as="/profile/edit">
-								<ProfileEditButton>프로필 수정</ProfileEditButton>
-							</Link>
-						</ButtonWrap>
 					</UserInfoWrap>
 					<Content>{!!userInfo.Posts.length && <UserSsoks />}</Content>
 				</Wrap>
@@ -68,17 +78,17 @@ const Wrap = styled.div`
 
 const UserInfoWrap = styled.div`
 	display: flex;
-	align-items: flex-end;
+	align-items: center;
 	width: 90%;
 	margin: 0 auto;
-	justify-content: space-between;
 	margin-bottom: 20px;
 `;
 
-const UserInfo = styled.div`
+const UserPhotoWrap = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	flex-basis: 0;
+	flex-grow: 1;
 `;
 
 const UserPhoto = styled.div`
@@ -97,11 +107,35 @@ const UserImg = styled.img`
 	height: auto;
 `;
 
+const UserInfo = styled.div`
+	margin-left: 40px;
+	display: flex;
+	flex-direction: column;
+	flex-basis: 30px;
+	flex-grow: 2;
+`;
+
+const UserNameWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+`;
+
 const UserName = styled.strong`
-	font-size: 1.6rem;
+	font-size: 25px;
 	color: ${({ theme }) => theme.fontColor};
-	display: block;
-	margin: 0 40px;
+`;
+
+const UserInfoList = styled.ul`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	> li {
+		margin-left: 10px;
+		&:first-child {
+			margin-left: 0;
+		}
+	}
 `;
 
 const Content = styled.div`
@@ -113,8 +147,9 @@ const Content = styled.div`
 `;
 
 const ButtonWrap = styled.div`
-	display: flex;
-	justify-content: flex-end;
+	/* display: flex;
+	justify-content: flex-end; */
+	margin-left: 15px;
 `;
 
 const grayButtonStyle = css`

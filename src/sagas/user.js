@@ -82,13 +82,12 @@ function* signUp(action) {
 }
 
 function followAPI(data) {
-	return axios.post('/user/follow', data);
+	return axios.patch(`/user/${data}/follow`);
 }
 
 function* follow(action) {
 	try {
 		const result = yield call(followAPI, action.data);
-		// yield delay(1000);
 		yield put({
 			type: FOLLOW_SUCCESS,
 			data: result.data,
@@ -102,7 +101,7 @@ function* follow(action) {
 }
 
 function unfollowAPI(data) {
-	return axios.post('/user/unfollow', data);
+	return axios.delete(`/user/${data}/follow`);
 }
 
 function* unfollow(action) {

@@ -130,7 +130,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case FOLLOW_SUCCESS:
 				draft.followLoading = false;
-				draft.userInfo.Followings = action.data;
+				draft.userInfo.Followings.push({ id: action.data.UserId });
 				draft.followDone = true;
 				break;
 			case FOLLOW_FAILURE:
@@ -145,7 +145,7 @@ const reducer = (state = initialState, action) =>
 			case UNFOLLOW_SUCCESS:
 				draft.unfollowLoading = false;
 				draft.userInfo.Followings = draft.userInfo.Followings.filter(
-					({ id }) => id !== action.data,
+					({ id }) => id !== action.data.UserId,
 				);
 				draft.unfollowDone = true;
 				break;

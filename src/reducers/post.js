@@ -1,20 +1,7 @@
 import produce from 'utils/produce';
 
 export const initialState = {
-	ssoks: [
-		// {
-		// 	id: 1,
-		// 	User: {
-		// 		id: 33,
-		// 		creatorName: 'arari',
-		// 		photo: '/images/user_img.png',
-		// 	},
-		// 	Images: ['https://picsum.photos/seed/picsum/500/300'],
-		// 	category: 'affirmation',
-		// 	content: '구글에서 테스트!!! ㅎㅎㅎ ㅎㅎㅎ',
-		// 	createdAt: 1604552017773,
-		// },
-	],
+	ssoks: [],
 	imagePaths: [],
 	addPostLoading: false,
 	addPostDone: false,
