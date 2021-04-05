@@ -33,6 +33,11 @@ const ProfileEditor = () => {
 			// console.log(uploadURL);
 			// editObj.userInfo.photoURL = uploadURL;
 			// editObj.ssokUserInfo.creatorPhoto = uploadURL;
+			// const imagesFormData = new FormData();
+			// dispatch({
+			//   type: UPLOAD_IMAGE_REQUEST,
+			//   data:
+			// })
 		}
 	};
 
@@ -58,6 +63,7 @@ const ProfileEditor = () => {
 						id="file_upload"
 						type="file"
 						accept="image/*"
+						name="image"
 						onChange={event => onFileChange(event, setUserPhoto)}
 					/>
 				</ProfileImgWrap>

@@ -113,7 +113,9 @@ const Ssok = ({ ssokData, isOwner }) => {
 							<>
 								<ImgText>{ssokData.content}</ImgText>
 								<PostImgWrap>
-									<PostImg src={ssokData.Images} />
+									{ssokData.Images.map(({ id, src }) => (
+										<PostImg key={id} src={`http://localhost:3065/${src}`} />
+									))}
 								</PostImgWrap>
 							</>
 						) : (
@@ -148,7 +150,7 @@ Ssok.propTypes = {
 			nickname: PropTypes.string,
 			profileImg: PropTypes.string,
 		}),
-		Images: PropTypes.arrayOf(PropTypes.string),
+		Images: PropTypes.arrayOf(PropTypes.object),
 		category: PropTypes.string.isRequired,
 		content: PropTypes.string.isRequired,
 		createdAt: PropTypes.number.isRequired,
