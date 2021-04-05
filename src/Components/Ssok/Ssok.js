@@ -1,4 +1,3 @@
-// import { dbService } from 'fbase';
 import React, { useCallback, useState } from 'react';
 import { faEdit, faTrashAlt, faHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +6,7 @@ import device from 'styles/deviceSize';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { DELETE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'reducers/post';
+import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from 'reducers/user';
 import MorePop from '../Layer/MorePop';
 import EditSsok from './EditSsok';
 
@@ -15,6 +15,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 	const [newSsok, setNewSsok] = useState(ssokData.content); // input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
+	const { userInfo } = useSelector(state => state.user);
 
 	const onSsokDelete = () => {
 		dispatch({
@@ -27,9 +28,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		setIsOpen(false);
 	};
 
-	const id = useSelector(state => state.user.userInfo?.id);
-	const liked = ssokData.Likers.find(v => v.id === id);
-
+	const liked = ssokData.Likers.find(v => v.id === userInfo.id);
 	const onClickLike = useCallback(() => {
 		if (liked) {
 			return dispatch({
@@ -43,6 +42,22 @@ const Ssok = ({ ssokData, isOwner }) => {
 		});
 	}, [liked]);
 
+	const isFollowing = userInfo.Followings.find(v => v.id === ssokData.User.id);
+	const onToggleFollow = useCallback(() => {
+		if (isFollowing) {
+			// 팔로잉 하고 있다면 언팔
+			dispatch({
+				type: UNFOLLOW_REQUEST,
+				data: ssokData.User.id,
+			});
+		} else {
+			dispatch({
+				type: FOLLOW_REQUEST,
+				data: ssokData.User.id,
+			});
+		}
+	}, [isFollowing]);
+
 	const onSubmit = event => {
 		event.preventDefault();
 		// try {
@@ -52,6 +67,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		// } catch {}
 		setEditing(false);
 	};
+
 	return (
 		<Wrap>
 			<UserInfoWrap>
@@ -61,6 +77,13 @@ const Ssok = ({ ssokData, isOwner }) => {
 					</UserPhoto>
 					<UserName>{ssokData.User.nickname}</UserName>
 				</UserInfo>
+				{!isOwner && (
+					<>
+						<button type="button" onClick={onToggleFollow}>
+							{!isFollowing ? '팔로우' : '팔로우 취소'}
+						</button>
+					</>
+				)}
 				{isOwner && ( // 글쓴 사람일 경우에만 수정, 삭제 버튼이 보일 수 있도록 체크
 					<>
 						<MorePop setIsOpen={setIsOpen} isOpen={isOpen}>
@@ -90,7 +113,9 @@ const Ssok = ({ ssokData, isOwner }) => {
 							<>
 								<ImgText>{ssokData.content}</ImgText>
 								<PostImgWrap>
-									<PostImg src={ssokData.Images} />
+									{ssokData.Images.map(({ id, src }) => (
+										<PostImg key={id} src={`http://localhost:3065/${src}`} />
+									))}
 								</PostImgWrap>
 							</>
 						) : (
@@ -125,7 +150,7 @@ Ssok.propTypes = {
 			nickname: PropTypes.string,
 			profileImg: PropTypes.string,
 		}),
-		Images: PropTypes.arrayOf(PropTypes.string),
+		Images: PropTypes.arrayOf(PropTypes.object),
 		category: PropTypes.string.isRequired,
 		content: PropTypes.string.isRequired,
 		createdAt: PropTypes.number.isRequired,

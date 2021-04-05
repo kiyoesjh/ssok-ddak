@@ -33,6 +33,11 @@ const ProfileEditor = () => {
 			// console.log(uploadURL);
 			// editObj.userInfo.photoURL = uploadURL;
 			// editObj.ssokUserInfo.creatorPhoto = uploadURL;
+			// const imagesFormData = new FormData();
+			// dispatch({
+			//   type: UPLOAD_IMAGE_REQUEST,
+			//   data:
+			// })
 		}
 	};
 
@@ -50,7 +55,7 @@ const ProfileEditor = () => {
 	return (
 		<Wrap>
 			<Form onSubmit={onSubmit}>
-				<ProfileImgWrap photo={userPhoto || userInfo.profileImage}>
+				<ProfileImgWrap photo={userPhoto || userInfo.profileImage || '/images/user_img.png'}>
 					<Label htmlFor="file_upload">
 						<FontAwesomeIcon icon={faPlus} />
 					</Label>
@@ -58,6 +63,7 @@ const ProfileEditor = () => {
 						id="file_upload"
 						type="file"
 						accept="image/*"
+						name="image"
 						onChange={event => onFileChange(event, setUserPhoto)}
 					/>
 				</ProfileImgWrap>

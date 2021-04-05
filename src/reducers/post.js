@@ -1,20 +1,7 @@
 import produce from 'utils/produce';
 
 export const initialState = {
-	ssoks: [
-		// {
-		// 	id: 1,
-		// 	User: {
-		// 		id: 33,
-		// 		creatorName: 'arari',
-		// 		photo: '/images/user_img.png',
-		// 	},
-		// 	Images: ['https://picsum.photos/seed/picsum/500/300'],
-		// 	category: 'affirmation',
-		// 	content: '구글에서 테스트!!! ㅎㅎㅎ ㅎㅎㅎ',
-		// 	createdAt: 1604552017773,
-		// },
-	],
+	ssoks: [],
 	imagePaths: [],
 	addPostLoading: false,
 	addPostDone: false,
@@ -25,6 +12,7 @@ export const initialState = {
 	loadPostLoading: false,
 	loadPostDone: false,
 	loadPostError: null,
+	hasMorePosts: true,
 	resetPostLoading: false,
 	resetPostDone: false,
 	resetPostError: null,
@@ -34,6 +22,9 @@ export const initialState = {
 	unlikePostLoading: false,
 	unlikePostDone: false,
 	unlikePostError: null,
+	uploadImageLoading: false,
+	uploadImageDone: false,
+	uploadImageError: null,
 };
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -60,10 +51,11 @@ export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
 export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
 export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
-export const addPostRequestAction = data => ({
-	type: ADD_POST_REQUEST,
-	data,
-});
+export const UPLOAD_IMAGE_REQUEST = 'UPLOAD_IMAGE_REQUEST';
+export const UPLOAD_IMAGE_SUCCESS = 'UPLOAD_IMAGE_SUCCESS';
+export const UPLOAD_IMAGE_FAILURE = 'UPLOAD_IMAGE_FAILURE';
+
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 const reducer = (state = initialState, action) =>
 	produce(state, draft => {
@@ -75,6 +67,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case LOAD_POST_SUCCESS:
 				draft.ssoks = draft.ssoks.concat(action.data);
+				draft.hasMorePosts = action.data.length === 10;
 				draft.loadPostLoading = false;
 				draft.loadPostDone = true;
 				draft.loadPostError = null;
@@ -93,6 +86,7 @@ const reducer = (state = initialState, action) =>
 				draft.addPostLoading = false;
 				draft.addPostDone = true;
 				draft.addPostError = null;
+				draft.imagePaths = [];
 				break;
 			case ADD_POST_FAILURE:
 				draft.addPostLoading = false;
@@ -158,6 +152,24 @@ const reducer = (state = initialState, action) =>
 			case UNLIKE_POST_FAILURE:
 				draft.unlikePostDone = false;
 				draft.unlikePostError = true;
+				break;
+			case UPLOAD_IMAGE_REQUEST:
+				draft.uploadImageLoading = true;
+				draft.uploadImageDone = false;
+				draft.uploadImageError = null;
+				break;
+			case UPLOAD_IMAGE_SUCCESS: {
+				draft.imagePaths = action.data;
+				draft.uploadImageLoading = false;
+				draft.uploadImageDone = true;
+				break;
+			}
+			case UPLOAD_IMAGE_FAILURE:
+				draft.uploadImageDone = false;
+				draft.uploadImageError = true;
+				break;
+			case REMOVE_IMAGE:
+				draft.imagePaths = draft.imagePaths.filter((_, idx) => idx !== action.data);
 				break;
 			default:
 				break;
