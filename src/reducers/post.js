@@ -12,6 +12,7 @@ export const initialState = {
 	loadPostLoading: false,
 	loadPostDone: false,
 	loadPostError: null,
+	hasMorePosts: true,
 	resetPostLoading: false,
 	resetPostDone: false,
 	resetPostError: null,
@@ -66,6 +67,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case LOAD_POST_SUCCESS:
 				draft.ssoks = draft.ssoks.concat(action.data);
+				draft.hasMorePosts = action.data.length === 10;
 				draft.loadPostLoading = false;
 				draft.loadPostDone = true;
 				draft.loadPostError = null;
