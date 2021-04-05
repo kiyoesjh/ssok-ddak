@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { onFileChange } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPostRequestAction } from 'reducers/post';
+import { ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGE_REQUEST } from 'reducers/post';
 import FileButton from './FileButton';
 import SDButton from './SDButton';
 import TextArea from './TextArea';
@@ -12,25 +11,61 @@ import RadioButton from './RadioButton';
 
 const SsokEditor = () => {
 	const [ssok, setSsok] = useState('');
-	const [attachment, setAttachment] = useState('');
+	// const [attachment, setAttachment] = useState('');
 	const [category, setCategory] = useState('other');
 
 	const dispatch = useDispatch();
+	const imagePaths = useSelector(state => state.post.imagePaths);
 
-	const onClearAttachment = () => setAttachment(null);
+	// const onClearAttachment = () => setAttachment(null);
 
 	const { addPostDone } = useSelector(state => state.post);
+
+	const onFileChange = event => {
+		const imagesFormData = new FormData();
+		[].forEach.call(event.target.files, v => {
+			imagesFormData.append('image', v);
+		});
+		dispatch({
+			type: UPLOAD_IMAGE_REQUEST,
+			data: imagesFormData,
+		});
+	};
+
+	const onDeleteImage = useCallback(index => () => {
+		dispatch({
+			type: REMOVE_IMAGE,
+			data: index,
+		});
+	});
 
 	const onSubmit = async event => {
 		event.preventDefault();
 		if (!ssok) return;
-		dispatch(addPostRequestAction(ssok));
+		if (!imagePaths.length) {
+			dispatch({
+				type: ADD_POST_REQUEST,
+				data: {
+					content: ssok,
+					image: null,
+				},
+			});
+			return;
+		}
+		const formData = new FormData();
+		imagePaths.forEach(path => {
+			formData.append('image', path);
+		});
+		formData.append('content', ssok);
+		dispatch({
+			type: ADD_POST_REQUEST,
+			data: formData,
+		});
 	};
 
 	useEffect(() => {
 		if (addPostDone) {
 			setSsok('');
-			setAttachment('');
 		}
 	}, [addPostDone]);
 
@@ -42,17 +77,18 @@ const SsokEditor = () => {
 					<TextArea setSsok={val => setSsok(val)} ssok={ssok} />
 				</TagWrap>
 				<ButtonWrapper>
-					<FileButton onFileChange={onFileChange} setAttachment={setAttachment} />
+					<FileButton onFileChange={onFileChange} />
 					<SDButton />
 				</ButtonWrapper>
 			</form>
-			{attachment && (
-				<ImgFilePreview backgroundURL={attachment}>
-					<CloseButton type="button" onClick={onClearAttachment}>
-						<FontAwesomeIcon icon={faTimesCircle} />
-					</CloseButton>
-				</ImgFilePreview>
-			)}
+			{!!imagePaths.length &&
+				imagePaths.map((imagePath, idx) => (
+					<ImgFilePreview backgroundURL={`http://localhost:3065/${imagePath}`}>
+						<CloseButton type="button" onClick={onDeleteImage(idx)}>
+							<FontAwesomeIcon icon={faTimesCircle} />
+						</CloseButton>
+					</ImgFilePreview>
+				))}
 		</Section>
 	);
 };

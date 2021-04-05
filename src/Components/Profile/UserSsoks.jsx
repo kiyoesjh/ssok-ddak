@@ -7,7 +7,7 @@ import UserSsok from './UserSsok';
 const UserSsoks = () => {
 	const {
 		user: {
-			userInfo: { Post },
+			userInfo: { Posts },
 		},
 		post,
 	} = useSelector(state => state);
@@ -17,7 +17,7 @@ const UserSsoks = () => {
 	});
 	return (
 		<Container>
-			{Post.map(({ id }) => filterPost(id).map(ssok => <UserSsok ssok={ssok} />))}
+			{Posts.map(({ id }) => filterPost(id).map(ssok => <UserSsok key={ssok.id} ssok={ssok} />))}
 		</Container>
 	);
 };

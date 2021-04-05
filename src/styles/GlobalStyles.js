@@ -3,6 +3,19 @@ import reset from 'styled-reset';
 
 export default createGlobalStyle`
   ${reset};
+  * {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: inherit;
+  }
+  html {
+    font-size: 14px;
+  }
+  body {
+    height: 100vh;
+    background-color: ${({ theme }) => theme.backgroundColor};
+    color: ${({ theme }) => theme.fontColor};
+  }
   button {
     cursor: pointer;
   }
@@ -12,18 +25,7 @@ export default createGlobalStyle`
     border-radius: 0;
     padding: 0;
     margin: 0;
-  }
-  * {
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
-  }
-  html {
-    font-size: 14px;
-  }
-  body {
-    height: 100vh;
-    background-color: ${({ theme }) => theme.backgroundColor};
-    color: ${({ theme }) => theme.fontColor};
+    font: inherit;
   }
   a {
     text-decoration: none;

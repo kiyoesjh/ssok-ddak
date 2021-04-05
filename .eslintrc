@@ -37,7 +37,8 @@
 		"jsx-a11y/anchor-is-valid": "off",
 		"no-console": "off",
 		"no-underscore-dangle": "off",
-		"linebreak-style": "off"
+		"linebreak-style": "off",
+		"no-param-reassign": 0
 	},
 	"settings": {
 		"import/resolver": {
