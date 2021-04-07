@@ -8,7 +8,6 @@ import themeReducer from 'reducer/themeReducer';
 import Context from 'context';
 import wrapper from 'store/configureStore';
 import PropTypes from 'prop-types';
-import withReduxSaga from 'next-redux-saga';
 
 const SsokDdak = ({ Component }) => {
 	const [state, dispatch] = useReducer(themeReducer, {
@@ -29,7 +28,7 @@ const SsokDdak = ({ Component }) => {
 	);
 };
 
-export default wrapper.withRedux(withReduxSaga(SsokDdak));
+export default wrapper.withRedux(SsokDdak);
 
 SsokDdak.propTypes = {
 	Component: PropTypes.elementType.isRequired,

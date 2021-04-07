@@ -4,24 +4,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWERS_REQUEST } from 'reducers/user';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
+import {
+	LOAD_FOLLOWINGS_REQUEST,
+	LOAD_FOLLOWERS_REQUEST,
+	LOAD_MY_INFO_REQUEST,
+} from 'reducers/user';
 import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
 import Header from 'components/Header';
 import UserSsoks from 'components/Profile/UserSsoks';
 import ProfileEditor from 'components/Profile/ProfileEditor';
 import ModalLayer from 'components/Modal';
+import wrapper from 'store/configureStore';
 
 const Profile = () => {
-	const { userInfo } = useSelector(state => state.user);
+	const { me } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 	const router = useRouter();
 	useEffect(() => {
-		if (!userInfo) {
+		if (!(me && me.id)) {
 			router.push('/');
 		}
-	}, [userInfo]);
+	}, [me]);
 
 	useEffect(() => {
 		if (router.query.followings) {
@@ -39,7 +46,7 @@ const Profile = () => {
 		}
 	}, [router.query.followers]);
 
-	if (!userInfo) {
+	if (!me) {
 		return null;
 	}
 
@@ -49,17 +56,17 @@ const Profile = () => {
 				<title>내 프로필 | ssok ddak</title>
 			</Head>
 			<Container>
-				<Header headText={userInfo.nickname || userInfo.email} />
+				<Header headText={me.nickname || me.email} />
 				<Wrap>
 					<UserInfoWrap>
 						<UserPhotoWrap>
 							<UserPhoto>
-								<UserImg src={userInfo.photoURL || '/images/user_img.png'} />
+								<UserImg src={me.photoURL || '/images/user_img.png'} />
 							</UserPhoto>
 						</UserPhotoWrap>
 						<UserInfo>
 							<UserNameWrapper>
-								<UserName>{userInfo.nickname || userInfo.email}</UserName>
+								<UserName>{me.nickname || me.email}</UserName>
 								<ButtonWrap>
 									<Link href="/profile/?edit=true" as="/profile/edit">
 										<ProfileEditButton>프로필 수정</ProfileEditButton>
@@ -69,39 +76,39 @@ const Profile = () => {
 							<UserInfoList>
 								<li>
 									<ListButton type="button">
-										게시글 <Length>{userInfo.Posts.length}</Length>
+										게시글 <Length>{me.Posts.length}</Length>
 									</ListButton>
 								</li>
 								<li>
 									<Link href="/profile/?followings=true" as="/profile/followings">
 										<FollowListButton>
-											팔로우 <Length>{userInfo.Followings.length}</Length>
+											팔로우 <Length>{me.Followings.length}</Length>
 										</FollowListButton>
 									</Link>
 								</li>
 								<li>
 									<Link href="/profile/?followers=true" as="/profile/followers">
 										<FollowListButton>
-											팔로워 <Length>{userInfo.Followers.length}</Length>
+											팔로워 <Length>{me.Followers.length}</Length>
 										</FollowListButton>
 									</Link>
 								</li>
 							</UserInfoList>
 						</UserInfo>
 					</UserInfoWrap>
-					<Content>{!!userInfo.Posts.length && <UserSsoks />}</Content>
+					<Content>{!!me.Posts.length && <UserSsoks />}</Content>
 				</Wrap>
 			</Container>
 
 			{router.query.edit && (
 				<ModalLayer onClick={() => router.back()}>
-					<ProfileEditor userObject={userInfo} />
+					<ProfileEditor userObject={me} />
 				</ModalLayer>
 			)}
 			{router.query.followings && (
 				<ModalLayer onClick={() => router.back()}>
 					<div>
-						{userInfo.Followings.map(({ id, nickname }) => (
+						{me.Followings.map(({ id, nickname }) => (
 							<div key={id}>{nickname}</div>
 						))}
 					</div>
@@ -110,7 +117,7 @@ const Profile = () => {
 			{router.query.followers && (
 				<ModalLayer onClick={() => router.back()}>
 					<div>
-						{userInfo.Followers.map(({ id, nickname }) => (
+						{me.Followers.map(({ id, nickname }) => (
 							<div key={id}>{nickname}</div>
 						))}
 					</div>
@@ -119,6 +126,19 @@ const Profile = () => {
 		</AppLayout>
 	);
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(async context => {
+	const cookie = context.req ? context.req.headers.cookie : '';
+	axios.defaults.headers.Cookie = '';
+	if (cookie && context.req) {
+		axios.defaults.headers.Cookie = cookie;
+	}
+	context.store.dispatch({
+		type: LOAD_MY_INFO_REQUEST,
+	});
+	context.store.dispatch(END);
+	await context.store.sagaTask.toPromise();
+});
 
 export default Profile;
 

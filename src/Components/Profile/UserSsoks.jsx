@@ -7,7 +7,7 @@ import UserSsok from './UserSsok';
 const UserSsoks = () => {
 	const {
 		user: {
-			userInfo: { Posts },
+			me: { Posts },
 		},
 		post,
 	} = useSelector(state => state);
