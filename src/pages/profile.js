@@ -4,21 +4,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWERS_REQUEST } from 'reducers/user';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
+import {
+	LOAD_FOLLOWINGS_REQUEST,
+	LOAD_FOLLOWERS_REQUEST,
+	LOAD_MY_INFO_REQUEST,
+} from 'reducers/user';
 import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
 import Header from 'components/Header';
 import UserSsoks from 'components/Profile/UserSsoks';
 import ProfileEditor from 'components/Profile/ProfileEditor';
 import ModalLayer from 'components/Modal';
+import wrapper from 'store/configureStore';
 
 const Profile = () => {
 	const { me } = useSelector(state => state.user);
 	const dispatch = useDispatch();
 	const router = useRouter();
 	useEffect(() => {
-		if (!me) {
+		if (!(me && me.id)) {
 			router.push('/');
 		}
 	}, [me]);
@@ -119,6 +126,19 @@ const Profile = () => {
 		</AppLayout>
 	);
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(async context => {
+	const cookie = context.req ? context.req.headers.cookie : '';
+	axios.defaults.headers.Cookie = '';
+	if (cookie && context.req) {
+		axios.defaults.headers.Cookie = cookie;
+	}
+	context.store.dispatch({
+		type: LOAD_MY_INFO_REQUEST,
+	});
+	context.store.dispatch(END);
+	await context.store.sagaTask.toPromise();
+});
 
 export default Profile;
 
