@@ -1,6 +1,8 @@
-import { produce, enableES5 } from 'immer';
+import { produce as produceImmer, enableES5 } from 'immer';
 
-export default (...args) => {
+const produce = (...args) => {
 	enableES5();
-	return produce(...args);
+	return produceImmer(...args);
 };
+
+export default produce;

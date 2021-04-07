@@ -47,7 +47,7 @@ const Home = () => {
 				<ColumnWrap>
 					<Wrap>
 						{ssoks.map(ssok => (
-							<Ssok key={ssok.id} ssokData={ssok} isOwner={ssok.User.id === user.userInfo.id} />
+							<Ssok key={ssok.id} ssokData={ssok} isOwner={ssok.User.id === user.me.id} />
 						))}
 					</Wrap>
 				</ColumnWrap>
