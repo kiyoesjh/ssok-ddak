@@ -15,7 +15,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 	const [newSsok, setNewSsok] = useState(ssokData.content); // input값을 수정할 수 있는 상태값, 초기값=수정하기 전에 있던 텍스트
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
-	const { userInfo } = useSelector(state => state.user);
+	const { me } = useSelector(state => state.user);
 
 	const onSsokDelete = () => {
 		dispatch({
@@ -28,7 +28,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		setIsOpen(false);
 	};
 
-	const liked = ssokData.Likers.find(v => v.id === userInfo.id);
+	const liked = ssokData.Likers.find(v => v.id === me?.id);
 	const onClickLike = useCallback(() => {
 		if (liked) {
 			return dispatch({
@@ -42,7 +42,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		});
 	}, [liked]);
 
-	const isFollowing = userInfo.Followings.find(v => v.id === ssokData.User.id);
+	const isFollowing = me?.Followings.find(v => v.id === ssokData.User.id);
 	const onToggleFollow = useCallback(() => {
 		if (isFollowing) {
 			// 팔로잉 하고 있다면 언팔

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { onFileChange /* uploadFileURL */ } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button';
@@ -10,8 +9,8 @@ import { useRouter } from 'next/router';
 import Loading from 'components/Button/Loading';
 
 const ProfileEditor = () => {
-	const userInfo = useSelector(state => state.user.userInfo);
-	const [userName, setUserName] = useState(userInfo.nickname);
+	const me = useSelector(state => state.user.me);
+	const [userName, setUserName] = useState(me.nickname);
 	const [userPhoto, setUserPhoto] = useState('');
 	const { changeNicknameLoading, changeNicknameDone } = useSelector(state => state.user);
 	const dispatch = useDispatch();
@@ -19,20 +18,20 @@ const ProfileEditor = () => {
 
 	const onSubmit = async event => {
 		event.preventDefault();
-		if (userInfo.nickname === userName && !userPhoto) return;
+		if (me.nickname === userName && !userPhoto) return;
 
-		if (userInfo.nickname !== userName) {
+		if (me.nickname !== userName) {
 			dispatch({
 				type: CHANGE_NICKNAME_REQUEST,
 				data: userName,
 			});
 		}
 		if (userPhoto) {
-			// await storageService.refFromURL(userInfo.photoURL).delete();
-			// const uploadURL = await uploadFileURL(userInfo.uid, userPhoto);
+			// await storageService.refFromURL(me.photoURL).delete();
+			// const uploadURL = await uploadFileURL(me.uid, userPhoto);
 			// console.log(uploadURL);
-			// editObj.userInfo.photoURL = uploadURL;
-			// editObj.ssokUserInfo.creatorPhoto = uploadURL;
+			// editObj.me.photoURL = uploadURL;
+			// editObj.ssokme.creatorPhoto = uploadURL;
 			// const imagesFormData = new FormData();
 			// dispatch({
 			//   type: UPLOAD_IMAGE_REQUEST,
@@ -45,6 +44,17 @@ const ProfileEditor = () => {
 		setUserName(value);
 	};
 
+	const onFileChange = useCallback(event => {
+		const imagesFormData = new FormData();
+		[].forEach.call(event.target.files, v => {
+			imagesFormData.append('profile', v);
+		});
+		dispatch({
+			type: UPLOAD_PROFILE_IMAGE_REQUEST,
+			data: imagesFormData,
+		});
+	});
+
 	useEffect(() => {
 		if (changeNicknameDone) {
 			setUserPhoto('');
@@ -55,7 +65,7 @@ const ProfileEditor = () => {
 	return (
 		<Wrap>
 			<Form onSubmit={onSubmit}>
-				<ProfileImgWrap photo={userPhoto || userInfo.profileImage || '/images/user_img.png'}>
+				<ProfileImgWrap photo={userPhoto || me.profileImage || '/images/user_img.png'}>
 					<Label htmlFor="file_upload">
 						<FontAwesomeIcon icon={faPlus} />
 					</Label>
@@ -64,7 +74,7 @@ const ProfileEditor = () => {
 						type="file"
 						accept="image/*"
 						name="image"
-						onChange={event => onFileChange(event, setUserPhoto)}
+						onChange={onFileChange}
 					/>
 				</ProfileImgWrap>
 				<NameInput type="text" placeholder="Display name" value={userName} onChange={onChange} />

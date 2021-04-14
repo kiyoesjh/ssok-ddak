@@ -5,11 +5,13 @@ import { faHome, faUser, faSearch, faPlus } from '@fortawesome/free-solid-svg-ic
 import device, { NavigationResponseWidth } from 'styles/deviceSize';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 import SettingPop from './Layer/SettingPop';
 
 const Navigation = () => {
 	const router = useRouter();
-	console.log(router.pathname);
+	const { me } = useSelector(state => state.user);
+	const id = me?.id;
 	return (
 		<NavWrap>
 			<Nav>
@@ -34,8 +36,8 @@ const Navigation = () => {
 							</a>
 						</NaviLink>
 					</NaviList>
-					<NaviList selected={router.pathname === '/post'}>
-						<NaviLink href="/post">
+					<NaviList selected={router.pathname === '/write'}>
+						<NaviLink href="/write">
 							<a>
 								<LinkText>
 									<FontAwesomeIcon icon={faPlus} fixedWidth />
@@ -44,8 +46,8 @@ const Navigation = () => {
 							</a>
 						</NaviLink>
 					</NaviList>
-					<NaviList selected={router.pathname === '/profile'}>
-						<NaviLink href="/profile">
+					<NaviList selected={router.pathname === `/user/${id}`}>
+						<NaviLink href={`/user/${id}`}>
 							<a>
 								<LinkText>
 									<FontAwesomeIcon icon={faUser} fixedWidth />

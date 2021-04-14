@@ -1,6 +1,9 @@
 import produce from 'utils/produce';
 
 export const initialState = {
+	loadMyInfoLoading: false,
+	loadMyInfoDone: false,
+	loadMyInfoError: null,
 	loadUserInfoLoading: false,
 	loadUserInfoDone: false,
 	loadUserInfoError: null,
@@ -28,12 +31,21 @@ export const initialState = {
 	changeNicknameLoading: false,
 	changeNicknameDone: false,
 	changeNicknameError: false,
+	uploadProfileImageLoading: false,
+	uploadProfileImageDone: false,
+	uploadProfileImageError: false,
 	userInfo: null,
+	me: null,
+	previewProfilePath: null,
 };
 
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -67,6 +79,10 @@ export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
 export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
 export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 
+export const UPLOAD_PROFILE_IMAGE_REQUEST = 'UPLOAD_PROFILE_IMAGE_REQUEST';
+export const UPLOAD_PROFILE_IMAGE_SUCCESS = 'UPLOAD_PROFILE_IMAGE_SUCCESS';
+export const UPLOAD_PROFILE_IMAGE_FAILURE = 'UPLOAD_PROFILE_IMAGE_FAILURE';
+
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
@@ -94,18 +110,32 @@ const reducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case LOAD_MY_INFO_REQUEST:
-				draft.loadUserInfoLoading = true;
-				draft.loadUserInfoDone = false;
-				draft.loadUserInfoError = null;
+				draft.loadMyInfoLoading = true;
+				draft.loadMyInfoDone = false;
+				draft.loadMyInfoError = null;
 				break;
 			case LOAD_MY_INFO_SUCCESS:
-				draft.oadUserInfoLoading = false;
-				draft.userInfo = action.data;
-				draft.oadUserInfoDone = true;
+				draft.loadMyInfoLoading = false;
+				draft.me = action.data;
+				draft.loadMyInfoDone = true;
 				break;
 			case LOAD_MY_INFO_FAILURE:
-				draft.loadUserInfoLoading = false;
-				draft.loadUserInfoError = action.error;
+				draft.loadMyInfoLoading = false;
+				draft.loadMyInfoError = action.error;
+				break;
+			case LOAD_USER_REQUEST:
+				draft.loadUserLoading = true;
+				draft.loadUserDone = false;
+				draft.loadUserError = null;
+				break;
+			case LOAD_USER_SUCCESS:
+				draft.loadUserLoading = false;
+				draft.userInfo = action.data;
+				draft.loadUserDone = true;
+				break;
+			case LOAD_USER_FAILURE:
+				draft.loadUserLoading = false;
+				draft.loadUserError = action.error;
 				break;
 			case LOG_IN_REQUEST:
 				draft.logInLoading = true;
@@ -114,7 +144,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case LOG_IN_SUCCESS:
 				draft.logInLoading = false;
-				draft.userInfo = action.data;
+				draft.me = action.data;
 				draft.logInDone = true;
 				break;
 			case LOG_IN_FAILURE:
@@ -130,7 +160,7 @@ const reducer = (state = initialState, action) =>
 				draft.logOutLoading = false;
 				draft.logInDone = true;
 				draft.signUpDone = false;
-				draft.userInfo = null;
+				draft.me = null;
 				break;
 			case LOG_OUT_FAILURE:
 				draft.logOutLoading = false;
@@ -143,7 +173,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case FOLLOW_SUCCESS:
 				draft.followLoading = false;
-				draft.userInfo.Followings.push({ id: action.data.UserId });
+				draft.me.Followings.push({ id: action.data.UserId });
 				draft.followDone = true;
 				break;
 			case FOLLOW_FAILURE:
@@ -157,9 +187,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case UNFOLLOW_SUCCESS:
 				draft.unfollowLoading = false;
-				draft.userInfo.Followings = draft.userInfo.Followings.filter(
-					({ id }) => id !== action.data.UserId,
-				);
+				draft.me.Followings = draft.me.Followings.filter(({ id }) => id !== action.data.UserId);
 				draft.unfollowDone = true;
 				break;
 			case UNFOLLOW_FAILURE:
@@ -171,11 +199,16 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowingsError = null;
 				draft.loadFollowingsDone = false;
 				break;
-			case LOAD_FOLLOWINGS_SUCCESS:
+			case LOAD_FOLLOWINGS_SUCCESS: {
 				draft.loadFollowingsLoading = false;
 				draft.loadFollowingsDone = true;
-				draft.userInfo.Followings = action.data;
+				if (action.data.isMe) {
+					draft.me.Followings = action.data.followings;
+				} else {
+					draft.userInfo.Followings = action.data.followings;
+				}
 				break;
+			}
 			case LOAD_FOLLOWINGS_FAILURE:
 				draft.loadFollowersLoading = false;
 				draft.loadFollowersError = action.error;
@@ -185,11 +218,16 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowersError = null;
 				draft.loadFollowersDone = false;
 				break;
-			case LOAD_FOLLOWERS_SUCCESS:
+			case LOAD_FOLLOWERS_SUCCESS: {
 				draft.loadFollowersLoading = false;
 				draft.loadFollowersDone = true;
-				draft.userInfo.Followers = action.data;
+				if (action.data.isMe) {
+					draft.me.Followers = action.data.followers;
+				} else {
+					draft.userInfo.Followers = action.data.followers;
+				}
 				break;
+			}
 			case LOAD_FOLLOWERS_FAILURE:
 				draft.loadFollowingsLoading = false;
 				draft.loadFollowingsError = action.error;
@@ -201,12 +239,26 @@ const reducer = (state = initialState, action) =>
 				break;
 			case CHANGE_NICKNAME_SUCCESS:
 				draft.changeNicknameLoading = false;
-				draft.userInfo.nickname = action.data.nickname;
+				draft.me.nickname = action.data.nickname;
 				draft.changeNicknameDone = true;
 				break;
 			case CHANGE_NICKNAME_FAILURE:
 				draft.changeNicknameLoading = false;
 				draft.changeNicknameError = action.error;
+				break;
+			case UPLOAD_PROFILE_IMAGE_REQUEST:
+				draft.uploadProfileImageLoading = true;
+				draft.uploadProfileImageError = null;
+				draft.uploadProfileImageDone = false;
+				break;
+			case UPLOAD_PROFILE_IMAGE_SUCCESS:
+				draft.uploadProfileImageLoading = false;
+				draft.previewProfilePath = action.data;
+				draft.uploadProfileImageDone = true;
+				break;
+			case UPLOAD_PROFILE_IMAGE_FAILURE:
+				draft.uploadProfileImageLoading = false;
+				draft.uploadProfileImageError = action.error;
 				break;
 			case SIGN_UP_REQUEST:
 				draft.signUpLoading = true;
@@ -222,10 +274,10 @@ const reducer = (state = initialState, action) =>
 				draft.signUpError = action.error;
 				break;
 			case ADD_POST_TO_ME:
-				draft.userInfo.Posts = draft.userInfo.Posts.unshift({ id: action.data });
+				draft.me.Posts = draft.me.Posts.concat({ id: action.data });
 				break;
 			case REMOVE_POST_OF_ME:
-				draft.userInfo.Posts = draft.userInfo.Post.filter(({ id }) => id !== action.data);
+				draft.me.Posts = draft.me.Post.filter(({ id }) => id !== action.data);
 				break;
 			default:
 				break;
