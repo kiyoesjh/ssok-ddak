@@ -28,7 +28,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		setIsOpen(false);
 	};
 
-	const liked = ssokData.Likers.find(v => v.id === me.id);
+	const liked = ssokData.Likers.find(v => v.id === me?.id);
 	const onClickLike = useCallback(() => {
 		if (liked) {
 			return dispatch({
@@ -42,7 +42,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 		});
 	}, [liked]);
 
-	const isFollowing = me.Followings.find(v => v.id === ssokData.User.id);
+	const isFollowing = me?.Followings.find(v => v.id === ssokData.User.id);
 	const onToggleFollow = useCallback(() => {
 		if (isFollowing) {
 			// 팔로잉 하고 있다면 언팔

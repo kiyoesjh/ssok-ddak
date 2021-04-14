@@ -9,7 +9,7 @@ import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
 import wrapper from 'store/configureStore';
 
-const Post = () => {
+const Write = () => {
 	return (
 		<AppLayout>
 			<Container>
@@ -33,4 +33,4 @@ export const getServerSideProps = wrapper.getServerSideProps(async context => {
 	await context.store.sagaTask.toPromise();
 });
 
-export default Post;
+export default Write;

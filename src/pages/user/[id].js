@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
@@ -6,34 +6,44 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import axios from 'axios';
 import { END } from 'redux-saga';
-
 import {
 	LOAD_FOLLOWINGS_REQUEST,
 	LOAD_FOLLOWERS_REQUEST,
 	LOAD_MY_INFO_REQUEST,
+	LOAD_USER_REQUEST,
 } from 'reducers/user';
+import { LOAD_USER_POSTS_REQUEST } from 'reducers/post';
 import Container from 'components/Container';
 import AppLayout from 'components/AppLayout';
 import Header from 'components/Header';
 import UserSsoks from 'components/Profile/UserSsoks';
-import ProfileEditor from 'components/Profile/ProfileEditor';
 import ModalLayer from 'components/Modal';
 import wrapper from 'store/configureStore';
 
-const Profile = () => {
-	const { me } = useSelector(state => state.user);
-	const dispatch = useDispatch();
+const User = () => {
 	const router = useRouter();
-	useEffect(() => {
-		if (!(me && me.id)) {
-			router.push('/');
-		}
-	}, [me]);
+	const { id } = router.query;
+	const dispatch = useDispatch();
+	const {
+		hasMorePosts,
+		loadPostsLoading,
+		ssoks,
+		loadPostsError,
+		loadFollowingsError,
+		loadFollowersError,
+	} = useSelector(state => state.post);
 
+	const { userInfo, me } = useSelector(state => state.user);
+	const isMe = parseInt(id, 10) === me.id;
+	const user = useMemo(() => (isMe ? me : userInfo), [isMe, me, userInfo]);
+	console.log(isMe);
 	useEffect(() => {
 		if (router.query.followings) {
+			console.log(user.id);
 			dispatch({
 				type: LOAD_FOLLOWINGS_REQUEST,
+				data: user.id,
+				isMe,
 			});
 		}
 	}, [router.query.followings]);
@@ -42,74 +52,118 @@ const Profile = () => {
 		if (router.query.followers) {
 			dispatch({
 				type: LOAD_FOLLOWERS_REQUEST,
+				data: user.id,
+				isMe,
 			});
 		}
 	}, [router.query.followers]);
 
-	if (!me) {
-		return null;
-	}
+	useEffect(() => {
+		const onScroll = () => {
+			if (
+				window.scrollY + document.documentElement.clientHeight >
+				document.documentElement.scrollHeight - 400
+			) {
+				if (hasMorePosts && !loadPostsLoading) {
+					const lastId = ssoks[ssoks.length - 1]?.id;
+					dispatch({
+						type: LOAD_USER_POSTS_REQUEST,
+						data: id,
+						lastId,
+					});
+				}
+			}
+		};
+
+		window.addEventListener('scroll', onScroll);
+		return () => window.removeEventListener('scroll', onScroll);
+	}, [hasMorePosts, loadPostsLoading, ssoks]);
+
+	useEffect(() => {
+		if (loadPostsError) {
+			alert(loadPostsError);
+		} else if (loadFollowersError) {
+			alert(loadFollowersError);
+		} else if (loadFollowingsError) {
+			alert(loadFollowingsError);
+		}
+	}, [loadPostsError, loadFollowersError, loadFollowingsError]);
 
 	return (
 		<AppLayout>
 			<Head>
-				<title>내 프로필 | ssok ddak</title>
+				<title>@{user.nickname} | ssok ddak</title>
 			</Head>
 			<Container>
-				<Header headText={me.nickname || me.email} />
+				<Header headText={user.nickname || me.nickname} />
 				<Wrap>
 					<UserInfoWrap>
 						<UserPhotoWrap>
 							<UserPhoto>
-								<UserImg src={me.photoURL || '/images/user_img.png'} />
+								<UserImg src={user.photoURL || '/images/user_img.png'} />
 							</UserPhoto>
 						</UserPhotoWrap>
 						<UserInfo>
 							<UserNameWrapper>
-								<UserName>{me.nickname || me.email}</UserName>
-								<ButtonWrap>
-									<Link href="/profile/?edit=true" as="/profile/edit">
-										<ProfileEditButton>프로필 수정</ProfileEditButton>
-									</Link>
-								</ButtonWrap>
+								<UserName>{user.nickname || user.email}</UserName>
+								{me && (
+									<ButtonWrap>
+										{isMe && (
+											<Link href="/profile/?edit=true" as="/profile/edit">
+												<ProfileEditButton>프로필 수정</ProfileEditButton>
+											</Link>
+										)}
+										{!isMe && (
+											<>
+												{me.Followings.filter(following => user.id === following.id).length ? (
+													<button type="button">팔로우 취소</button>
+												) : (
+													<button type="button">팔로우</button>
+												)}
+											</>
+										)}
+									</ButtonWrap>
+								)}
 							</UserNameWrapper>
 							<UserInfoList>
 								<li>
 									<ListButton type="button">
-										게시글 <Length>{me.Posts.length}</Length>
+										게시글 <Length>{user.Posts.length}</Length>
 									</ListButton>
 								</li>
 								<li>
-									<Link href="/profile/?followings=true" as="/profile/followings">
+									<Link
+										href={`/user/${user.id}/?followings=${true}`}
+										as={`/user/${user.id}/?followings`}
+									>
 										<FollowListButton>
-											팔로우 <Length>{me.Followings.length}</Length>
+											팔로우 <Length>{user.Followings.length}</Length>
 										</FollowListButton>
 									</Link>
 								</li>
 								<li>
-									<Link href="/profile/?followers=true" as="/profile/followers">
+									<Link
+										href={`/user/${user.id}/?followers=${true}`}
+										as={`/user/${user.id}/?followers`}
+									>
 										<FollowListButton>
-											팔로워 <Length>{me.Followers.length}</Length>
+											팔로워 <Length>{user.Followers.length}</Length>
 										</FollowListButton>
 									</Link>
 								</li>
 							</UserInfoList>
 						</UserInfo>
 					</UserInfoWrap>
-					<Content>{!!me.Posts.length && <UserSsoks />}</Content>
+					<Content>{!!ssoks.length && <UserSsoks />}</Content>
 				</Wrap>
 			</Container>
 
-			{router.query.edit && (
-				<ModalLayer onClick={() => router.back()}>
-					<ProfileEditor userObject={me} />
-				</ModalLayer>
-			)}
 			{router.query.followings && (
 				<ModalLayer onClick={() => router.back()}>
 					<div>
-						{me.Followings.map(({ id, nickname }) => (
-							<div key={id}>{nickname}</div>
+						{console.log(user.Followings)}
+						{user.Followings.map(item => (
+							<div key={item.id}>{item.nickname}</div>
 						))}
 					</div>
 				</ModalLayer>
@@ -117,8 +171,9 @@ const Profile = () => {
 			{router.query.followers && (
 				<ModalLayer onClick={() => router.back()}>
 					<div>
-						{me.Followers.map(({ id, nickname }) => (
-							<div key={id}>{nickname}</div>
+						{console.log(user.Followers)}
+						{user.Followers.map(item => (
+							<div key={item.id}>{item.nickname}</div>
 						))}
 					</div>
 				</ModalLayer>
@@ -136,11 +191,19 @@ export const getServerSideProps = wrapper.getServerSideProps(async context => {
 	context.store.dispatch({
 		type: LOAD_MY_INFO_REQUEST,
 	});
+	context.store.dispatch({
+		type: LOAD_USER_REQUEST,
+		data: context.params.id,
+	});
+	context.store.dispatch({
+		type: LOAD_USER_POSTS_REQUEST,
+		data: context.params.id,
+	});
 	context.store.dispatch(END);
 	await context.store.sagaTask.toPromise();
 });
 
-export default Profile;
+export default User;
 
 const Wrap = styled.div`
 	width: 100%;

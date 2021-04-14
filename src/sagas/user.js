@@ -129,7 +129,7 @@ function* unfollow(action) {
 }
 
 function loadFollowingsAPI(data) {
-	return axios.get(`/user/followings`, data);
+	return axios.get(`/user/${data}/followings`);
 }
 
 function* loadFollowings(action) {
@@ -137,7 +137,10 @@ function* loadFollowings(action) {
 		const result = yield call(loadFollowingsAPI, action.data);
 		yield put({
 			type: LOAD_FOLLOWINGS_SUCCESS,
-			data: result.data,
+			data: {
+				followings: result.data,
+				isMe: action.isMe,
+			},
 		});
 	} catch (error) {
 		yield put({
@@ -148,15 +151,19 @@ function* loadFollowings(action) {
 }
 
 function loadFollowersAPI(data) {
-	return axios.get(`/user/followers`, data);
+	return axios.get(`/user/${data}/followers`);
 }
 
 function* loadFollowers(action) {
 	try {
+		console.log(action.isMe);
 		const result = yield call(loadFollowersAPI, action.data);
 		yield put({
 			type: LOAD_FOLLOWERS_SUCCESS,
-			data: result.data,
+			data: {
+				followers: result.data,
+				isMe: action.isMe,
+			},
 		});
 	} catch (error) {
 		yield put({

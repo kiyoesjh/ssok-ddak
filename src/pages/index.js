@@ -7,6 +7,7 @@ import wrapper from 'store/configureStore';
 import { LOAD_MY_INFO_REQUEST } from 'reducers/user';
 import Home from 'components/Home';
 import Auth from 'components/Auth';
+import { LOAD_POSTS_REQUEST } from 'reducers/post';
 
 const App = () => {
 	const { me } = useSelector(state => state.user);
@@ -21,6 +22,9 @@ export const getServerSideProps = wrapper.getServerSideProps(async context => {
 	}
 	context.store.dispatch({
 		type: LOAD_MY_INFO_REQUEST,
+	});
+	context.store.dispatch({
+		type: LOAD_POSTS_REQUEST,
 	});
 	context.store.dispatch(END);
 	await context.store.sagaTask.toPromise();
