@@ -5,19 +5,17 @@ import { useSelector } from 'react-redux';
 import UserSsok from './UserSsok';
 
 const UserSsoks = () => {
-	const {
-		user: {
-			me: { Posts },
-		},
-		post,
-	} = useSelector(state => state);
+	const { post } = useSelector(state => state);
 
-	const filterPost = useCallback(postId => {
-		return post.ssoks.filter(({ id }) => id === postId);
-	});
+	// const filterPost = useCallback(postId => {
+	// 	return post.ssoks.filter(({ id }) => id === postId);
+	// });
 	return (
 		<Container>
-			{Posts.map(({ id }) => filterPost(id).map(ssok => <UserSsok key={ssok.id} ssok={ssok} />))}
+			{/* {Posts.map(({ id }) => filterPost(id).map(ssok => <UserSsok key={ssok.id} ssok={ssok} />))} */}
+			{post.ssoks.map(ssok => (
+				<UserSsok key={ssok.id} ssok={ssok} />
+			))}
 		</Container>
 	);
 };

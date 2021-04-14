@@ -199,11 +199,16 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowingsError = null;
 				draft.loadFollowingsDone = false;
 				break;
-			case LOAD_FOLLOWINGS_SUCCESS:
+			case LOAD_FOLLOWINGS_SUCCESS: {
 				draft.loadFollowingsLoading = false;
 				draft.loadFollowingsDone = true;
-				draft.me.Followings = action.data;
+				if (action.data.isMe) {
+					draft.me.Followings = action.data.followings;
+				} else {
+					draft.userInfo.Followings = action.data.followings;
+				}
 				break;
+			}
 			case LOAD_FOLLOWINGS_FAILURE:
 				draft.loadFollowersLoading = false;
 				draft.loadFollowersError = action.error;
@@ -213,11 +218,16 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowersError = null;
 				draft.loadFollowersDone = false;
 				break;
-			case LOAD_FOLLOWERS_SUCCESS:
+			case LOAD_FOLLOWERS_SUCCESS: {
 				draft.loadFollowersLoading = false;
 				draft.loadFollowersDone = true;
-				draft.me.Followers = action.data;
+				if (action.data.isMe) {
+					draft.me.Followers = action.data.followers;
+				} else {
+					draft.userInfo.Followers = action.data.followers;
+				}
 				break;
+			}
 			case LOAD_FOLLOWERS_FAILURE:
 				draft.loadFollowingsLoading = false;
 				draft.loadFollowingsError = action.error;
