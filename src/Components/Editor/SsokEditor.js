@@ -11,16 +11,11 @@ import RadioButton from './RadioButton';
 
 const SsokEditor = () => {
 	const [ssok, setSsok] = useState('');
-	// const [attachment, setAttachment] = useState('');
 	const [category, setCategory] = useState('other');
-
 	const dispatch = useDispatch();
-	const imagePaths = useSelector(state => state.post.imagePaths);
 
-	// const onClearAttachment = () => setAttachment(null);
-
-	const { addPostDone } = useSelector(state => state.post);
-
+	const { imagePaths, addPostDone } = useSelector(state => state.post);
+	const { me } = useSelector(state => state.user);
 	const onFileChange = event => {
 		const imagesFormData = new FormData();
 		[].forEach.call(event.target.files, v => {
@@ -41,7 +36,8 @@ const SsokEditor = () => {
 
 	const onSubmit = async event => {
 		event.preventDefault();
-		if (!ssok) return;
+		if (!ssok) return alert('작성한 내용이 없습니다.');
+		if (!me) return alert('로그인이 필요한 서비스입니다.');
 		if (!imagePaths.length) {
 			dispatch({
 				type: ADD_POST_REQUEST,

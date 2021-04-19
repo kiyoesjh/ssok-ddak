@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import ThemeButton from 'components/ThemeButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,17 +6,25 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import device from 'styles/deviceSize';
 import { logoutRequestAction } from 'reducers/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const SettingPop = ({ children, position }) => {
 	const [isOpen, setIsOpen] = useState(false);
-	// const history = useHistory();
 	const dispatch = useDispatch();
+	const router = useRouter();
 	const togglePop = () => setIsOpen(prev => !prev);
 
 	const logOutHandle = async () => {
 		dispatch(logoutRequestAction());
+		setIsOpen(false);
 	};
+
+	const loginHandle = useCallback(() => {
+		router.push('/');
+	}, []);
+
+	const { me } = useSelector(state => state.user);
 
 	return (
 		<Wrap>
@@ -31,11 +39,20 @@ const SettingPop = ({ children, position }) => {
 						<ButtonList first>
 							<ThemeButton setIsOpen={setIsOpen} />
 						</ButtonList>
-						<ButtonList last>
-							<LogoutButton type="button" onClick={logOutHandle}>
-								계정에서 로그아웃
-							</LogoutButton>
-						</ButtonList>
+						{!!me && (
+							<ButtonList last>
+								<LogoutButton type="button" onClick={logOutHandle}>
+									계정에서 로그아웃
+								</LogoutButton>
+							</ButtonList>
+						)}
+						{!me && (
+							<ButtonList last>
+								<LogoutButton type="button" onClick={loginHandle}>
+									로그인
+								</LogoutButton>
+							</ButtonList>
+						)}
 					</PopList>
 				</>
 			)}

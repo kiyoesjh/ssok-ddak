@@ -210,8 +210,8 @@ const reducer = (state = initialState, action) =>
 				break;
 			}
 			case LOAD_FOLLOWINGS_FAILURE:
-				draft.loadFollowersLoading = false;
-				draft.loadFollowersError = action.error;
+				draft.loadFollowingsLoading = false;
+				draft.loadFollowingsError = action.error;
 				break;
 			case LOAD_FOLLOWERS_REQUEST:
 				draft.loadFollowersLoading = true;
@@ -229,8 +229,8 @@ const reducer = (state = initialState, action) =>
 				break;
 			}
 			case LOAD_FOLLOWERS_FAILURE:
-				draft.loadFollowingsLoading = false;
-				draft.loadFollowingsError = action.error;
+				draft.loadFollowersLoading = false;
+				draft.loadFollowersError = action.error;
 				break;
 			case CHANGE_NICKNAME_REQUEST:
 				draft.changeNicknameLoading = true;

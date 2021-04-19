@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { faEdit, faTrashAlt, faHeart, faComment } from '@fortawesome/free-regular-svg-icons';
+import { faEdit, faTrashAlt, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
@@ -9,6 +9,7 @@ import { DELETE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'red
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from 'reducers/user';
 import MorePop from '../Layer/MorePop';
 import EditSsok from './EditSsok';
+import Link from 'next/link';
 
 const Ssok = ({ ssokData, isOwner }) => {
 	const [editing, setEditing] = useState(false); // 수정하고 있는지 아닌지에 대한 상태
@@ -30,6 +31,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 
 	const liked = ssokData.Likers.find(v => v.id === me?.id);
 	const onClickLike = useCallback(() => {
+		if (!me?.id) return alert('로그인이 필요합니다.');
 		if (liked) {
 			return dispatch({
 				type: UNLIKE_POST_REQUEST,
@@ -40,12 +42,12 @@ const Ssok = ({ ssokData, isOwner }) => {
 			type: LIKE_POST_REQUEST,
 			data: ssokData.id,
 		});
-	}, [liked]);
+	}, [liked, me]);
 
 	const isFollowing = me?.Followings.find(v => v.id === ssokData.User.id);
 	const onToggleFollow = useCallback(() => {
+		if (!me?.id) return alert('로그인이 필요합니다.');
 		if (isFollowing) {
-			// 팔로잉 하고 있다면 언팔
 			dispatch({
 				type: UNFOLLOW_REQUEST,
 				data: ssokData.User.id,
@@ -56,28 +58,25 @@ const Ssok = ({ ssokData, isOwner }) => {
 				data: ssokData.User.id,
 			});
 		}
-	}, [isFollowing]);
+	}, [isFollowing, me]);
 
 	const onSubmit = event => {
 		event.preventDefault();
-		// try {
-		// 	dbService.doc(`ssok/${ssokData.id}`).update({
-		// 		text: newSsok,
-		// 	});
-		// } catch {}
 		setEditing(false);
 	};
 
 	return (
 		<Wrap>
 			<UserInfoWrap>
-				<UserInfo>
-					<UserPhoto>
-						<img src={ssokData.User.profileImg || '/images/user_img.png'} alt="배경이미지" />
-					</UserPhoto>
-					<UserName>{ssokData.User.nickname}</UserName>
-				</UserInfo>
-				{!isOwner && (
+				<Link href={`/user/${ssokData.User.id}`}>
+					<UserInfoLink>
+						<UserPhoto>
+							<img src={ssokData.User.profileImg || '/images/user_img.png'} alt="배경이미지" />
+						</UserPhoto>
+						<UserName>{ssokData.User.nickname}</UserName>
+					</UserInfoLink>
+				</Link>
+				{!isOwner && !!me && (
 					<>
 						<button type="button" onClick={onToggleFollow}>
 							{!isFollowing ? '팔로우' : '팔로우 취소'}
@@ -100,7 +99,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 				)}
 			</UserInfoWrap>
 			<PostContent>
-				{editing ? ( // 수정하기를 눌렀다면? 폼이 나오게 된다.
+				{editing ? (
 					<EditSsok
 						onSubmit={onSubmit}
 						setNewSsok={setNewSsok}
@@ -124,10 +123,6 @@ const Ssok = ({ ssokData, isOwner }) => {
 							</EmptyDiv>
 						)}
 						<Info>
-							<CommentButton>
-								<FontAwesomeIcon icon={faComment} />
-								<span>0</span>
-							</CommentButton>
 							<LikeButton liked={liked} onClick={onClickLike}>
 								<FontAwesomeIcon icon={faHeart} />
 								<span>{ssokData.Likers.length}</span>
@@ -179,9 +174,10 @@ const UserInfoWrap = styled.div`
 	background-color: ${({ theme }) => theme.cardColor};
 `;
 
-const UserInfo = styled.div`
+const UserInfoLink = styled.a`
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 `;
 
 const UserPhoto = styled.div`
@@ -294,8 +290,6 @@ const Info = styled.div`
 	padding: 5px 10px;
 	font-size: 14px;
 `;
-
-const CommentButton = styled.button``;
 
 const LikeButton = styled.button`
 	color: ${({ liked }) => (liked ? `red` : `inherit`)};
