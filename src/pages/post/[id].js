@@ -17,17 +17,21 @@ const Post = () => {
 
 	return (
 		<AppLayout>
-			<Head>
-				<title>{singleSsok.User.nickname}님의 게시글</title>
-				<meta name="description" content={singleSsok.content} />
-				<meta property="og:title" content={`${singleSsok.User.nickname}님의 게시글`} />
-				<meta property="og:description" content={singleSsok.content} />
-				<meta property="og:image" content={singleSsok.Images[0]?.src || '/favicon.ico'} />
-			</Head>
-			<Container>
-				<Header headText="게시글" />
-				<Ssok ssokData={singleSsok} isOwner={singleSsok.User.id === user.me?.id} />
-			</Container>
+			{!!singleSsok && (
+				<>
+					<Head>
+						<title>{singleSsok.User.nickname}님의 게시글</title>
+						<meta name="description" content={singleSsok.content} />
+						<meta property="og:title" content={`${singleSsok.User.nickname}님의 게시글`} />
+						<meta property="og:description" content={singleSsok.content} />
+						<meta property="og:image" content={singleSsok.Images[0]?.src || '/favicon.ico'} />
+					</Head>
+					<Container>
+						<Header headText="게시글" />
+						<Ssok ssokData={singleSsok} isOwner={singleSsok.User.id === user.me?.id} />
+					</Container>
+				</>
+			)}
 		</AppLayout>
 	);
 };

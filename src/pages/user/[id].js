@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
@@ -29,7 +29,7 @@ const User = () => {
 		state => state.user,
 	);
 	const isMe = parseInt(id, 10) === me?.id;
-	console.log('user', userInfo);
+
 	useEffect(() => {
 		if (router.query.followings) {
 			dispatch({

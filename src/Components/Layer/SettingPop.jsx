@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import ThemeButton from 'components/ThemeButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,16 +15,26 @@ const SettingPop = ({ children, position }) => {
 	const router = useRouter();
 	const togglePop = () => setIsOpen(prev => !prev);
 
-	const logOutHandle = async () => {
-		dispatch(logoutRequestAction());
+	const logOutHandle = () => {
+		const result = confirm('로그아웃 하시겠습니까?');
+		console.log(result);
+		if (result) {
+			dispatch(logoutRequestAction());
+		}
 		setIsOpen(false);
 	};
 
 	const loginHandle = useCallback(() => {
-		router.push('/');
+		router.push('/login');
 	}, []);
 
-	const { me } = useSelector(state => state.user);
+	const { me, logOutDone } = useSelector(state => state.user);
+
+	useEffect(() => {
+		if (logOutDone) {
+			router.push('/');
+		}
+	}, [logOutDone]);
 
 	return (
 		<Wrap>
