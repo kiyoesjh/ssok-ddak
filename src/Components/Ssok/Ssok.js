@@ -1,14 +1,22 @@
-import React, { useCallback, useState } from 'react';
-import { faEdit, faTrashAlt, faHeart, faComment } from '@fortawesome/free-regular-svg-icons';
+import React, { useCallback, useMemo, useState } from 'react';
+import { faEdit, faTrashAlt, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import device from 'styles/deviceSize';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import Link from 'next/link';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 import { DELETE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from 'reducers/post';
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from 'reducers/user';
 import MorePop from '../Layer/MorePop';
 import EditSsok from './EditSsok';
+
+dayjs.locale('ko');
+dayjs.extend(relativeTime);
 
 const Ssok = ({ ssokData, isOwner }) => {
 	const [editing, setEditing] = useState(false); // 수정하고 있는지 아닌지에 대한 상태
@@ -30,6 +38,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 
 	const liked = ssokData.Likers.find(v => v.id === me?.id);
 	const onClickLike = useCallback(() => {
+		if (!me?.id) return alert('로그인이 필요합니다.');
 		if (liked) {
 			return dispatch({
 				type: UNLIKE_POST_REQUEST,
@@ -40,12 +49,12 @@ const Ssok = ({ ssokData, isOwner }) => {
 			type: LIKE_POST_REQUEST,
 			data: ssokData.id,
 		});
-	}, [liked]);
+	}, [liked, me]);
 
 	const isFollowing = me?.Followings.find(v => v.id === ssokData.User.id);
 	const onToggleFollow = useCallback(() => {
+		if (!me?.id) return alert('로그인이 필요합니다.');
 		if (isFollowing) {
-			// 팔로잉 하고 있다면 언팔
 			dispatch({
 				type: UNFOLLOW_REQUEST,
 				data: ssokData.User.id,
@@ -56,28 +65,29 @@ const Ssok = ({ ssokData, isOwner }) => {
 				data: ssokData.User.id,
 			});
 		}
-	}, [isFollowing]);
+	}, [isFollowing, me]);
 
 	const onSubmit = event => {
 		event.preventDefault();
-		// try {
-		// 	dbService.doc(`ssok/${ssokData.id}`).update({
-		// 		text: newSsok,
-		// 	});
-		// } catch {}
 		setEditing(false);
 	};
 
+	const dateTime = useMemo(
+		() => Math.floor((dayjs().unix() - dayjs(ssokData.createdAt).unix()) / 60 / 60 / 24),
+		[ssokData.createdAt],
+	);
 	return (
 		<Wrap>
 			<UserInfoWrap>
-				<UserInfo>
-					<UserPhoto>
-						<img src={ssokData.User.profileImg || '/images/user_img.png'} alt="배경이미지" />
-					</UserPhoto>
-					<UserName>{ssokData.User.nickname}</UserName>
-				</UserInfo>
-				{!isOwner && (
+				<Link href={`/user/${ssokData.User.id}`}>
+					<UserInfoLink>
+						<UserPhoto>
+							<img src={ssokData.User.profileImg || '/images/user_img.png'} alt="배경이미지" />
+						</UserPhoto>
+						<UserName>{ssokData.User.nickname}</UserName>
+					</UserInfoLink>
+				</Link>
+				{!isOwner && !!me && (
 					<>
 						<button type="button" onClick={onToggleFollow}>
 							{!isFollowing ? '팔로우' : '팔로우 취소'}
@@ -100,7 +110,7 @@ const Ssok = ({ ssokData, isOwner }) => {
 				)}
 			</UserInfoWrap>
 			<PostContent>
-				{editing ? ( // 수정하기를 눌렀다면? 폼이 나오게 된다.
+				{editing ? (
 					<EditSsok
 						onSubmit={onSubmit}
 						setNewSsok={setNewSsok}
@@ -111,11 +121,11 @@ const Ssok = ({ ssokData, isOwner }) => {
 					<>
 						{ssokData.Images.length ? (
 							<>
-								<ImgText>{ssokData.content}</ImgText>
 								<PostImgWrap>
 									{ssokData.Images.map(({ id, src }) => (
 										<PostImg key={id} src={`http://localhost:3065/${src}`} />
 									))}
+									<ImgText>{ssokData.content}</ImgText>
 								</PostImgWrap>
 							</>
 						) : (
@@ -123,18 +133,29 @@ const Ssok = ({ ssokData, isOwner }) => {
 								<PostText>{ssokData.content}</PostText>
 							</EmptyDiv>
 						)}
-						<Info>
-							<CommentButton>
-								<FontAwesomeIcon icon={faComment} />
-								<span>0</span>
-							</CommentButton>
-							<LikeButton liked={liked} onClick={onClickLike}>
-								<FontAwesomeIcon icon={faHeart} />
-								<span>{ssokData.Likers.length}</span>
-							</LikeButton>
-						</Info>
 					</>
 				)}
+				<SsokInfoWrap>
+					<LikeWrap>
+						<LikeButton liked={liked} onClick={onClickLike}>
+							<FontAwesomeIcon icon={faHeart} />
+							<span>{ssokData.Likers.length}</span>
+						</LikeButton>
+					</LikeWrap>
+					<DateWrap>
+						<div>{dateTime <= 7 && dayjs().to(dayjs(ssokData.createdAt))}</div>
+						<div>
+							{dateTime >= 7 &&
+								dayjs().year() === dayjs(ssokData.createdAt).year() &&
+								dayjs(ssokData.createdAt).format('M월 D일')}
+						</div>
+						<div>
+							{dateTime >= 7 &&
+								dayjs().year() !== dayjs(ssokData.createdAt).year() &&
+								dayjs(ssokData.createdAt).format('YYYY년 M월 D일')}
+						</div>
+					</DateWrap>
+				</SsokInfoWrap>
 			</PostContent>
 		</Wrap>
 	);
@@ -179,9 +200,10 @@ const UserInfoWrap = styled.div`
 	background-color: ${({ theme }) => theme.cardColor};
 `;
 
-const UserInfo = styled.div`
+const UserInfoLink = styled.a`
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 `;
 
 const UserPhoto = styled.div`
@@ -286,17 +308,26 @@ const EmptyDiv = styled(PostWrap)`
 	background-color: ${({ theme }) => theme.cardColor};
 `;
 
-const Info = styled.div`
+const SsokInfoWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 5px 10px;
+`;
+
+const LikeWrap = styled.div`
 	margin-top: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	padding: 5px 10px;
 	font-size: 14px;
 `;
 
-const CommentButton = styled.button``;
-
 const LikeButton = styled.button`
 	color: ${({ liked }) => (liked ? `red` : `inherit`)};
+`;
+
+const DateWrap = styled.div`
+	margin-top: 5px;
+	font-size: 12px;
 `;

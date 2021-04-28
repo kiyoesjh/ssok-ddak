@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-// import { useSelector } from 'react-redux';
-
+import Link from 'next/link';
 const UserSsok = ({ ssok }) => {
-	// const { attachmentURL } = ssok;
 	return (
 		<Container>
-			<ImgWrap imgUrl={ssok.Images[0]} />
-			<Text isAttachment={Boolean(ssok.Images[0])}>{ssok.content}</Text>
+			<Link href={`http://localhost:3000/post/${ssok.id}`}>
+				<a>
+					<ImgWrap imgUrl={ssok.Images[0]?.src} />
+					<Text isAttachment={Boolean(ssok.Images[0])}>{ssok.content}</Text>
+				</a>
+			</Link>
 		</Container>
 	);
 };
@@ -18,7 +20,7 @@ export default React.memo(UserSsok);
 UserSsok.propTypes = {
 	ssok: PropTypes.shape({
 		id: PropTypes.number,
-		Images: PropTypes.arrayOf(PropTypes.string),
+		Images: PropTypes.arrayOf(PropTypes.object),
 		Likers: PropTypes.arrayOf(PropTypes.object),
 		User: PropTypes.shape({
 			id: PropTypes.number,
@@ -47,7 +49,7 @@ const ImgWrap = styled.div`
 	${({ imgUrl, theme }) =>
 		imgUrl
 			? `
-    background-image: url(${imgUrl});
+    background-image: url(http://localhost:3065/${imgUrl});
     &:after {
       position: absolute;
       top: 0;

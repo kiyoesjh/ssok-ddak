@@ -46,8 +46,8 @@ const Navigation = () => {
 							</a>
 						</NaviLink>
 					</NaviList>
-					<NaviList selected={router.pathname === `/user/${id}`}>
-						<NaviLink href={`/user/${id}`}>
+					<NaviList selected={router.asPath === `/user/${id}`}>
+						<NaviLink href={id ? `/user/${id}` : '/login'}>
 							<a>
 								<LinkText>
 									<FontAwesomeIcon icon={faUser} fixedWidth />

@@ -158,7 +158,7 @@ const reducer = (state = initialState, action) =>
 				break;
 			case LOG_OUT_SUCCESS:
 				draft.logOutLoading = false;
-				draft.logInDone = true;
+				draft.logOutDone = true;
 				draft.signUpDone = false;
 				draft.me = null;
 				break;
@@ -204,14 +204,13 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowingsDone = true;
 				if (action.data.isMe) {
 					draft.me.Followings = action.data.followings;
-				} else {
-					draft.userInfo.Followings = action.data.followings;
 				}
+				draft.userInfo.Followings = action.data.followings;
 				break;
 			}
 			case LOAD_FOLLOWINGS_FAILURE:
-				draft.loadFollowersLoading = false;
-				draft.loadFollowersError = action.error;
+				draft.loadFollowingsLoading = false;
+				draft.loadFollowingsError = action.error;
 				break;
 			case LOAD_FOLLOWERS_REQUEST:
 				draft.loadFollowersLoading = true;
@@ -223,14 +222,13 @@ const reducer = (state = initialState, action) =>
 				draft.loadFollowersDone = true;
 				if (action.data.isMe) {
 					draft.me.Followers = action.data.followers;
-				} else {
-					draft.userInfo.Followers = action.data.followers;
 				}
+				draft.userInfo.Followers = action.data.followers;
 				break;
 			}
 			case LOAD_FOLLOWERS_FAILURE:
-				draft.loadFollowingsLoading = false;
-				draft.loadFollowingsError = action.error;
+				draft.loadFollowersLoading = false;
+				draft.loadFollowersError = action.error;
 				break;
 			case CHANGE_NICKNAME_REQUEST:
 				draft.changeNicknameLoading = true;
