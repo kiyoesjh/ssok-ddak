@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
@@ -24,25 +24,17 @@ const User = () => {
 	const router = useRouter();
 	const { id } = router.query;
 	const dispatch = useDispatch();
-	const {
-		hasMorePosts,
-		loadPostsLoading,
-		ssoks,
-		loadPostsError,
-		loadFollowingsError,
-		loadFollowersError,
-	} = useSelector(state => state.post);
+	const { hasMorePosts, loadPostsLoading, ssoks } = useSelector(state => state.post);
+	const { userInfo, me, loadFollowingsError, loadFollowersError } = useSelector(
+		state => state.user,
+	);
+	const isMe = parseInt(id, 10) === me?.id;
 
-	const { userInfo, me } = useSelector(state => state.user);
-	const isMe = parseInt(id, 10) === me.id;
-	const user = useMemo(() => (isMe ? me : userInfo), [isMe, me, userInfo]);
-	console.log(isMe);
 	useEffect(() => {
 		if (router.query.followings) {
-			console.log(user.id);
 			dispatch({
 				type: LOAD_FOLLOWINGS_REQUEST,
-				data: user.id,
+				data: userInfo.id,
 				isMe,
 			});
 		}
@@ -52,7 +44,7 @@ const User = () => {
 		if (router.query.followers) {
 			dispatch({
 				type: LOAD_FOLLOWERS_REQUEST,
-				data: user.id,
+				data: userInfo.id,
 				isMe,
 			});
 		}
@@ -79,104 +71,100 @@ const User = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [hasMorePosts, loadPostsLoading, ssoks]);
 
-	useEffect(() => {
-		if (loadPostsError) {
-			alert(loadPostsError);
-		} else if (loadFollowersError) {
-			alert(loadFollowersError);
-		} else if (loadFollowingsError) {
-			alert(loadFollowingsError);
-		}
-	}, [loadPostsError, loadFollowersError, loadFollowingsError]);
-
 	return (
 		<AppLayout>
-			<Head>
-				<title>@{user.nickname} | ssok ddak</title>
-			</Head>
-			<Container>
-				<Header headText={user.nickname || me.nickname} />
-				<Wrap>
-					<UserInfoWrap>
-						<UserPhotoWrap>
-							<UserPhoto>
-								<UserImg src={user.photoURL || '/images/user_img.png'} />
-							</UserPhoto>
-						</UserPhotoWrap>
-						<UserInfo>
-							<UserNameWrapper>
-								<UserName>{user.nickname || user.email}</UserName>
-								{me && (
-									<ButtonWrap>
-										{isMe && (
-											<Link href="/profile/?edit=true" as="/profile/edit">
-												<ProfileEditButton>프로필 수정</ProfileEditButton>
-											</Link>
-										)}
-										{!isMe && (
-											<>
-												{me.Followings.filter(following => user.id === following.id).length ? (
-													<button type="button">팔로우 취소</button>
-												) : (
-													<button type="button">팔로우</button>
+			{userInfo && (
+				<>
+					<Head>
+						<title>@{userInfo.nickname} | ssok ddak</title>
+					</Head>
+					<Container>
+						<Header headText={userInfo.nickname || me.nickname} />
+						<Wrap>
+							<UserInfoWrap>
+								<UserPhotoWrap>
+									<UserPhoto>
+										<UserImg src={userInfo.photoURL || '/images/user_img.png'} />
+									</UserPhoto>
+								</UserPhotoWrap>
+								<UserInfo>
+									<UserNameWrapper>
+										<UserName>{userInfo.nickname || userInfo.email}</UserName>
+										{me && (
+											<ButtonWrap>
+												{isMe && (
+													<Link href="/profile/?edit=true" as="/profile/edit">
+														<ProfileEditButton>프로필 수정</ProfileEditButton>
+													</Link>
 												)}
-											</>
+												{!isMe && !!me && (
+													<>
+														{me.Followings.filter(following => userInfo.id === following.id)
+															.length ? (
+															<button type="button">팔로우 취소</button>
+														) : (
+															<button type="button">팔로우</button>
+														)}
+													</>
+												)}
+											</ButtonWrap>
 										)}
-									</ButtonWrap>
-								)}
-							</UserNameWrapper>
-							<UserInfoList>
-								<li>
-									<ListButton type="button">
-										게시글 <Length>{user.Posts.length}</Length>
-									</ListButton>
-								</li>
-								<li>
-									<Link
-										href={`/user/${user.id}/?followings=${true}`}
-										as={`/user/${user.id}/?followings`}
-									>
-										<FollowListButton>
-											팔로우 <Length>{user.Followings.length}</Length>
-										</FollowListButton>
-									</Link>
-								</li>
-								<li>
-									<Link
-										href={`/user/${user.id}/?followers=${true}`}
-										as={`/user/${user.id}/?followers`}
-									>
-										<FollowListButton>
-											팔로워 <Length>{user.Followers.length}</Length>
-										</FollowListButton>
-									</Link>
-								</li>
-							</UserInfoList>
-						</UserInfo>
-					</UserInfoWrap>
-					<Content>{!!ssoks.length && <UserSsoks />}</Content>
-				</Wrap>
-			</Container>
+									</UserNameWrapper>
+									<UserInfoList>
+										<li>
+											<div>
+												게시글 <Length>{userInfo.Posts.length || userInfo.Posts}</Length>
+											</div>
+										</li>
+										<li>
+											<Link
+												href={`/user/${userInfo.id}/?followings=${true}`}
+												as={`/user/${userInfo.id}/?followings`}
+											>
+												<FollowListButton>
+													팔로우
+													<Length>{userInfo.Followings.length || userInfo.Followings}</Length>
+												</FollowListButton>
+											</Link>
+										</li>
+										<li>
+											<Link
+												href={`/user/${userInfo.id}/?followers=${true}`}
+												as={`/user/${userInfo.id}/?followers`}
+											>
+												<FollowListButton>
+													팔로워 <Length>{userInfo.Followers.length || userInfo.Followers}</Length>
+												</FollowListButton>
+											</Link>
+										</li>
+									</UserInfoList>
+								</UserInfo>
+							</UserInfoWrap>
+							<Content>{!!ssoks.length && <UserSsoks />}</Content>
+						</Wrap>
+					</Container>
 
-			{router.query.followings && (
-				<ModalLayer onClick={() => router.back()}>
-					<div>
-						{console.log(user.Followings)}
-						{user.Followings.map(item => (
-							<div key={item.id}>{item.nickname}</div>
-						))}
-					</div>
-				</ModalLayer>
-			)}
-			{router.query.followers && (
-				<ModalLayer onClick={() => router.back()}>
-					<div>
-						{console.log(user.Followers)}
-						{user.Followers.map(item => (
-							<div key={item.id}>{item.nickname}</div>
-						))}
-					</div>
-				</ModalLayer>
+					{router.query.followings && (
+						<ModalLayer onClick={() => router.back()}>
+							<div>
+								{!loadFollowingsError &&
+									Array.isArray(userInfo.Followings) &&
+									userInfo.Followings.map(item => <div key={item.id}>{item.nickname}</div>)}
+								{!!loadFollowingsError && <div>{loadFollowingsError}</div>}
+							</div>
+						</ModalLayer>
+					)}
+					{router.query.followers && (
+						<ModalLayer onClick={() => router.back()}>
+							<div>
+								{!loadFollowersError &&
+									Array.isArray(userInfo.Followers) &&
+									userInfo.Followers.map(item => <div key={item.id}>{item.nickname}</div>)}
+								{!!loadFollowersError && <div>{loadFollowersError}</div>}
+							</div>
+						</ModalLayer>
+					)}
+				</>
 			)}
 		</AppLayout>
 	);
@@ -271,10 +259,6 @@ const UserInfoList = styled.ul`
 			margin-left: 0;
 		}
 	}
-`;
-
-const ListButton = styled.button`
-	cursor: pointer;
 `;
 
 const FollowListButton = styled.a`
